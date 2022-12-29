@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "tools/train.py", line 30, in <module>
+    from ppocr.data import build_dataloader
+ImportError: cannot import name 'build_dataloader' from 'ppocr.data' (unknown location)

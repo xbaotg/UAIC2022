@@ -1,0 +1,8 @@
+**/*.jpg
+**/backup/
+**/data/
+**/*.pt
+**/weights
+**/PaddleOCR/output/
+**/PaddleOCR/inference/
+**/PaddleOCR/backup-inference/
