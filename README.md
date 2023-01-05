@@ -22,9 +22,9 @@
 
 Nếu như không muốn **Xử lý dữ liệu** và **train model**, ta có thể sử dụng bộ dữ liệu và model đã được team chúng mình tạo ra và train:
 
-- Model YOLOv7 + SRN: https://drive.google.com/file/d/13pkPQT7N7URkuvJwsdz5qpUjTqeWW6QT/view?usp=share_link 
+- Model YOLOv7 + SRN: [Drive](https://drive.google.com/file/d/13pkPQT7N7URkuvJwsdz5qpUjTqeWW6QT/view?usp=share_link)
 
-Sau đó tiến hành giải nén, và đặt vào thư mục gốc (thư mục có chứa các file `predict.py`, `model.py`, ... 
+Sau đó tiến hành giải nén, và đặt vào thư mục gốc (thư mục có chứa các file `predict.py`, `model.py`.
 
 ## Cấu trúc folders
 
