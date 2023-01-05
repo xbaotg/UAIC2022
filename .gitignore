@@ -8,5 +8,6 @@
 **/PaddleOCR/backup-inference/
 **/.venv
 **/models/**
+**/models-2/
 **/.idea
 **/__pycache__/
