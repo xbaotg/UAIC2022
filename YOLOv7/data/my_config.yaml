@@ -1,0 +1,12 @@
+# COCO 2017 dataset http://cocodataset.org
+
+# download command/URL (optional)
+train: ../tools/TestModel/result/
+val: ../tools/TestModel/result/
+test: ../tools/TestModel/result/
+
+# number of classes
+nc: 1
+
+# class names
+names: [ 'text' ]
