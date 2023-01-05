@@ -1,9 +1,6 @@
 import json
+
 import numpy as np
-
-from shapely.geometry import Point
-from shapely.geometry.polygon import Polygon
-
 from cv2 import cv2
 
 
@@ -33,23 +30,22 @@ def convert_points_to_yolo(size, points):
 
     box = (x_min, x_max, y_min, y_max)
 
-    dw = 1./size[0]
-    dh = 1./size[1]
+    dw = 1. / size[0]
+    dh = 1. / size[1]
 
-    x = (box[0] + box[1])/2.0
-    y = (box[2] + box[3])/2.0
+    x = (box[0] + box[1]) / 2.0
+    y = (box[2] + box[3]) / 2.0
 
     w = box[1] - box[0]
     h = box[3] - box[2]
 
-    x = x*dw
-    w = w*dw
+    x = x * dw
+    w = w * dw
 
-    y = y*dh
-    h = h*dh
+    y = y * dh
+    h = h * dh
 
     return (x, y, w, h)
-
 
 
 def visualize_from_labels(s, l):
@@ -75,7 +71,6 @@ def visualize_from_labels(s, l):
         cv2.imshow("1", word_img)
         cv2.imshow("2", cropped_img)
         cv2.waitKey(0)
-
 
     return img
 
@@ -116,34 +111,3 @@ def perspective_transform(img, pts):
     M = cv2.getPerspectiveTransform(rect, dst)
     warped = cv2.warpPerspective(img, M, (maxWidth, maxHeight))
     return warped
-
-
-def distance_two_points_np(p1, p2):
-    return np.sqrt((p1[0] - p2[0]) * (p1[0] - p2[0]) + (p1[1] - p2[1]) * (p1[1] - p2[1]))
-
-
-def distance_two_points(x1, y1, x2, y2):
-    return np.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2))
-
-
-def distance_from_point_to_line(p1, p2, p3):
-    p1_t = np.array(p1)
-    p2_t = np.array(p2)
-    p3_t = np.array(p3)
-
-    return np.linalg.norm(np.cross(p2_t - p1_t, p3_t - p1_t)) / np.linalg.norm(p3_t - p2_t)
-
-
-def is_point_in_rectangle(top_left, top_right, bottom_left, bottom_right, x, y):
-    return Polygon([bottom_left, bottom_right, top_right, top_left, bottom_left]).contains(Point(x, y))
-
-
-def unit_vector(vector):
-    return vector / np.linalg.norm(vector)
-
-
-def angle_between(v1, v2):
-    v1_u = unit_vector(v1)
-    v2_u = unit_vector(v2)
-
-    return np.arccos(np.clip(np.dot(v1_u, v2_u), -1.0, 1.0))

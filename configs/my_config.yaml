@@ -1,0 +1,8 @@
+train: /content/train
+val: /content/val
+
+# number of classes
+nc: 1
+
+# class names
+names: [ 'text' ]

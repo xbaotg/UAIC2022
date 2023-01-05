@@ -6,3 +6,5 @@
 **/PaddleOCR/output/
 **/PaddleOCR/inference/
 **/PaddleOCR/backup-inference/
+**/.venv
+**/models/
