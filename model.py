@@ -5,17 +5,20 @@ import traceback
 import cv2
 import numpy as np
 import torch
+
 from tqdm import tqdm
+from pathlib import Path
+
 
 # YOLOv7
-sys.path.append("YOLOv7")
+sys.path.insert(0, str(Path(__file__).parent / "YOLOv7"))
 from models.experimental import attempt_load
 from utils.datasets import LoadImages
 from utils.general import check_img_size, non_max_suppression, scale_coords
 from utils.torch_utils import select_device
 
 # PaddleOCR
-sys.path.append("PaddleOCR")
+sys.path.insert(0, str(Path(__file__).parent / "PaddleOCR"))
 import tools.infer.utility as utility
 from ppocr.postprocess import build_post_process
 from ppocr.utils.logging import get_logger
@@ -100,16 +103,21 @@ class DetectWords():
 # }}}
 # {{{ Recode PaddleOCR 
 class TextRecognizer(object):
-    def __init__(self, dict_path="./configs/dict.txt"):
-        args = pickle.load(open("./configs/config_ocr.p", "rb"))
+    def __init__(self):
+        root_dir = Path(__file__).parent
+
+        args = pickle.load(open(str(root_dir / "configs/config_ocr.p"), "rb"))
+        args.rec_char_dict_path = str(root_dir / "configs" / "dict.txt")
+        args.rec_model_dir = str(root_dir / "models" / "rec" / "inference")
+
         self.rec_image_shape = [int(v) for v in args.rec_image_shape.split(",")]
         self.rec_batch_num = args.rec_batch_num
         self.rec_algorithm = args.rec_algorithm
 
         postprocess_params = {
             'name': 'SRNLabelDecode',
-            "character_dict_path": dict_path,
-            "use_space_char": False
+            "character_dict_path": args.rec_char_dict_path,
+            "use_space_char": args.use_space_char
         }
 
         self.logger = get_logger()

@@ -3,13 +3,16 @@ import os
 import shutil
 import time
 import sys
-from pathlib import Path
+import argparse
 
 import cv2
 import torch
-from tqdm import tqdm
-
 import model
+import numpy as np
+
+from tqdm import tqdm
+from PIL import ImageFont, ImageDraw, Image
+from pathlib import Path
 
 
 def order_points(pts):
@@ -82,7 +85,7 @@ def generate_det_images():
         torch.cuda.empty_cache()
 
 
-def predict_text(threshold=0.95):
+def predict_text(threshold=0.95, submit=True):
     if not Path("temp-det-images").exists():
         print("Must run generate_det_images()")
         return
@@ -90,6 +93,10 @@ def predict_text(threshold=0.95):
     if Path("result").exists():
         shutil.rmtree(Path("result"))
     os.mkdir("result")
+
+    if not submit:
+        fontpath = "./times.ttf"
+        font = ImageFont.truetype(fontpath, 12)
 
     # Process
     locs = {}
@@ -103,33 +110,57 @@ def predict_text(threshold=0.95):
     img_files = [t.split("/")[-1] for t in img_files]
 
     print("Generating result ...")
-    for idx, fname in enumerate(img_files):
-        pred = output[idx][0]
-        conf = output[idx][1]
+    if submit:
+        for idx, fname in enumerate(img_files):
+            pred = output[idx][0]
+            conf = output[idx][1]
 
-        if conf < threshold:
-            continue
+            if conf < threshold:
+                continue
 
-        pts = order_points(locs[fname])
-        loc = ",".join(f"{int(x)},{int(y)}" for (x, y) in pts)
-        org_name = fname.split("-")[0]
+            pts = order_points(locs[fname])
+            loc = ",".join(f"{int(x)},{int(y)}" for (x, y) in pts)
+            org_name = fname.split("-")[0]
 
-        with open("result/" + org_name + ".txt", "a+") as f:
-            f.write(f"{loc},{pred}\n")
-            f.close()
+            with open("result/" + org_name + ".txt", "a+") as f:
+                f.write(f"{loc},{pred}\n")
+                f.close()
+    else:
+        images = os.listdir("data")
+        for i in tqdm(range(len(images))):
+            org_name = images[i][:-4]
+            img = cv2.imread(f"data/{images[i]}")
+
+            for j, fname in enumerate(img_files):
+                if fname.split("-")[0] == org_name:
+                    pts = order_points(locs[fname])
+                    cv2.rectangle(img, (pts[0][0], pts[0][1]), (pts[2][0], pts[2][1]), (0, 255, 0), 1)
+                    img = Image.fromarray(img)
+                    draw = ImageDraw.Draw(img)
+                    draw.text(tuple([pts[0][0], max(0, pts[0][1] - 30)]), output[j][0], font=font, fill=(0, 255, 0, 1), stroke_width=1, stroke_fill=(0, 0, 255))
+                    img = np.array(img)
+
+            cv2.imwrite(f"result/{images[i]}", img)
 
     os.remove("temp-locs.txt")
     shutil.rmtree("temp-det-images")
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('--task', type=str, default='submit', help='source')
+    opt = parser.parse_args()
+
     if len(os.listdir("models/rec/inference")) < 3:
         print("Must export model OCR at ./tools/export_ocr_inference.sh")
         sys.exit(0)
 
     generate_det_images()
 
-    # sleep 5s to release gpu memory
-    time.sleep(5)
+    # sleep 2s to release gpu memory
+    time.sleep(2)
 
-    predict_text()
+    if opt.task == "submit":
+        predict_text()
+    else:
+        predict_text(submit=False)
