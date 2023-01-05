@@ -5,49 +5,47 @@
 - [1. 简介](#1-简介)
 - [2. 精度与性能](#2-精度与性能)
 - [3. 效果演示](#3-效果演示)
-  - [3.1 SER](#31-ser)
-  - [3.2 RE](#32-re)
+    - [3.1 SER](#31-ser)
+    - [3.2 RE](#32-re)
 - [4. 使用](#4-使用)
-  - [4.1 准备环境](#41-准备环境)
-  - [4.2 快速开始](#42-快速开始)
-  - [4.3 更多](#43-更多)
+    - [4.1 准备环境](#41-准备环境)
+    - [4.2 快速开始](#42-快速开始)
+    - [4.3 更多](#43-更多)
 - [5. 参考链接](#5-参考链接)
 - [6. License](#6-License)
 
-
 ## 1. 简介
 
-关键信息抽取 (Key Information Extraction, KIE)指的是是从文本或者图像中，抽取出关键的信息。针对文档图像的关键信息抽取任务作为OCR的下游任务，存在非常多的实际应用场景，如表单识别、车票信息抽取、身份证信息抽取等。
+关键信息抽取 (Key Information Extraction, KIE)
+指的是是从文本或者图像中，抽取出关键的信息。针对文档图像的关键信息抽取任务作为OCR的下游任务，存在非常多的实际应用场景，如表单识别、车票信息抽取、身份证信息抽取等。
 
-PP-Structure 基于 LayoutXLM 文档多模态系列方法进行研究与优化，设计了视觉特征无关的多模态模型结构VI-LayoutXLM，同时引入符合阅读顺序的文本行排序方法以及UDML联合互学习蒸馏方法，最终在精度与速度均超越LayoutXLM。
+PP-Structure 基于 LayoutXLM
+文档多模态系列方法进行研究与优化，设计了视觉特征无关的多模态模型结构VI-LayoutXLM，同时引入符合阅读顺序的文本行排序方法以及UDML联合互学习蒸馏方法，最终在精度与速度均超越LayoutXLM。
 
 PP-Structure中关键信息抽取模块的主要特性如下：
 
 - 集成[LayoutXLM](https://arxiv.org/pdf/2104.08836.pdf)、VI-LayoutXLM等多模态模型以及PP-OCR预测引擎。
-- 支持基于多模态方法的语义实体识别 (Semantic Entity Recognition, SER) 以及关系抽取 (Relation Extraction, RE) 任务。基于 SER 任务，可以完成对图像中的文本识别与分类；基于 RE 任务，可以完成对图象中的文本内容的关系提取，如判断问题对(pair)。
+- 支持基于多模态方法的语义实体识别 (Semantic Entity Recognition, SER) 以及关系抽取 (Relation Extraction, RE) 任务。基于
+  SER 任务，可以完成对图像中的文本识别与分类；基于 RE 任务，可以完成对图象中的文本内容的关系提取，如判断问题对(pair)。
 - 支持SER任务和RE任务的自定义训练。
 - 支持OCR+SER的端到端系统预测与评估。
 - 支持OCR+SER+RE的端到端系统预测。
 - 支持SER模型的动转静导出与基于PaddleInfernece的模型推理。
 
-
 ## 2. 精度与性能
-
 
 我们在 [XFUND](https://github.com/doc-analysis/XFUND) 的中文数据集上对算法进行了评估，SER与RE上的任务性能如下
 
-|模型|骨干网络|任务|配置文件|hmean|预测耗时(ms)|下载链接|
-| --- | --- |  --- | --- | --- | --- | --- |
-|VI-LayoutXLM| VI-LayoutXLM-base | SER | [ser_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml)|**93.19%**| 15.49|[训练模型](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar)|
-|LayoutXLM| LayoutXLM-base | SER | [ser_layoutxlm_xfund_zh.yml](../../configs/kie/layoutlm_series/ser_layoutxlm_xfund_zh.yml)|90.38%| 19.49 | [训练模型](https://paddleocr.bj.bcebos.com/pplayout/ser_LayoutXLM_xfun_zh.tar)|
-|VI-LayoutXLM| VI-LayoutXLM-base | RE | [re_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh_udml.yml)|**83.92%**| 15.49|[训练模型](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar)|
-|LayoutXLM| LayoutXLM-base | RE | [re_layoutxlm_xfund_zh.yml](../../configs/kie/layoutlm_series/re_layoutxlm_xfund_zh.yml)|74.83%| 19.49|[训练模型](https://paddleocr.bj.bcebos.com/pplayout/re_LayoutXLM_xfun_zh.tar)|
-
+| 模型           | 骨干网络              | 任务  | 配置文件                                                                                                    | hmean      | 预测耗时(ms) | 下载链接                                                                                                          |
+|--------------|-------------------|-----|---------------------------------------------------------------------------------------------------------|------------|----------|---------------------------------------------------------------------------------------------------------------|
+| VI-LayoutXLM | VI-LayoutXLM-base | SER | [ser_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml) | **93.19%** | 15.49    | [训练模型](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar) |
+| LayoutXLM    | LayoutXLM-base    | SER | [ser_layoutxlm_xfund_zh.yml](../../configs/kie/layoutlm_series/ser_layoutxlm_xfund_zh.yml)              | 90.38%     | 19.49    | [训练模型](https://paddleocr.bj.bcebos.com/pplayout/ser_LayoutXLM_xfun_zh.tar)                                    |
+| VI-LayoutXLM | VI-LayoutXLM-base | RE  | [re_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh_udml.yml)   | **83.92%** | 15.49    | [训练模型](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar)  |
+| LayoutXLM    | LayoutXLM-base    | RE  | [re_layoutxlm_xfund_zh.yml](../../configs/kie/layoutlm_series/re_layoutxlm_xfund_zh.yml)                | 74.83%     | 19.49    | [训练模型](https://paddleocr.bj.bcebos.com/pplayout/re_LayoutXLM_xfun_zh.tar)                                     |
 
 * 注：预测耗时测试条件：V100 GPU + cuda10.2 + cudnn8.1.1 + TensorRT 7.2.3.4，使用FP16进行测试。
 
 更多关于PaddleOCR中关键信息抽取模型的介绍，请参考[关键信息抽取模型库](../../doc/doc_ch/algorithm_overview.md)。
-
 
 ## 3. 效果演示
 
@@ -78,15 +76,15 @@ PP-Structure中关键信息抽取模块的主要特性如下：
     <img src="https://user-images.githubusercontent.com/14270174/185539735-37b5c2ef-629d-43fe-9abb-44bb717ef7ee.jpg" width="600">
 </div>
 
-**注意：** 测试图片来源于[XFUND数据集](https://github.com/doc-analysis/XFUND)、[发票数据集](https://aistudio.baidu.com/aistudio/datasetdetail/165561)以及合成的身份证数据集。
-
+**注意：**
+测试图片来源于[XFUND数据集](https://github.com/doc-analysis/XFUND)、[发票数据集](https://aistudio.baidu.com/aistudio/datasetdetail/165561)
+以及合成的身份证数据集。
 
 图中不同颜色的框表示不同的类别。
 
 图中的发票以及申请表图像，有`QUESTION`, `ANSWER`, `HEADER` 3种类别，识别的`QUESTION`, `ANSWER`可以用于后续的问题与答案的关系抽取。
 
 图中的身份证图像，则直接识别出其中的`姓名`、`性别`、`民族`等关键信息，这样就无需后续的关系抽取过程，一个模型即可完成关键信息抽取。
-
 
 ### 3.2 RE
 
@@ -170,7 +168,6 @@ python3 ./tools/infer_kie_token_ser_re.py \
 
 `Global.save_res_path`目录中会保存可视化的结果图像以及预测的文本文件。
 
-
 如果希望加载标注好的文本检测与识别结果，仅预测可以使用下面的命令进行预测。
 
 ```bash
@@ -239,7 +236,6 @@ python3 kie/predict_kie_token_ser_re.py \
 
 可视化结果保存在`output`目录下。
 
-
 ### 4.3 更多
 
 关于KIE模型的训练评估与推理，请参考：[关键信息抽取教程](../../doc/doc_ch/kie.md)。
@@ -250,13 +246,14 @@ python3 kie/predict_kie_token_ser_re.py \
 
 关于怎样在自己的场景中完成关键信息抽取任务，请参考：[关键信息抽取全流程指南](./how_to_do_kie.md)。
 
-
 ## 5. 参考链接
 
-- LayoutXLM: Multimodal Pre-training for Multilingual Visually-rich Document Understanding, https://arxiv.org/pdf/2104.08836.pdf
+- LayoutXLM: Multimodal Pre-training for Multilingual Visually-rich Document
+  Understanding, https://arxiv.org/pdf/2104.08836.pdf
 - microsoft/unilm/layoutxlm, https://github.com/microsoft/unilm/tree/master/layoutxlm
 - XFUND dataset, https://github.com/doc-analysis/XFUND
 
 ## 6. License
 
-The content of this project itself is licensed under the [Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/)
+The content of this project itself is licensed under
+the [Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)](https://creativecommons.org/licenses/by-nc-sa/4.0/)

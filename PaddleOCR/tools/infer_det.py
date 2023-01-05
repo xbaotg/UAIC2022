@@ -16,10 +16,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy as np
-
 import os
 import sys
+
+import numpy as np
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
@@ -110,7 +110,7 @@ def main():
                         dt_boxes_list.append(tmp_json)
                     det_box_json[k] = dt_boxes_list
                     save_det_path = os.path.dirname(config['Global'][
-                        'save_res_path']) + "/det_results_{}/".format(k)
+                                                        'save_res_path']) + "/det_results_{}/".format(k)
                     draw_det_res(boxes, config, src_img, file, save_det_path)
             else:
                 boxes = post_result[0]['points']
@@ -121,7 +121,7 @@ def main():
                     tmp_json['points'] = np.array(box).tolist()
                     dt_boxes_json.append(tmp_json)
                 save_det_path = os.path.dirname(config['Global'][
-                    'save_res_path']) + "/det_results/"
+                                                    'save_res_path']) + "/det_results/"
                 draw_det_res(boxes, config, src_img, file, save_det_path)
             otstr = file + "\t" + json.dumps(dt_boxes_json) + "\n"
             fout.write(otstr.encode())

@@ -19,7 +19,6 @@ from __future__ import print_function
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
-import numpy as np
 
 
 class AttentionHead(nn.Layer):
@@ -92,7 +91,6 @@ class AttentionGRUCell(nn.Layer):
         self.hidden_size = hidden_size
 
     def forward(self, prev_hidden, batch_H, char_onehots):
-
         batch_H_proj = self.i2h(batch_H)
         prev_hidden_proj = paddle.unsqueeze(self.h2h(prev_hidden), axis=1)
 

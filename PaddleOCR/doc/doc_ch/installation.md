@@ -2,6 +2,7 @@
 
 经测试PaddleOCR可在glibc 2.23上运行，您也可以测试其他glibc版本或安装glic 2.23
 PaddleOCR 工作环境
+
 - PaddlePaddle 2.0.0
 - python3.7
 - glibc 2.23
@@ -12,6 +13,7 @@ PaddleOCR 工作环境
 *如您希望使用 mac 或 windows直接运行预测代码，可以从第2步开始执行。*
 
 **1. （建议）准备docker环境。第一次使用这个镜像，会自动下载该镜像，请耐心等待。**
+
 ```
 # 切换到工作目录下
 cd /home/Projects
@@ -31,6 +33,7 @@ sudo docker container exec -it ppocr /bin/bash
 ```
 
 **2. 安装PaddlePaddle 2.0**
+
 ```
 pip3 install --upgrade pip
 
@@ -45,6 +48,7 @@ python3 -m pip install paddlepaddle==2.0.0 -i https://mirror.baidu.com/pypi/simp
 ```
 
 **3. 克隆PaddleOCR repo代码**
+
 ```
 【推荐】git clone https://github.com/PaddlePaddle/PaddleOCR
 
@@ -56,6 +60,7 @@ git clone https://gitee.com/paddlepaddle/PaddleOCR
 ```
 
 **4. 安装第三方库**
+
 ```
 cd PaddleOCR
 pip3 install -r requirements.txt

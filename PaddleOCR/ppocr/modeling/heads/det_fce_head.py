@@ -16,12 +16,13 @@ This code is refer from:
 https://github.com/open-mmlab/mmocr/blob/main/mmocr/models/textdet/dense_heads/fce_head.py
 """
 
-from paddle import nn
-from paddle import ParamAttr
-import paddle.nn.functional as F
-from paddle.nn.initializer import Normal
-import paddle
 from functools import partial
+
+import paddle
+import paddle.nn.functional as F
+from paddle import ParamAttr
+from paddle import nn
+from paddle.nn.initializer import Normal
 
 
 def multi_apply(func, *args, **kwargs):

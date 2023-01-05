@@ -1,8 +1,4 @@
 import paddle
-import numpy as np
-import os
-import paddle.nn as nn
-import paddleslim
 
 
 class PACT(paddle.nn.Layer):

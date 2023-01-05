@@ -14,6 +14,7 @@
 - [5. FAQ](#5)
 
 <a name="1"></a>
+
 ## 1. Introduction
 
 Paper:
@@ -23,48 +24,60 @@ Paper:
 
 On the CTW1500 dataset, the text detection result is as follows:
 
-|Model|Backbone|Configuration|Precision|Recall|Hmean|Download|
-| --- | --- | --- | --- | --- | --- | --- |
-| DRRG | ResNet50_vd | [configs/det/det_r50_drrg_ctw.yml](../../configs/det/det_r50_drrg_ctw.yml)| 89.92%|80.91%|85.18%|[trained model](https://paddleocr.bj.bcebos.com/contribution/det_r50_drrg_ctw_train.tar)|
+| Model | Backbone    | Configuration                                                              | Precision | Recall | Hmean  | Download                                                                                 |
+|-------|-------------|----------------------------------------------------------------------------|-----------|--------|--------|------------------------------------------------------------------------------------------|
+| DRRG  | ResNet50_vd | [configs/det/det_r50_drrg_ctw.yml](../../configs/det/det_r50_drrg_ctw.yml) | 89.92%    | 80.91% | 85.18% | [trained model](https://paddleocr.bj.bcebos.com/contribution/det_r50_drrg_ctw_train.tar) |
 
 <a name="2"></a>
-## 2. Environment
-Please prepare your environment referring to [prepare the environment](./environment_en.md) and [clone the repo](./clone_en.md).
 
+## 2. Environment
+
+Please prepare your environment referring to [prepare the environment](./environment_en.md)
+and [clone the repo](./clone_en.md).
 
 <a name="3"></a>
+
 ## 3. Model Training / Evaluation / Prediction
 
-The above DRRG model is trained using the CTW1500 text detection public dataset. For the download of the dataset, please refer to [ocr_datasets](./dataset/ocr_datasets_en.md).
+The above DRRG model is trained using the CTW1500 text detection public dataset. For the download of the dataset, please
+refer to [ocr_datasets](./dataset/ocr_datasets_en.md).
 
-After the data download is complete, please refer to [Text Detection Training Tutorial](./detection_en.md) for training. PaddleOCR has modularized the code structure, so that you only need to **replace the configuration file** to train different detection models.
+After the data download is complete, please refer to [Text Detection Training Tutorial](./detection_en.md) for training.
+PaddleOCR has modularized the code structure, so that you only need to **replace the configuration file** to train
+different detection models.
 
 <a name="4"></a>
+
 ## 4. Inference and Deployment
 
 <a name="4-1"></a>
+
 ### 4.1 Python Inference
 
-Since the model needs to be converted to Numpy data for many times in the forward, DRRG dynamic graph to static graph is not supported.
+Since the model needs to be converted to Numpy data for many times in the forward, DRRG dynamic graph to static graph is
+not supported.
 
 <a name="4-2"></a>
+
 ### 4.2 C++ Inference
 
 Not supported
 
 <a name="4-3"></a>
+
 ### 4.3 Serving
 
 Not supported
 
 <a name="4-4"></a>
+
 ### 4.4 More
 
 Not supported
 
 <a name="5"></a>
-## 5. FAQ
 
+## 5. FAQ
 
 ## Citation
 

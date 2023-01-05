@@ -19,7 +19,6 @@ https://github.com/whai362/PSENet/blob/python3/models/head/psenet_head.py
 import paddle
 from paddle import nn
 from paddle.nn import functional as F
-import numpy as np
 from ppocr.utils.iou import iou
 
 
@@ -65,7 +64,7 @@ class PSELoss(nn.Layer):
             selected_masks = gt_texts * training_masks
         elif self.kernel_sample_mask == 'pred':
             selected_masks = (
-                F.sigmoid(texts) > 0.5).astype('float32') * training_masks
+                                     F.sigmoid(texts) > 0.5).astype('float32') * training_masks
 
         for i in range(kernels.shape[1]):
             kernel_i = kernels[:, i, :, :]
@@ -113,7 +112,7 @@ class PSELoss(nn.Layer):
             selected_mask = training_mask
             selected_mask = selected_mask.reshape(
                 [1, selected_mask.shape[0], selected_mask.shape[1]]).astype(
-                    'float32')
+                'float32')
             return selected_mask
 
         neg_num = int(paddle.sum((gt_text <= 0.5).astype('float32')))
@@ -123,7 +122,7 @@ class PSELoss(nn.Layer):
             selected_mask = training_mask
             selected_mask = selected_mask.reshape(
                 [1, selected_mask.shape[0], selected_mask.shape[1]]).astype(
-                    'float32')
+                'float32')
             return selected_mask
 
         neg_score = paddle.masked_select(score, gt_text <= 0.5)
@@ -135,7 +134,7 @@ class PSELoss(nn.Layer):
             (training_mask > 0.5))
         selected_mask = selected_mask.reshape(
             [1, selected_mask.shape[0], selected_mask.shape[1]]).astype(
-                'float32')
+            'float32')
         return selected_mask
 
     def ohem_batch(self, scores, gt_texts, training_masks, ohem_ratio=3):

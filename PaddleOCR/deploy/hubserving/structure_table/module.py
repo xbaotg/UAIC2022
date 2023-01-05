@@ -18,20 +18,18 @@ from __future__ import print_function
 
 import os
 import sys
+
 sys.path.insert(0, ".")
 import copy
 
 import time
-import paddlehub
 from paddlehub.common.logger import logger
-from paddlehub.module.module import moduleinfo, runnable, serving
+from paddlehub.module.module import moduleinfo, serving
 import cv2
-import numpy as np
 import paddlehub as hub
 
 from tools.infer.utility import base64_to_cv2
 from ppstructure.table.predict_table import TableSystem as _TableSystem
-from ppstructure.predict_system import save_structure_res
 from ppstructure.utility import parse_args
 from deploy.hubserving.structure_table.params import read_params
 

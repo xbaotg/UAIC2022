@@ -2,8 +2,8 @@
 
 ## Style Text
 
-
 ### 目录
+
 - [一、工具简介](#工具简介)
 - [二、环境配置](#环境配置)
 - [三、快速上手](#快速上手)
@@ -11,7 +11,9 @@
 - [五、代码结构](#代码结构)
 
 <a name="工具简介"></a>
+
 ### 一、工具简介
+
 <div align="center">
     <img src="doc/images/3.png" width="800">
 </div>
@@ -23,13 +25,15 @@
 
 Style-Text数据合成工具是基于百度和华科合作研发的文本编辑算法《Editing Text in the Wild》https://arxiv.org/abs/1908.03047
 
-不同于常用的基于GAN的数据合成工具，Style-Text主要框架包括：1.文本前景风格迁移模块 2.背景抽取模块 3.融合模块。经过这样三步，就可以迅速实现图像文本风格迁移。下图是一些该数据合成工具效果图。
+不同于常用的基于GAN的数据合成工具，Style-Text主要框架包括：1.文本前景风格迁移模块 2.背景抽取模块
+3.融合模块。经过这样三步，就可以迅速实现图像文本风格迁移。下图是一些该数据合成工具效果图。
 
 <div align="center">
     <img src="doc/images/2.png" width="1000">
 </div>
 
 <a name="环境配置"></a>
+
 ### 二、环境配置
 
 1. 参考[快速安装](../doc/doc_ch/installation.md)，安装PaddleOCR。
@@ -55,19 +59,21 @@ fusion_generator:
 ```
 
 <a name="快速上手"></a>
+
 ### 三、快速上手
 
 #### 合成单张图
+
 输入一张风格图和一段文字语料，运行tools/synth_image，合成单张图片，结果图像保存在当前目录下：
 
 ```python
 python3 tools/synth_image.py -c configs/config.yml --style_image examples/style_images/2.jpg --text_corpus PaddleOCR --language en
 ```
+
 * 注1：语言选项和语料相对应，目前支持英文(en)、简体中文(ch)和韩语(ko)。
 * 注2：Style-Text生成的数据主要应用于OCR识别场景。基于当前PaddleOCR识别模型的设计，我们主要支持高度在32左右的风格图像。
   如果输入图像尺寸相差过多，效果可能不佳。
 * 注3：可以通过修改配置文件`configs/config.yml`中的`use_gpu`(true或者false)参数来决定是否使用GPU进行预测。
-
 
 例如，输入如下图片和语料"PaddleOCR":
 
@@ -93,20 +99,22 @@ python3 tools/synth_image.py -c configs/config.yml --style_image examples/style_
 </div>
 
 #### 批量合成
+
 在实际应用场景中，经常需要批量合成图片，补充到训练集中。Style-Text可以使用一批风格图片和语料，批量合成数据。合成过程如下：
 
 1. 在`configs/dataset_config.yml`中配置目标场景风格图像和语料的路径，具体如下：
 
-   * `Global`：
-     * `output_dir:`：保存合成数据的目录。
-   * `StyleSampler`：
-     * `image_home`：风格图片目录；
-     * `label_file`：风格图片路径列表文件，如果所用数据集有label，则label_file为label文件路径；
-     * `with_label`：标志`label_file`是否为label文件。
-   * `CorpusGenerator`：
-     * `method`：语料生成方法，目前有`FileCorpus`和`EnNumCorpus`可选。如果使用`EnNumCorpus`，则不需要填写其他配置，否则需要修改`corpus_file`和`language`；
-     * `language`：语料的语种，目前支持英文(en)、简体中文(ch)和韩语(ko)；
-     * `corpus_file`: 语料文件路径。语料文件应使用文本文件。语料生成器首先会将语料按行切分，之后每次随机选取一行。
+    * `Global`：
+        * `output_dir:`：保存合成数据的目录。
+    * `StyleSampler`：
+        * `image_home`：风格图片目录；
+        * `label_file`：风格图片路径列表文件，如果所用数据集有label，则label_file为label文件路径；
+        * `with_label`：标志`label_file`是否为label文件。
+    * `CorpusGenerator`：
+        * `method`：语料生成方法，目前有`FileCorpus`和`EnNumCorpus`可选。如果使用`EnNumCorpus`
+          ，则不需要填写其他配置，否则需要修改`corpus_file`和`language`；
+        * `language`：语料的语种，目前支持英文(en)、简体中文(ch)和韩语(ko)；
+        * `corpus_file`: 语料文件路径。语料文件应使用文本文件。语料生成器首先会将语料按行切分，之后每次随机选取一行。
 
    语料文件格式示例：
    ```
@@ -145,7 +153,9 @@ python3 tools/synth_image.py -c configs/config.yml --style_image examples/style_
    如果程序正常运行完毕，则会在output_data下生成label.txt，为最终的标注结果。
 
 <a name="应用案例"></a>
+
 ### 四、应用案例
+
 下面以金属表面英文数字识别和通用韩语识别两个场景为例，说明使用Style-Text合成数据，来提升文本识别效果的实际案例。下图给出了一些真实场景图像和合成图像的示例：
 
 <div align="center">
@@ -154,13 +164,13 @@ python3 tools/synth_image.py -c configs/config.yml --style_image examples/style_
 
 在添加上述合成数据进行训练后，识别模型的效果提升，如下表所示：
 
-| 场景     | 字符       | 原始数据 | 测试数据 | 只使用原始数据</br>识别准确率 | 新增合成数据 | 同时使用合成数据</br>识别准确率 | 指标提升 |
-| -------- | ---------- | -------- | -------- | -------------------------- | ------------ | ---------------------- | -------- |
-| 金属表面 | 英文和数字 | 2203     | 650      | 59.38%                     | 20000        | 75.46%                 | 16.08%      |
-| 随机背景 | 韩语       | 5631     | 1230     | 30.12%                     | 100000       | 50.57%                 | 20.45%      |
-
+| 场景   | 字符    | 原始数据 | 测试数据 | 只使用原始数据</br>识别准确率 | 新增合成数据 | 同时使用合成数据</br>识别准确率 | 指标提升   |
+|------|-------|------|------|-------------------|--------|--------------------|--------|
+| 金属表面 | 英文和数字 | 2203 | 650  | 59.38%            | 20000  | 75.46%             | 16.08% |
+| 随机背景 | 韩语    | 5631 | 1230 | 30.12%            | 100000 | 50.57%             | 20.45% |
 
 <a name="代码结构"></a>
+
 ### 五、代码结构
 
 ```

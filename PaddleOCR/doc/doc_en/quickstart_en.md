@@ -1,19 +1,19 @@
 # PaddleOCR Quick Start
 
-**Note:** This tutorial mainly introduces the usage of PP-OCR series models, please refer to [PP-Structure Quick Start](../../ppstructure/docs/quickstart_en.md) for the quick use of document analysis related functions.
+**Note:** This tutorial mainly introduces the usage of PP-OCR series models, please refer
+to [PP-Structure Quick Start](../../ppstructure/docs/quickstart_en.md) for the quick use of document analysis related
+functions.
 
 - [1. Installation](#1-installation)
-  - [1.1 Install PaddlePaddle](#11-install-paddlepaddle)
-  - [1.2 Install PaddleOCR Whl Package](#12-install-paddleocr-whl-package)
+    - [1.1 Install PaddlePaddle](#11-install-paddlepaddle)
+    - [1.2 Install PaddleOCR Whl Package](#12-install-paddleocr-whl-package)
 - [2. Easy-to-Use](#2-easy-to-use)
-  - [2.1 Use by Command Line](#21-use-by-command-line)
-    - [2.1.1 Chinese and English Model](#211-chinese-and-english-model)
-    - [2.1.2 Multi-language Model](#212-multi-language-model)
-  - [2.2 Use by Code](#22-use-by-code)
-    - [2.2.1 Chinese & English Model and Multilingual Model](#221-chinese--english-model-and-multilingual-model)
+    - [2.1 Use by Command Line](#21-use-by-command-line)
+        - [2.1.1 Chinese and English Model](#211-chinese-and-english-model)
+        - [2.1.2 Multi-language Model](#212-multi-language-model)
+    - [2.2 Use by Code](#22-use-by-code)
+        - [2.2.1 Chinese & English Model and Multilingual Model](#221-chinese--english-model-and-multilingual-model)
 - [3. Summary](#3-summary)
-
-
 
 <a name="1nstallation"></a>
 
@@ -37,7 +37,8 @@
   python3 -m pip install paddlepaddle -i https://mirror.baidu.com/pypi/simple
   ```
 
-For more software version requirements, please refer to the instructions in [Installation Document](https://www.paddlepaddle.org.cn/install/quick) for operation.
+For more software version requirements, please refer to the instructions
+in [Installation Document](https://www.paddlepaddle.org.cn/install/quick) for operation.
 
 <a name="12-install-paddleocr-whl-package"></a>
 
@@ -47,7 +48,9 @@ For more software version requirements, please refer to the instructions in [Ins
 pip install "paddleocr>=2.0.1" # Recommend to use version 2.0.1+
 ```
 
-- **For windows users:** If you getting this error `OSError: [WinError 126] The specified module could not be found` when you install shapely on windows. Please try to download Shapely whl file [here](http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely).
+- **For windows users:** If you getting this error `OSError: [WinError 126] The specified module could not be found`
+  when you install shapely on windows. Please try to download Shapely whl
+  file [here](http://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely).
 
   Reference: [Solve shapely installation on windows](https://stackoverflow.com/questions/44398265/install-shapely-oserror-winerror-126-the-specified-module-could-not-be-found)
 
@@ -59,13 +62,15 @@ pip install "paddleocr>=2.0.1" # Recommend to use version 2.0.1+
 
 ### 2.1 Use by Command Line
 
-PaddleOCR provides a series of test images, click [here](https://paddleocr.bj.bcebos.com/dygraph_v2.1/ppocr_img.zip) to download, and then switch to the corresponding directory in the terminal
+PaddleOCR provides a series of test images, click [here](https://paddleocr.bj.bcebos.com/dygraph_v2.1/ppocr_img.zip) to
+download, and then switch to the corresponding directory in the terminal
 
 ```bash
 cd /path/to/ppocr_img
 ```
 
-If you do not use the provided test image, you can replace the following `--image_dir` parameter with the corresponding test image path
+If you do not use the provided test image, you can replace the following `--image_dir` parameter with the corresponding
+test image path
 
 <a name="211-english-and-chinese-model"></a>
 
@@ -86,7 +91,8 @@ If you do not use the provided test image, you can replace the following `--imag
   ......
   ```
 
-  pdf file is also supported, you can infer the first few pages by using the `page_num` parameter, the default is 0, which means infer all pages
+  pdf file is also supported, you can infer the first few pages by using the `page_num` parameter, the default is 0,
+  which means infer all pages
 
   ```bash
   paddleocr --image_dir ./xxx.pdf --use_angle_cls true --use_gpu false --page_num 2
@@ -120,14 +126,19 @@ If you do not use the provided test image, you can replace the following `--imag
   ```
 
 **Version**
-paddleocr uses the PP-OCRv3 model by default(`--ocr_version PP-OCRv3`). If you want to use other versions, you can set the parameter `--ocr_version`, the specific version description is as follows:
-|  version name |  description |
-|    ---    |   ---   |
-| PP-OCRv3 | support Chinese and English detection and recognition, direction classifier, support multilingual recognition |
-| PP-OCRv2 | only supports Chinese and English detection and recognition, direction classifier, multilingual model is not updated |
-| PP-OCR   | support Chinese and English detection and recognition, direction classifier, support multilingual recognition |
+paddleocr uses the PP-OCRv3 model by default(`--ocr_version PP-OCRv3`). If you want to use other versions, you can set
+the parameter `--ocr_version`, the specific version description is as follows:
+| version name | description |
+| --- | --- |
+| PP-OCRv3 | support Chinese and English detection and recognition, direction classifier, support multilingual
+recognition |
+| PP-OCRv2 | only supports Chinese and English detection and recognition, direction classifier, multilingual model is
+not updated |
+| PP-OCR | support Chinese and English detection and recognition, direction classifier, support multilingual
+recognition |
 
-If you want to add your own trained model, you can add model links and keys in [paddleocr](../../paddleocr.py) and recompile.
+If you want to add your own trained model, you can add model links and keys in [paddleocr](../../paddleocr.py) and
+recompile.
 
 More whl package usage can be found in [whl package](./whl_en.md)
 
@@ -156,18 +167,19 @@ The result is a list, each item contains a text box, text and recognition confid
 
 Commonly used multilingual abbreviations include
 
-| Language            | Abbreviation |      | Language | Abbreviation |      | Language | Abbreviation |
-| ------------------- | ------------ | ---- | -------- | ------------ | ---- | -------- | ------------ |
-| Chinese & English   | ch           |      | French   | fr           |      | Japanese | japan        |
-| English             | en           |      | German   | german       |      | Korean   | korean       |
-| Chinese Traditional | chinese_cht  |      | Italian  | it           |      | Russian  | ru           |
+| Language            | Abbreviation |     | Language | Abbreviation |     | Language | Abbreviation |
+|---------------------|--------------|-----|----------|--------------|-----|----------|--------------|
+| Chinese & English   | ch           |     | French   | fr           |     | Japanese | japan        |
+| English             | en           |     | German   | german       |     | Korean   | korean       |
+| Chinese Traditional | chinese_cht  |     | Italian  | it           |     | Russian  | ru           |
 
-A list of all languages and their corresponding abbreviations can be found in [Multi-Language Model Tutorial](./multi_languages_en.md)
-
+A list of all languages and their corresponding abbreviations can be found
+in [Multi-Language Model Tutorial](./multi_languages_en.md)
 
 <a name="22-use-by-code"></a>
 
 ### 2.2 Use by Code
+
 <a name="221-chinese---english-model-and-multilingual-model"></a>
 
 #### 2.2.1 Chinese & English Model and Multilingual Model
@@ -266,4 +278,6 @@ for idx in range(len(result)):
 
 In this section, you have mastered the use of PaddleOCR whl package.
 
-PaddleOCR is a rich and practical OCR tool library that get through the whole process of data production, model training, compression, inference and deployment, please refer to the [tutorials](../../README.md#tutorials) to start the journey of PaddleOCR.
+PaddleOCR is a rich and practical OCR tool library that get through the whole process of data production, model
+training, compression, inference and deployment, please refer to the [tutorials](../../README.md#tutorials) to start the
+journey of PaddleOCR.

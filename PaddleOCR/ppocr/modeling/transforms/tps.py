@@ -21,10 +21,11 @@ from __future__ import division
 from __future__ import print_function
 
 import math
+
+import numpy as np
 import paddle
 from paddle import nn, ParamAttr
 from paddle.nn import functional as F
-import numpy as np
 
 
 class ConvBNLayer(nn.Layer):
@@ -237,7 +238,7 @@ class GridGenerator(nn.Layer):
         hat_eye = paddle.eye(F, dtype='float64')  # F x F
         hat_C = paddle.norm(
             C.reshape([1, F, 2]) - C.reshape([F, 1, 2]), axis=2) + hat_eye
-        hat_C = (hat_C**2) * paddle.log(hat_C)
+        hat_C = (hat_C ** 2) * paddle.log(hat_C)
         delta_C = paddle.concat(  # F+3 x F+3
             [
                 paddle.concat(
@@ -247,14 +248,14 @@ class GridGenerator(nn.Layer):
                     [
                         paddle.zeros(
                             (2, 3), dtype='float64'), paddle.transpose(
-                                C, perm=[1, 0])
+                        C, perm=[1, 0])
                     ],
                     axis=1),  # 2 x F+3
                 paddle.concat(
                     [
                         paddle.zeros(
                             (1, 3), dtype='float64'), paddle.ones(
-                                (1, F), dtype='float64')
+                        (1, F), dtype='float64')
                     ],
                     axis=1)  # 1 x F+3
             ],

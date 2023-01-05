@@ -19,8 +19,8 @@ https://github.com/PaddlePaddle/PaddleDetection/blob/release/2.3/ppdet/modeling/
 import paddle.nn as nn
 import paddle.nn.functional as F
 from paddle import ParamAttr
-from paddle.nn.initializer import XavierUniform
 from paddle.nn.initializer import Normal
+from paddle.nn.initializer import XavierUniform
 from paddle.regularizer import L2Decay
 
 __all__ = ['FCEFPN']

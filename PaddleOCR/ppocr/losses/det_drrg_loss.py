@@ -60,7 +60,7 @@ class DRRGLoss(nn.Layer):
             negative_loss.reshape([-1]), negative_count)
 
         balance_loss = (positive_loss + paddle.sum(negative_loss)) / (
-            float(positive_count + negative_count) + 1e-5)
+                float(positive_count + negative_count) + 1e-5)
 
         return balance_loss
 
@@ -118,7 +118,7 @@ class DRRGLoss(nn.Layer):
 
         assert isinstance(preds, tuple)
         gt_text_mask, gt_center_region_mask, gt_mask, gt_top_height_map, gt_bot_height_map, gt_sin_map, gt_cos_map = labels[
-            1:8]
+                                                                                                                     1:8]
 
         downsample_ratio = self.downsample_ratio
 
@@ -135,7 +135,7 @@ class DRRGLoss(nn.Layer):
         mapping = {
             'gt_text_mask': paddle.cast(gt_text_mask, 'float32'),
             'gt_center_region_mask':
-            paddle.cast(gt_center_region_mask, 'float32'),
+                paddle.cast(gt_center_region_mask, 'float32'),
             'gt_mask': paddle.cast(gt_mask, 'float32'),
             'gt_top_height_map': paddle.cast(gt_top_height_map, 'float32'),
             'gt_bot_height_map': paddle.cast(gt_bot_height_map, 'float32'),
@@ -154,7 +154,7 @@ class DRRGLoss(nn.Layer):
                     gt[key] = [item * downsample_ratio for item in gt[key]]
             gt[key] = [item for item in gt[key]]
 
-        scale = paddle.sqrt(1.0 / (pred_sin_map**2 + pred_cos_map**2 + 1e-8))
+        scale = paddle.sqrt(1.0 / (pred_sin_map ** 2 + pred_cos_map ** 2 + 1e-8))
         pred_sin_map = pred_sin_map * scale
         pred_cos_map = pred_cos_map * scale
 
@@ -191,7 +191,7 @@ class DRRGLoss(nn.Layer):
                 ones,
                 reduction='none')
             gt_height = (
-                gt['gt_top_height_map'][0] + gt['gt_bot_height_map'][0])
+                    gt['gt_top_height_map'][0] + gt['gt_bot_height_map'][0])
             loss_height = paddle.sum(
                 (paddle.log(gt_height + 1) *
                  (loss_top + loss_bot)) * center_mask) / paddle.sum(center_mask)

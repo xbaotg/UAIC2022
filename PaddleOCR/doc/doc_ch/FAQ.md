@@ -4,40 +4,43 @@
 
 PaddleOCR收集整理了自从开源以来在issues和用户群中的常见问题并且给出了简要解答，旨在为OCR的开发者提供一些参考，也希望帮助大家少走一些弯路。
 
-其中[通用问题](#1)一般是初次接触OCR相关算法时用户会提出的问题，在[1.5 垂类场景实现思路](#15)中总结了如何在一些具体的场景中确定技术路线进行优化。[PaddleOCR常见问题](#2)是开发者在使用PaddleOCR之后可能会遇到的问题也是PaddleOCR实践过程中的避坑指南。
+其中[通用问题](#1)一般是初次接触OCR相关算法时用户会提出的问题，在[1.5 垂类场景实现思路](#15)
+中总结了如何在一些具体的场景中确定技术路线进行优化。[PaddleOCR常见问题](#2)
+是开发者在使用PaddleOCR之后可能会遇到的问题也是PaddleOCR实践过程中的避坑指南。
 
-同时PaddleOCR也会在review issue的过程中添加 `good issue`、 `good first issue` 标签，但这些问题可能不会被立刻补充在FAQ文档里，开发者也可对应查看。我们也非常希望开发者能够帮助我们将这些内容补充在FAQ中。
+同时PaddleOCR也会在review issue的过程中添加 `good issue`、 `good first issue`
+标签，但这些问题可能不会被立刻补充在FAQ文档里，开发者也可对应查看。我们也非常希望开发者能够帮助我们将这些内容补充在FAQ中。
 
 OCR领域大佬众多，本文档回答主要依赖有限的项目实践，难免挂一漏万，如有遗漏和不足，也**希望有识之士帮忙补充和修正**，万分感谢。
 
 - [FAQ](#faq)
 
-  * [1. 通用问题](#1)
-    + [1.1 检测](#11)
-    + [1.2 识别](#12)
-    + [1.3 端到端](#13)
-    + [1.4 评估方法](#14)
-    + [1.5 垂类场景实现思路](#15)
-    + [1.6 训练过程与模型调优](#16)
-    + [1.7 补充资料](#17)
+    * [1. 通用问题](#1)
+        + [1.1 检测](#11)
+        + [1.2 识别](#12)
+        + [1.3 端到端](#13)
+        + [1.4 评估方法](#14)
+        + [1.5 垂类场景实现思路](#15)
+        + [1.6 训练过程与模型调优](#16)
+        + [1.7 补充资料](#17)
 
-  * [2. PaddleOCR实战问题](#2)
-    + [2.1 PaddleOCR repo](#21)
-    + [2.2 安装环境](#22)
-    + [2.3 数据量说明](#23)
-    + [2.4 数据标注与生成](#24)
-    + [2.5 预训练模型与微调](#25)
-    + [2.6 模型超参调整](#26)
-    + [2.7 模型结构](#27)
-    + [2.8 PP-OCR系统](#28)
-    + [2.9 端到端](#29)
-    + [2.10 模型效果与效果不一致](#210)
-    + [2.11 训练调试与配置文件](#211)
-    + [2.12 预测](#212)
-    + [2.13 推理部署](#213)
-
+    * [2. PaddleOCR实战问题](#2)
+        + [2.1 PaddleOCR repo](#21)
+        + [2.2 安装环境](#22)
+        + [2.3 数据量说明](#23)
+        + [2.4 数据标注与生成](#24)
+        + [2.5 预训练模型与微调](#25)
+        + [2.6 模型超参调整](#26)
+        + [2.7 模型结构](#27)
+        + [2.8 PP-OCR系统](#28)
+        + [2.9 端到端](#29)
+        + [2.10 模型效果与效果不一致](#210)
+        + [2.11 训练调试与配置文件](#211)
+        + [2.12 预测](#212)
+        + [2.13 推理部署](#213)
 
 <a name="1"></a>
+
 ## 1. 通用问题
 
 <a name="11"></a>
@@ -48,7 +51,8 @@ OCR领域大佬众多，本文档回答主要依赖有限的项目实践，难�
 
 **A**：常用的基于深度学习的文字检测方法一般可以分为基于回归的、基于分割的两大类，当然还有一些将两者进行结合的方法。
 
-（1）基于回归的方法分为box回归和像素值回归。a. 采用box回归的方法主要有CTPN、Textbox系列和EAST，这类算法对规则形状文本检测效果较好，但无法准确检测不规则形状文本。 b. 像素值回归的方法主要有CRAFT和SA-Text，这类算法能够检测弯曲文本且对小文本效果优秀但是实时性能不够。
+（1）基于回归的方法分为box回归和像素值回归。a. 采用box回归的方法主要有CTPN、Textbox系列和EAST，这类算法对规则形状文本检测效果较好，但无法准确检测不规则形状文本。
+b. 像素值回归的方法主要有CRAFT和SA-Text，这类算法能够检测弯曲文本且对小文本效果优秀但是实时性能不够。
 
 （2）基于分割的算法，如PSENet，这类算法不受文本形状的限制，对各种形状的文本都能取得较好的效果，但是往往后处理比较复杂，导致耗时严重。目前也有一些算法专门针对这个问题进行改进，如DB，将二值化进行近似，使其可导，融入训练，从而获取更准确的边界，大大降低了后处理的耗时。
 
@@ -58,15 +62,19 @@ OCR领域大佬众多，本文档回答主要依赖有限的项目实践，难�
 
 #### Q: PaddleOCR提供的文本识别算法包括哪些？
 
-A: PaddleOCR主要提供五种文本识别算法，包括CRNN\StarNet\RARE\Rosetta和SRN, 其中CRNN\StarNet和Rosetta是基于ctc的文字识别算法，RARE是基于attention的文字识别算法；SRN为百度自研的文本识别算法，引入了语义信息，显著提升了准确率。 详情可参照如下页面: 文本识别算法
+A: PaddleOCR主要提供五种文本识别算法，包括CRNN\StarNet\RARE\Rosetta和SRN,
+其中CRNN\StarNet和Rosetta是基于ctc的文字识别算法，RARE是基于attention的文字识别算法；SRN为百度自研的文本识别算法，引入了语义信息，显著提升了准确率。
+详情可参照如下页面: 文本识别算法
 
 #### Q: 文本识别方法CRNN关键技术有哪些？
 
-A: CRNN 关键技术包括三部分。（1）CNN提取图像卷积特征。（2）深层双向LSTM网络，在卷积特征的基础上继续提取文字序列特征。（3）Connectionist Temporal Classification(CTC)，解决训练时字符无法对齐的问题。
+A: CRNN 关键技术包括三部分。（1）CNN提取图像卷积特征。（2）深层双向LSTM网络，在卷积特征的基础上继续提取文字序列特征。（3）Connectionist
+Temporal Classification(CTC)，解决训练时字符无法对齐的问题。
 
 #### Q: 对于中文行文本识别，CTC和Attention哪种更优？
 
-**A**：（1）从效果上来看，通用OCR场景CTC的识别效果优于Attention，因为带识别的字典中的字符比较多，常用中文汉字三千字以上，如果训练样本不足的情况下，对于这些字符的序列关系挖掘比较困难。中文场景下Attention模型的优势无法体现。而且Attention适合短语句识别，对长句子识别比较差。
+**A**
+：（1）从效果上来看，通用OCR场景CTC的识别效果优于Attention，因为带识别的字典中的字符比较多，常用中文汉字三千字以上，如果训练样本不足的情况下，对于这些字符的序列关系挖掘比较困难。中文场景下Attention模型的优势无法体现。而且Attention适合短语句识别，对长句子识别比较差。
 
 （2）从训练和预测速度上，Attention的串行解码结构限制了预测速度，而CTC网络结构更高效，预测速度上更有优势。
 
@@ -74,7 +82,8 @@ A: CRNN 关键技术包括三部分。（1）CNN提取图像卷积特征。（2�
 
 **A**：（1）在大多数情况下，如果遇到的场景弯曲形变不是太严重，检测4个顶点，然后直接通过仿射变换转正识别就足够了。
 
-（2）如果不能满足需求，可以尝试使用TPS（Thin Plate Spline），即薄板样条插值。TPS是一种插值算法，经常用于图像变形等，通过少量的控制点就可以驱动图像进行变化。一般用在有弯曲形变的文本识别中，当检测到不规则的/弯曲的（如，使用基于分割的方法检测算法）文本区域，往往先使用TPS算法对文本区域矫正成矩形再进行识别，如，STAR-Net、RARE等识别算法中引入了TPS模块。
+（2）如果不能满足需求，可以尝试使用TPS（Thin Plate
+Spline），即薄板样条插值。TPS是一种插值算法，经常用于图像变形等，通过少量的控制点就可以驱动图像进行变化。一般用在有弯曲形变的文本识别中，当检测到不规则的/弯曲的（如，使用基于分割的方法检测算法）文本区域，往往先使用TPS算法对文本区域矫正成矩形再进行识别，如，STAR-Net、RARE等识别算法中引入了TPS模块。
 
 > **Warning**：TPS看起来美好，在实际应用时经常发现并不够鲁棒，并且会增加耗时，需要谨慎使用。
 
@@ -140,7 +149,8 @@ A：在人类肉眼可以识别的前提下，可以考虑图像处理中的均�
 
 #### Q：低像素文字或者字号比较小的文字有什么超分辨率方法吗
 
-A：超分辨率方法分为传统方法和基于深度学习的方法。基于深度学习的方法中，比较经典的有SRCNN，另外CVPR2020也有一篇超分辨率的工作可以参考文章：Unpaired Image Super-Resolution using Pseudo-Supervision，但是没有充分的实践验证过，需要看实际场景下的效果。
+A：超分辨率方法分为传统方法和基于深度学习的方法。基于深度学习的方法中，比较经典的有SRCNN，另外CVPR2020也有一篇超分辨率的工作可以参考文章：Unpaired
+Image Super-Resolution using Pseudo-Supervision，但是没有充分的实践验证过，需要看实际场景下的效果。
 
 #### Q：对于一些尺寸较大的文档类图片，在检测时会有较多的漏检，怎么避免这种漏检的问题呢？
 
@@ -152,11 +162,17 @@ A：可以在预测时调小 det_db_box_thresh 阈值，默认为0.5, 可调小�
 
 #### Q: 弯曲文本（如略微形变的文档图像）漏检问题
 
-**A**: db后处理中计算文本框平均得分时，是求rectangle区域的平均分数，容易造成弯曲文本漏检，已新增求polygon区域的平均分数，会更准确，但速度有所降低，可按需选择，在相关pr中可查看[可视化对比效果](https://github.com/PaddlePaddle/PaddleOCR/pull/2604)。该功能通过参数 [det_db_score_mode](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/tools/infer/utility.py#L51)进行选择，参数值可选[`fast`(默认)、`slow`]，`fast`对应原始的rectangle方式，`slow`对应polygon方式。感谢用户[buptlihang](https://github.com/buptlihang)提[pr](https://github.com/PaddlePaddle/PaddleOCR/pull/2574)帮助解决该问题🌹。
+**A**:
+db后处理中计算文本框平均得分时，是求rectangle区域的平均分数，容易造成弯曲文本漏检，已新增求polygon区域的平均分数，会更准确，但速度有所降低，可按需选择，在相关pr中可查看[可视化对比效果](https://github.com/PaddlePaddle/PaddleOCR/pull/2604)
+。该功能通过参数 [det_db_score_mode](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/tools/infer/utility.py#L51)
+进行选择，参数值可选[`fast`(默认)、`slow`]，`fast`对应原始的rectangle方式，`slow`
+对应polygon方式。感谢用户[buptlihang](https://github.com/buptlihang)
+提[pr](https://github.com/PaddlePaddle/PaddleOCR/pull/2574)帮助解决该问题🌹。
 
 #### Q：如何识别文字比较长的文本？
 
-**A**：在中文识别模型训练时，并不是采用直接将训练样本缩放到[3,32,320]进行训练，而是先等比例缩放图像，保证图像高度为32，宽度不足320的部分补0，宽高比大于10的样本直接丢弃。预测时，如果是单张图像预测，则按上述操作直接对图像缩放，不做宽度320的限制。如果是多张图预测，则采用batch方式预测，每个batch的宽度动态变换，采用这个batch中最长宽度。
+**A**：在中文识别模型训练时，并不是采用直接将训练样本缩放到[3,32,320]
+进行训练，而是先等比例缩放图像，保证图像高度为32，宽度不足320的部分补0，宽高比大于10的样本直接丢弃。预测时，如果是单张图像预测，则按上述操作直接对图像缩放，不做宽度320的限制。如果是多张图预测，则采用batch方式预测，每个batch的宽度动态变换，采用这个batch中最长宽度。
 
 #### Q：如何识别带空格的英文行文本图像？
 
@@ -172,7 +188,8 @@ A：可以在预测时调小 det_db_box_thresh 阈值，默认为0.5, 可调小�
 
 #### Q: 如何识别招牌或者广告图中的艺术字？
 
-A: 招牌或者广告图中的艺术字是文本识别一个非常有挑战性的难题，因为艺术字中的单字和印刷体相比，变化非常大。如果需要识别的艺术字是在一个词典列表内，可以将改每个词典认为是一个待识别图像模板，通过通用图像检索识别系统解决识别问题。可以尝试使用PaddleClas的图像识别系统。
+A:
+招牌或者广告图中的艺术字是文本识别一个非常有挑战性的难题，因为艺术字中的单字和印刷体相比，变化非常大。如果需要识别的艺术字是在一个词典列表内，可以将改每个词典认为是一个待识别图像模板，通过通用图像检索识别系统解决识别问题。可以尝试使用PaddleClas的图像识别系统。
 
 #### Q: 印章如何识别
 
@@ -180,7 +197,8 @@ A：1. 使用带tps的识别网络或abcnet,2.使用极坐标变换将图片拉�
 
 #### Q: 使用预训练模型进行预测，对于特定字符识别识别效果较差，怎么解决？
 
-A: 由于我们所提供的识别模型是基于通用大规模数据集进行训练的，部分字符可能在训练集中包含较少，因此您可以构建特定场景的数据集，基于我们提供的预训练模型进行微调。建议用于微调的数据集中，每个字符出现的样本数量不低于300，但同时需要注意不同字符的数量均衡。具体可以参考：微调。
+A:
+由于我们所提供的识别模型是基于通用大规模数据集进行训练的，部分字符可能在训练集中包含较少，因此您可以构建特定场景的数据集，基于我们提供的预训练模型进行微调。建议用于微调的数据集中，每个字符出现的样本数量不低于300，但同时需要注意不同字符的数量均衡。具体可以参考：微调。
 
 #### Q: 在使用训练好的识别模型进行预测的时候，发现有很多重复的字，这个怎么解决呢？
 
@@ -188,11 +206,13 @@ A：可以看下训练的尺度和预测的尺度是否相同，如果训练的�
 
 #### Q: 如何识别招牌或者广告图中的艺术字？
 
-**A**: 招牌或者广告图中的艺术字是文本识别一个非常有挑战性的难题，因为艺术字中的单字和印刷体相比，变化非常大。如果需要识别的艺术字是在一个词典列表内，可以将改每个词典认为是一个待识别图像模板，通过通用图像检索识别系统解决识别问题。可以尝试使用PaddleClas的图像识别系统。
+**A**:
+招牌或者广告图中的艺术字是文本识别一个非常有挑战性的难题，因为艺术字中的单字和印刷体相比，变化非常大。如果需要识别的艺术字是在一个词典列表内，可以将改每个词典认为是一个待识别图像模板，通过通用图像检索识别系统解决识别问题。可以尝试使用PaddleClas的图像识别系统。
 
 #### Q: 图像正常识别出来的文字是OK的，旋转90度后识别出来的结果就比较差，有什么方法可以优化？
 
-**A**: 	整图旋转90之后效果变差是有可能的，因为目前PPOCR默认输入的图片是正向的； 可以自己训练一个整图的方向分类器，放在预测的最前端（可以参照现有方向分类器的方式），或者可以基于规则做一些预处理，比如判断长宽等等。
+**A**:    整图旋转90之后效果变差是有可能的，因为目前PPOCR默认输入的图片是正向的；
+可以自己训练一个整图的方向分类器，放在预测的最前端（可以参照现有方向分类器的方式），或者可以基于规则做一些预处理，比如判断长宽等等。
 
 #### Q: 如何识别竹简上的古文？
 
@@ -211,8 +231,10 @@ A：可以看下训练的尺度和预测的尺度是否相同，如果训练的�
 
 **A**: 有两种方式处理：
 
-- 如果没有其他需要，可以在解码数据的时候指定模式为三通道，例如如果使用opencv，可以使用cv::imread(img_path, cv::IMREAD_COLOR)。
-- 如果其他模块需要处理四通道的图像，那也可以在输入PaddleOCR模块之前进行转换，例如使用cvCvtColor(&img,img3chan,CV_RGBA2RGB)。
+- 如果没有其他需要，可以在解码数据的时候指定模式为三通道，例如如果使用opencv，可以使用cv::imread(img_path, cv::
+  IMREAD_COLOR)。
+- 如果其他模块需要处理四通道的图像，那也可以在输入PaddleOCR模块之前进行转换，例如使用cvCvtColor(
+  &img,img3chan,CV_RGBA2RGB)。
 
 #### Q: 遇到中英文识别模型不支持的字符，该如何对模型做微调？
 
@@ -236,7 +258,8 @@ A：可以看下训练的尺度和预测的尺度是否相同，如果训练的�
 
 #### Q: 多语言的字典里是混合了不同的语种，这个是有什么讲究吗？统一到一个字典里会对精度造成多大的损失？
 
-**A**：统一到一个字典里，会造成最后一层FC过大，增加模型大小。如果有特殊需求的话，可以把需要的几种语言合并字典训练模型，合并字典之后如果引入过多的形近字，可能会造成精度损失，字符平衡的问题可能也需要考虑一下。在PaddleOCR里暂时将语言字典分开。
+**A**
+：统一到一个字典里，会造成最后一层FC过大，增加模型大小。如果有特殊需求的话，可以把需要的几种语言合并字典训练模型，合并字典之后如果引入过多的形近字，可能会造成精度损失，字符平衡的问题可能也需要考虑一下。在PaddleOCR里暂时将语言字典分开。
 
 #### Q：类似泰语这样的小语种，部分字会占用两个字符甚至三个字符，请问如何制作字典。
 
@@ -248,10 +271,13 @@ A：可以看下训练的尺度和预测的尺度是否相同，如果训练的�
 
 **A**:  这样的需求在企业应用中确实比较常见，但往往都是个性化的需求，没有非常规整统一的处理方式。常见的处理方式有如下两种：
 
-1.  对于单一版式、或者版式差异不大的应用场景，可以基于识别场景的一些先验信息，将识别内容进行配对； 比如运用表单结构信息：常见表单"姓名"关键字的后面，往往紧跟的就是名字信息
-2.  对于版式多样，或者无固定版式的场景， 需要借助于NLP中的NER技术，给识别内容中的某些字段，赋予key值
+1. 对于单一版式、或者版式差异不大的应用场景，可以基于识别场景的一些先验信息，将识别内容进行配对；
+   比如运用表单结构信息：常见表单"姓名"关键字的后面，往往紧跟的就是名字信息
+2. 对于版式多样，或者无固定版式的场景， 需要借助于NLP中的NER技术，给识别内容中的某些字段，赋予key值
 
-由于这部分需求和业务场景强相关，难以用一个统一的模型去处理，目前PPOCR暂不支持。 如果需要用到NER技术，可以参照Paddle团队的另一个开源套件:  https://github.com/PaddlePaddle/ERNIE， 其提供的预训练模型ERNIE,  可以帮助提升NER任务的准确率。
+由于这部分需求和业务场景强相关，难以用一个统一的模型去处理，目前PPOCR暂不支持。
+如果需要用到NER技术，可以参照Paddle团队的另一个开源套件:  https://github.com/PaddlePaddle/ERNIE， 其提供的预训练模型ERNIE,
+可以帮助提升NER任务的准确率。
 
 <a name="16"></a>
 
@@ -260,7 +286,7 @@ A：可以看下训练的尺度和预测的尺度是否相同，如果训练的�
 #### Q: 增大batch_size模型训练速度没有明显提升
 
 A：如果batch_size打得太大，加速效果不明显的话，可以试一下增大初始化内存的值，运行代码前设置环境变量：
-export FLAGS_initial_cpu_memory_in_mb=2000  # 设置初始化内存约2G左右
+export FLAGS_initial_cpu_memory_in_mb=2000 # 设置初始化内存约2G左右
 
 #### Q: 预测时提示图像过大，显存、内存溢出了，应该如何处理？
 
@@ -268,7 +294,8 @@ A: 可以按照这个PR的修改来缓解显存、内存占用 #2230
 
 #### Q: 识别训练时，训练集精度已经到达90了，但验证集精度一直在70，涨不上去怎么办？
 
-A：训练集精度90，测试集70多的话，应该是过拟合了，有两个可尝试的方法：（1）加入更多的增广方式或者调大增广prob的概率，默认为0.4。（2）调大系统的l2 decay值
+A：训练集精度90，测试集70多的话，应该是过拟合了，有两个可尝试的方法：（1）加入更多的增广方式或者调大增广prob的概率，默认为0.4。（2）调大系统的l2
+decay值
 
 <a name="17"></a>
 
@@ -297,7 +324,8 @@ AI 快车道课程：https://aistudio.baidu.com/aistudio/course/introduce/1519
 - dygraph：基于Paddle动态图开发的分支，目前仍在开发中，未来将作为主要开发分支，运行要求使用Paddle2.0.0版本。
 - release/2.0-rc1-0：PaddleOCR发布的第二个稳定版本，基于动态图和paddle2.0版本开发，动态图开发的工程更易于调试，目前支，支持模型训练、预测，暂不支持移动端部署。
 
-如果您已经上手过PaddleOCR，并且希望在各种环境上部署PaddleOCR，目前建议使用静态图分支，develop或者release/1.1分支。如果您是初学者，想快速训练，调试PaddleOCR中的算法，建议尝鲜PaddleOCR dygraph分支。
+如果您已经上手过PaddleOCR，并且希望在各种环境上部署PaddleOCR，目前建议使用静态图分支，develop或者release/1.1分支。如果您是初学者，想快速训练，调试PaddleOCR中的算法，建议尝鲜PaddleOCR
+dygraph分支。
 
 **注意**：develop和dygraph分支要求的Paddle版本、本地环境有差别，请注意不同分支环境安装部分的差异。
 
@@ -349,11 +377,13 @@ A：PaddleOCR已完成Windows和Mac系统适配，运行时注意两点：
 
 #### Q：训练文字识别模型，真实数据有30w，合成数据有500w，需要做样本均衡吗？
 
-A：需要，一般需要保证一个batch中真实数据样本和合成数据样本的比例是5：1~10：1左右效果比较理想。如果合成数据过大，会过拟合到合成数据，预测效果往往不佳。还有一种启发性的尝试是可以先用大量合成数据训练一个base模型，然后再用真实数据微调，在一些简单场景效果也是会有提升的。
+A：需要，一般需要保证一个batch中真实数据样本和合成数据样本的比例是5：1~
+10：1左右效果比较理想。如果合成数据过大，会过拟合到合成数据，预测效果往往不佳。还有一种启发性的尝试是可以先用大量合成数据训练一个base模型，然后再用真实数据微调，在一些简单场景效果也是会有提升的。
 
 #### Q: 当训练数据量少时，如何获取更多的数据？
 
-A：当训练数据量少时，可以尝试以下三种方式获取更多的数据：（1）人工采集更多的训练数据，最直接也是最有效的方式。（2）基于PIL和opencv基本图像处理或者变换。例如PIL中ImageFont, Image, ImageDraw三个模块将文字写到背景中，opencv的旋转仿射变换，高斯滤波等。（3）利用数据生成算法合成数据，例如pix2pix等算法。
+A：当训练数据量少时，可以尝试以下三种方式获取更多的数据：（1）人工采集更多的训练数据，最直接也是最有效的方式。（2）基于PIL和opencv基本图像处理或者变换。例如PIL中ImageFont,
+Image, ImageDraw三个模块将文字写到背景中，opencv的旋转仿射变换，高斯滤波等。（3）利用数据生成算法合成数据，例如pix2pix等算法。
 
 <a name="24"></a>
 
@@ -375,7 +405,8 @@ StyleText的用途主要是：提取style_image中的字体、背景等style信�
 
 #### Q: StyleText批量生成图片为什么没有输出？
 
-**A**：需要检查以下您配置文件中的路径是否都存在。尤其要注意的是[label_file配置](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/StyleText/README_ch.md#%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B)。
+**A**
+：需要检查以下您配置文件中的路径是否都存在。尤其要注意的是[label_file配置](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/StyleText/README_ch.md#%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B)。
 如果您使用的style_image输入没有label信息，您依然需要提供一个图片文件列表。
 
 #### Q：使用StyleText进行数据合成时，文本(TextInput)的长度远超StyleInput的长度，该怎么处理与合成呢？
@@ -398,7 +429,8 @@ StyleText的用途主要是：提取style_image中的字体、背景等style信�
 
 #### Q：如何更换文本检测/识别的backbone？
 
-A：无论是文字检测，还是文字识别，骨干网络的选择是预测效果和预测效率的权衡。一般，选择更大规模的骨干网络，例如ResNet101_vd，则检测或识别更准确，但预测耗时相应也会增加。而选择更小规模的骨干网络，例如MobileNetV3_small_x0_35，则预测更快，但检测或识别的准确率会大打折扣。幸运的是不同骨干网络的检测或识别效果与在ImageNet数据集图像1000分类任务效果正相关。飞桨图像分类套件PaddleClas汇总了ResNet_vd、Res2Net、HRNet、MobileNetV3、GhostNet等23种系列的分类网络结构，在上述图像分类任务的top1识别准确率，GPU(V100和T4)和CPU(骁龙855)的预测耗时以及相应的117个预训练模型下载地址。
+A：无论是文字检测，还是文字识别，骨干网络的选择是预测效果和预测效率的权衡。一般，选择更大规模的骨干网络，例如ResNet101_vd，则检测或识别更准确，但预测耗时相应也会增加。而选择更小规模的骨干网络，例如MobileNetV3_small_x0_35，则预测更快，但检测或识别的准确率会大打折扣。幸运的是不同骨干网络的检测或识别效果与在ImageNet数据集图像1000分类任务效果正相关。飞桨图像分类套件PaddleClas汇总了ResNet_vd、Res2Net、HRNet、MobileNetV3、GhostNet等23种系列的分类网络结构，在上述图像分类任务的top1识别准确率，GPU(
+V100和T4)和CPU(骁龙855)的预测耗时以及相应的117个预训练模型下载地址。
 
 （1）文字检测骨干网络的替换，主要是确定类似与ResNet的4个stages，以方便集成后续的类似FPN的检测头。此外，对于文字检测问题，使用ImageNet训练的分类预训练模型，可以加速收敛和效果提升。
 
@@ -421,7 +453,8 @@ checkpoints：指之前训练的中间结果，例如前一次训练到了100个
 
 #### Q: 如何对检测模型finetune，比如冻结前面的层或某些层使用小的学习率学习？
 
-**A**：如果是冻结某些层，可以将变量的stop_gradient属性设置为True，这样计算这个变量之前的所有参数都不会更新了，参考：https://www.paddlepaddle.org.cn/documentation/docs/zh/develop/faq/train_cn.html#id4
+**A**
+：如果是冻结某些层，可以将变量的stop_gradient属性设置为True，这样计算这个变量之前的所有参数都不会更新了，参考：https://www.paddlepaddle.org.cn/documentation/docs/zh/develop/faq/train_cn.html#id4
 
 如果对某些层使用更小的学习率学习，静态图里还不是很方便，一个方法是在参数初始化的时候，给权重的属性设置固定的学习率，参考：https://www.paddlepaddle.org.cn/documentation/docs/zh/develop/api/paddle/fluid/param_attr/ParamAttr_cn.html#paramattr
 
@@ -433,7 +466,8 @@ checkpoints：指之前训练的中间结果，例如前一次训练到了100个
 
 #### Q: DB检测训练输入尺寸640，可以改大一些吗？
 
-A：不建议改大。检测模型训练输入尺寸是预处理中random crop后的尺寸，并非直接将原图进行resize，多数场景下这个尺寸并不小了，改大后可能反而并不合适，而且训练会变慢。另外，代码里可能有的地方参数按照预设输入尺寸适配的，改大后可能有隐藏风险。
+A：不建议改大。检测模型训练输入尺寸是预处理中random
+crop后的尺寸，并非直接将原图进行resize，多数场景下这个尺寸并不小了，改大后可能反而并不合适，而且训练会变慢。另外，代码里可能有的地方参数按照预设输入尺寸适配的，改大后可能有隐藏风险。
 
 #### Q: 预处理部分，图片的长和宽为什么要处理成32的倍数？
 
@@ -441,7 +475,8 @@ A：以检测中的resnet骨干网络为例，图像输入网络之后，需要�
 
 #### Q: 在识别模型中，为什么降采样残差结构的stride为(2, 1)？
 
-**A**: stride为(2, 1)，表示在图像y方向（高度方向）上stride为2，x方向（宽度方向）上为1。由于待识别的文本图像通常为长方形，这样只在高度方向做下采样，尽量保留宽度方向的序列信息，避免宽度方向下采样后丢失过多的文字信息。
+**A**: stride为(2, 1)
+，表示在图像y方向（高度方向）上stride为2，x方向（宽度方向）上为1。由于待识别的文本图像通常为长方形，这样只在高度方向做下采样，尽量保留宽度方向的序列信息，避免宽度方向下采样后丢失过多的文字信息。
 
 #### Q：训练识别时，如何选择合适的网络输入shape？
 
@@ -469,11 +504,13 @@ A：可以在命令中加入 --det_db_unclip_ratio ，参数定义位置，这�
 
 #### Q：对于CRNN模型，backbone采用DenseNet和ResNet_vd，哪种网络结构更好？
 
-**A**：Backbone的识别效果在CRNN模型上的效果，与Imagenet 1000 图像分类任务上识别效果和效率一致。在图像分类任务上ResnNet_vd（79%+）的识别精度明显优于DenseNet（77%+），此外对于GPU，Nvidia针对ResNet系列模型做了优化，预测效率更高，所以相对而言，resnet_vd是较好选择。如果是移动端，可以优先考虑MobileNetV3系列。
+**A**：Backbone的识别效果在CRNN模型上的效果，与Imagenet 1000
+图像分类任务上识别效果和效率一致。在图像分类任务上ResnNet_vd（79%+）的识别精度明显优于DenseNet（77%+），此外对于GPU，Nvidia针对ResNet系列模型做了优化，预测效率更高，所以相对而言，resnet_vd是较好选择。如果是移动端，可以优先考虑MobileNetV3系列。
 
 #### Q:  如何根据不同的硬件平台选用不同的backbone？
 
-**A**：在不同的硬件上，不同的backbone的速度优势不同，可以根据不同平台的速度-精度图来确定backbone，这里可以参考[PaddleClas模型速度-精度图](https://github.com/PaddlePaddle/PaddleClas/tree/release/2.0/docs/zh_CN/models)。
+**A**
+：在不同的硬件上，不同的backbone的速度优势不同，可以根据不同平台的速度-精度图来确定backbone，这里可以参考[PaddleClas模型速度-精度图](https://github.com/PaddlePaddle/PaddleClas/tree/release/2.0/docs/zh_CN/models)。
 
 <a name="28"></a>
 
@@ -481,15 +518,19 @@ A：可以在命令中加入 --det_db_unclip_ratio ，参数定义位置，这�
 
 #### Q: 在PP-OCR系统中，文本检测的骨干网络为什么没有使用SE模块？
 
-**A**：SE模块是MobileNetV3网络一个重要模块，目的是估计特征图每个特征通道重要性，给特征图每个特征分配权重，提高网络的表达能力。但是，对于文本检测，输入网络的分辨率比较大，一般是640\*640，利用SE模块估计特征图每个特征通道重要性比较困难，网络提升能力有限，但是该模块又比较耗时，因此在PP-OCR系统中，文本检测的骨干网络没有使用SE模块。实验也表明，当去掉SE模块，超轻量模型大小可以减小40%，文本检测效果基本不受影响。详细可以参考PP-OCR技术文章，https://arxiv.org/abs/2009.09941.
+**A**
+：SE模块是MobileNetV3网络一个重要模块，目的是估计特征图每个特征通道重要性，给特征图每个特征分配权重，提高网络的表达能力。但是，对于文本检测，输入网络的分辨率比较大，一般是640\*640，利用SE模块估计特征图每个特征通道重要性比较困难，网络提升能力有限，但是该模块又比较耗时，因此在PP-OCR系统中，文本检测的骨干网络没有使用SE模块。实验也表明，当去掉SE模块，超轻量模型大小可以减小40%，文本检测效果基本不受影响。详细可以参考PP-OCR技术文章，https://arxiv.org/abs/2009.09941.
 
 #### Q: PP-OCR系统中，文本检测的结果有置信度吗？
 
-**A**：文本检测的结果有置信度，由于推理过程中没有使用，所以没有显示的返回到最终结果中。如果需要文本检测结果的置信度，可以在[文本检测DB的后处理代码](../../ppocr/postprocess/db_postprocess.py)的155行，添加scores信息。这样，在[检测预测代码](../../tools/infer/predict_det.py)的197行，就可以拿到文本检测的scores信息。
+**A**
+：文本检测的结果有置信度，由于推理过程中没有使用，所以没有显示的返回到最终结果中。如果需要文本检测结果的置信度，可以在[文本检测DB的后处理代码](../../ppocr/postprocess/db_postprocess.py)
+的155行，添加scores信息。这样，在[检测预测代码](../../tools/infer/predict_det.py)的197行，就可以拿到文本检测的scores信息。
 
 #### Q: DB文本检测，特征提取网络金字塔构建的部分代码在哪儿？
 
-**A**：特征提取网络金字塔构建的部分:[代码位置](../../ppocr/modeling/necks/db_fpn.py)。ppocr/modeling文件夹里面是组网相关的代码，其中architectures是文本检测或者文本识别整体流程代码；backbones是骨干网络相关代码；necks是类似与FPN的颈函数代码；heads是提取文本检测或者文本识别预测结果相关的头函数；transforms是类似于TPS特征预处理模块。更多的信息可以参考[代码组织结构](./tree.md)。
+**A**：特征提取网络金字塔构建的部分:[代码位置](../../ppocr/modeling/necks/db_fpn.py)
+。ppocr/modeling文件夹里面是组网相关的代码，其中architectures是文本检测或者文本识别整体流程代码；backbones是骨干网络相关代码；necks是类似与FPN的颈函数代码；heads是提取文本检测或者文本识别预测结果相关的头函数；transforms是类似于TPS特征预处理模块。更多的信息可以参考[代码组织结构](./tree.md)。
 
 #### Q：PaddleOCR如何做到横排和竖排同时支持的？
 
@@ -515,7 +556,8 @@ A：可以在命令中加入 --det_db_unclip_ratio ，参数定义位置，这�
 
 #### Q: 端到端算法PGNet是否支持中文识别，速度会很慢嘛？
 
-**A**：目前开源的PGNet算法模型主要是用于检测英文数字，对于中文的识别需要自己训练，大家可以使用开源的端到端中文数据集，而对于复杂文本（弯曲文本）的识别，也可以自己构造一批数据集针对进行训练，对于推理速度，可以先将模型转换为inference再进行预测，速度应该会相当可观。
+**A**
+：目前开源的PGNet算法模型主要是用于检测英文数字，对于中文的识别需要自己训练，大家可以使用开源的端到端中文数据集，而对于复杂文本（弯曲文本）的识别，也可以自己构造一批数据集针对进行训练，对于推理速度，可以先将模型转换为inference再进行预测，速度应该会相当可观。
 
 #### Q: 端到端算法PGNet提供了两种后处理方式，两者之间有什么区别呢？
 
@@ -532,13 +574,17 @@ A：可以在命令中加入 --det_db_unclip_ratio ，参数定义位置，这�
 
 **A**: 目前我们尚未提供针对中文的预训练模型，如有需要，可以尝试自己训练。具体需要修改的地方有：
 
-  1. [config文件中](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/configs/e2e/e2e_r50_vd_pg.yml#L23-L24)，字典文件路径及语种设置；
-  1. [网络结构中](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/ppocr/modeling/heads/e2e_pg_head.py#L181)，`out_channels`修改为字典中的字符数目+1（考虑到空格）；
-  1. [loss中](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/ppocr/losses/e2e_pg_loss.py#L93)，修改`37`为字典中的字符数目+1（考虑到空格）；
+1. [config文件中](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/configs/e2e/e2e_r50_vd_pg.yml#L23-L24)
+   ，字典文件路径及语种设置；
+1. [网络结构中](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/ppocr/modeling/heads/e2e_pg_head.py#L181)，`out_channels`
+   修改为字典中的字符数目+1（考虑到空格）；
+1. [loss中](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/ppocr/losses/e2e_pg_loss.py#L93)，修改`37`
+   为字典中的字符数目+1（考虑到空格）；
 
 #### Q: 用于PGNet的训练集，文本框的标注有要求吗？
 
-**A**: PGNet支持多点标注，比如4点、8点、14点等。但需要注意的是，标注点尽可能分布均匀（相邻标注点间隔距离均匀一致），且label文件中的标注点需要从标注框的左上角开始，按标注点顺时针顺序依次编写，以上问题都可能对训练精度造成影响。
+**A**:
+PGNet支持多点标注，比如4点、8点、14点等。但需要注意的是，标注点尽可能分布均匀（相邻标注点间隔距离均匀一致），且label文件中的标注点需要从标注框的左上角开始，按标注点顺时针顺序依次编写，以上问题都可能对训练精度造成影响。
 我们提供的，基于Total Text数据集的PGNet预训练模型使用了14点标注方式。
 
 #### Q: 用PGNet做进行端到端训练时，数据集标注的点的个数必须都是统一一样的吗? 能不能随意标点数，只要能够按顺时针从左上角开始标这样?
@@ -583,11 +629,14 @@ A： 具体问题具体分析:
 A：当前问题表现为：使用训练完的模型直接测试结果较好，但是转换为inference model后，预测结果不一致；出现这个问题一般是两个原因：
 
 1. 预处理函数设置的不一致
-2. 后处理参数不一致 repo中config.yml文件的前后处理参数和inference预测默认的超参数有不一致的地方，建议排查下训练模型预测和inference预测的前后处理， 参考issue。
+2. 后处理参数不一致 repo中config.yml文件的前后处理参数和inference预测默认的超参数有不一致的地方，建议排查下训练模型预测和inference预测的前后处理，
+   参考issue。
 
 #### Q: 自己训练的det模型，在同一张图片上，inference模型与eval模型结果差别很大，为什么？
 
-A：这是由于图片预处理不同造成的。如果训练的det模型图片输入并不是默认的shape[600, 600]，eval的程序中图片预处理方式与train时一致 （由xxx_reader.yml中的test_image_shape参数决定缩放大小，但predict_eval.py中的图片预处理方式由程序里的preprocess_params决定， 最好不要传入max_side_len，而是传入和训练时一样大小的test_image_shape。
+A：这是由于图片预处理不同造成的。如果训练的det模型图片输入并不是默认的shape[600, 600]，eval的程序中图片预处理方式与train时一致
+（由xxx_reader.yml中的test_image_shape参数决定缩放大小，但predict_eval.py中的图片预处理方式由程序里的preprocess_params决定，
+最好不要传入max_side_len，而是传入和训练时一样大小的test_image_shape。
 
 #### Q:  训练模型和测试模型的检测结果差距较大
 
@@ -595,7 +644,9 @@ A：这是由于图片预处理不同造成的。如果训练的det模型图片�
 
 #### Q: PaddleOCR模型Python端预测和C++预测结果不一致？
 
-A：正常来说，python端预测和C++预测文本是一致的，如果预测结果差异较大， 建议首先排查diff出现在检测模型还是识别模型，或者尝试换其他模型是否有类似的问题。 其次，检查python端和C++端数据处理部分是否存在差异，建议保存环境，更新PaddleOCR代码再试下。 如果更新代码或者更新代码都没能解决，建议在PaddleOCR微信群里或者issue中抛出您的问题。
+A：正常来说，python端预测和C++预测文本是一致的，如果预测结果差异较大， 建议首先排查diff出现在检测模型还是识别模型，或者尝试换其他模型是否有类似的问题。
+其次，检查python端和C++端数据处理部分是否存在差异，建议保存环境，更新PaddleOCR代码再试下。
+如果更新代码或者更新代码都没能解决，建议在PaddleOCR微信群里或者issue中抛出您的问题。
 
 用户总结的排查步骤：https://github.com/PaddlePaddle/PaddleOCR/issues/2470
 
@@ -617,23 +668,33 @@ A：tools/train.py中有一个test_reader()函数用于调试数据读取。
 
 #### Q：中文文本检测、文本识别构建训练集的话，大概需要多少数据量
 
-A：检测需要的数据相对较少，在PaddleOCR模型的基础上进行Fine-tune，一般需要500张可达到不错的效果。 识别分英文和中文，一般英文场景需要几十万数据可达到不错的效果，中文则需要几百万甚至更多。
+A：检测需要的数据相对较少，在PaddleOCR模型的基础上进行Fine-tune，一般需要500张可达到不错的效果。
+识别分英文和中文，一般英文场景需要几十万数据可达到不错的效果，中文则需要几百万甚至更多。
 
 #### Q: config yml文件中的ratio_list参数的作用是什么？
 
-**A**: 在动态图中，ratio_list在有多个数据源的情况下使用，ratio_list中的每个值是每个epoch从对应数据源采样数据的比例。如ratio_list=[0.3,0.2]，label_file_list=['data1','data2'],代表每个epoch的训练数据包含data1 30%的数据，和data2里 20%的数据，ratio_list中数值的和不需要等于1。ratio_list和label_file_list的长度必须一致。
+**A**:
+在动态图中，ratio_list在有多个数据源的情况下使用，ratio_list中的每个值是每个epoch从对应数据源采样数据的比例。如ratio_list=[0.3,0.2]
+，label_file_list=['data1','data2'],代表每个epoch的训练数据包含data1 30%的数据，和data2里
+20%的数据，ratio_list中数值的和不需要等于1。ratio_list和label_file_list的长度必须一致。
 
 静态图检测数据采样的逻辑与动态图不同，但基本不影响训练精度。
 
-在静态图中，使用 检测 dataloader读取数据时，会先设置每个epoch的数据量，比如这里设置为1000，ratio_list中的值表示在1000中的占比，比如ratio_list是[0.3, 0.7]，则表示使用两个数据源，每个epoch从第一个数据源采样1000*0.3=300张图，从第二个数据源采样700张图。ratio_list的值的和也不需要等于1。
+在静态图中，使用 检测
+dataloader读取数据时，会先设置每个epoch的数据量，比如这里设置为1000，ratio_list中的值表示在1000中的占比，比如ratio_list是[0.3, 0.7]
+，则表示使用两个数据源，每个epoch从第一个数据源采样1000*0.3=300张图，从第二个数据源采样700张图。ratio_list的值的和也不需要等于1。
 
 #### Q: iaa里面添加的数据增强方式，是每张图像训练都会做增强还是随机的？如何添加一个数据增强方法？
 
-**A**：iaa增强的训练配置参考：[这里](https://github.com/PaddlePaddle/PaddleOCR/blob/0ccc1720c252beb277b9e522a1b228eb6abffb8a/configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml#L82)。其中{ 'type': Fliplr, 'args': { 'p': 0.5 } } p是概率。新增数据增强，可以参考[这个方法](https://github.com/PaddlePaddle/PaddleOCR/blob/release%2F2.1/doc/doc_ch/add_new_algorithm.md#%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%A4%84%E7%90%86)
+**A**
+：iaa增强的训练配置参考：[这里](https://github.com/PaddlePaddle/PaddleOCR/blob/0ccc1720c252beb277b9e522a1b228eb6abffb8a/configs/det/ch_ppocr_v2.0/ch_det_mv3_db_v2.0.yml#L82)
+。其中{ 'type': Fliplr, 'args': { 'p': 0.5 } }
+p是概率。新增数据增强，可以参考[这个方法](https://github.com/PaddlePaddle/PaddleOCR/blob/release%2F2.1/doc/doc_ch/add_new_algorithm.md#%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E5%92%8C%E5%A4%84%E7%90%86)
 
 #### Q: 怎么加速训练过程呢？
 
-**A**：OCR模型训练过程中一般包含大量的数据增广，这些数据增广是比较耗时的，因此可以离线生成大量增广后的图像，直接送入网络进行训练，机器资源充足的情况下，也可以使用分布式训练的方法，可以参考[分布式训练教程文档](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/doc/doc_ch/distributed_training.md)。
+**A**
+：OCR模型训练过程中一般包含大量的数据增广，这些数据增广是比较耗时的，因此可以离线生成大量增广后的图像，直接送入网络进行训练，机器资源充足的情况下，也可以使用分布式训练的方法，可以参考[分布式训练教程文档](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/doc/doc_ch/distributed_training.md)。
 
 #### Q: 一些特殊场景的数据识别效果差，但是数据量很少，不够用来finetune怎么办？
 
@@ -647,7 +708,8 @@ A：检测需要的数据相对较少，在PaddleOCR模型的基础上进行Fine
 
 #### Q: 如何合成手写中文数据集？
 
-**A**: 手写数据集可以通过手写单字数据集合成得到。随机选取一定数量的单字图片和对应的label，将图片高度resize为随机的统一高度后拼接在一起，即可得到合成数据集。对于需要添加文字背景的情况，建议使用阈值化将单字图片的白色背景处理为透明背景，再与真实背景图进行合成。具体可以参考文档[手写数据集](https://github.com/PaddlePaddle/PaddleOCR/blob/a72d6f23be9979e0c103d911a9dca3e4613e8ccf/doc/doc_ch/handwritten_datasets.md)。
+**A**:
+手写数据集可以通过手写单字数据集合成得到。随机选取一定数量的单字图片和对应的label，将图片高度resize为随机的统一高度后拼接在一起，即可得到合成数据集。对于需要添加文字背景的情况，建议使用阈值化将单字图片的白色背景处理为透明背景，再与真实背景图进行合成。具体可以参考文档[手写数据集](https://github.com/PaddlePaddle/PaddleOCR/blob/a72d6f23be9979e0c103d911a9dca3e4613e8ccf/doc/doc_ch/handwritten_datasets.md)。
 
 #### Q：PaddleOCR默认不是200个step保存一次模型吗？为啥文件夹下面都没有生成
 
@@ -655,11 +717,13 @@ A：检测需要的数据相对较少，在PaddleOCR模型的基础上进行Fine
 
 #### Q: PaddleOCR在训练的时候一直使用cosine_decay的学习率下降策略，这是为什么呢？
 
-**A**：cosine_decay表示在训练的过程中，学习率按照cosine的变化趋势逐渐下降至0，在迭代轮数更长的情况下，比常量的学习率变化策略会有更好的收敛效果，因此在实际训练的时候，均采用了cosine_decay，来获得精度更高的模型。
+**A**
+：cosine_decay表示在训练的过程中，学习率按照cosine的变化趋势逐渐下降至0，在迭代轮数更长的情况下，比常量的学习率变化策略会有更好的收敛效果，因此在实际训练的时候，均采用了cosine_decay，来获得精度更高的模型。
 
 #### Q: Cosine学习率的更新策略是怎样的？训练过程中为什么会在一个值上停很久？
 
-**A**: Cosine学习率的说明可以参考[这里](https://www.paddlepaddle.org.cn/documentation/docs/zh/api/paddle/optimizer/lr/CosineAnnealingDecay_cn.html#cosineannealingdecay)
+**A**:
+Cosine学习率的说明可以参考[这里](https://www.paddlepaddle.org.cn/documentation/docs/zh/api/paddle/optimizer/lr/CosineAnnealingDecay_cn.html#cosineannealingdecay)
 
 在PaddleOCR中，为了让学习率更加平缓，我们将其中的epoch调整成了iter。
 学习率的更新会和总的iter数量有关。当iter比较大时，会经过较多iter才能看出学习率的值有变化。
@@ -678,15 +742,20 @@ lr:
 
 #### Q: 训练识别和检测时学习率要加上warmup，目的是什么？
 
-**A**: Warmup机制先使学习率从一个较小的值逐步升到一个较大的值，而不是直接就使用较大的学习率，这样有助于模型的稳定收敛。在OCR检测和OCR识别中，一般会带来精度~0.5%的提升。
+**A**:
+Warmup机制先使学习率从一个较小的值逐步升到一个较大的值，而不是直接就使用较大的学习率，这样有助于模型的稳定收敛。在OCR检测和OCR识别中，一般会带来精度~
+0.5%的提升。
 
 #### Q: 关于dygraph分支中，文本识别模型训练，要使用数据增强应该如何设置？
 
-**A**：可以参考[配置文件](../../configs/rec/ch_ppocr_v2.0/rec_chinese_lite_train_v2.0.yml)在Train['dataset']['transforms']添加RecAug字段，使数据增强生效。可以通过添加对aug_prob设置，表示每种数据增强采用的概率。aug_prob默认是0.4。详细设置可以参考[ISSUE 1744](https://github.com/PaddlePaddle/PaddleOCR/issues/1744)。
+**A**：可以参考[配置文件](../../configs/rec/ch_ppocr_v2.0/rec_chinese_lite_train_v2.0.yml)
+在Train['dataset']['transforms']
+添加RecAug字段，使数据增强生效。可以通过添加对aug_prob设置，表示每种数据增强采用的概率。aug_prob默认是0.4。详细设置可以参考[ISSUE 1744](https://github.com/PaddlePaddle/PaddleOCR/issues/1744)。
 
 #### Q: 训练过程中，训练程序意外退出/挂起，应该如何解决？
 
-**A**: 考虑内存，显存（使用GPU训练的话）是否不足，可在配置文件中，将训练和评估的batch size调小一些。需要注意，训练batch size调小时，学习率learning rate也要调小，一般可按等比例调整。
+**A**: 考虑内存，显存（使用GPU训练的话）是否不足，可在配置文件中，将训练和评估的batch size调小一些。需要注意，训练batch
+size调小时，学习率learning rate也要调小，一般可按等比例调整。
 
 #### Q: 训练程序启动后直到结束，看不到训练过程log？
 
@@ -698,7 +767,9 @@ lr:
 
 #### Q: 配置文件中的参数num workers是什么意思，应该如何设置？
 
-**A**: 训练数据的读取需要硬盘IO，而硬盘IO速度远小于GPU运算速度，为了避免数据读取成为训练速度瓶颈，可以使用多进程读取数据，num workers表示数据读取的进程数量，0表示不使用多进程读取。在Linux系统下，多进程读取数据时，进程间通信需要基于共享内存，因此使用多进程读取数据时，建议设置共享内存不低于2GB，最好可以达到8GB，此时，num workers可以设置为CPU核心数。如果机器硬件配置较低，或训练进程卡死、dataloader报错，可以将num workers设置为0，即不使用多进程读取数据。
+**A**: 训练数据的读取需要硬盘IO，而硬盘IO速度远小于GPU运算速度，为了避免数据读取成为训练速度瓶颈，可以使用多进程读取数据，num
+workers表示数据读取的进程数量，0表示不使用多进程读取。在Linux系统下，多进程读取数据时，进程间通信需要基于共享内存，因此使用多进程读取数据时，建议设置共享内存不低于2GB，最好可以达到8GB，此时，num
+workers可以设置为CPU核心数。如果机器硬件配置较低，或训练进程卡死、dataloader报错，可以将num workers设置为0，即不使用多进程读取数据。
 
 <a name="212"></a>
 
@@ -710,17 +781,21 @@ A：测试的时候，对图像等比例缩放，最长边960，不同图像等�
 
 #### Q: PaddleOCR支持tensorrt推理吗？
 
-A: 支持的，需要在编译的时候将CMakeLists.txt文件当中，将相关代码option(WITH_TENSORRT "Compile demo with TensorRT." OFF)的OFF改成ON。关于服务器端部署的更多设置，可以参考飞桨官网
+A: 支持的，需要在编译的时候将CMakeLists.txt文件当中，将相关代码option(WITH_TENSORRT "Compile demo with TensorRT." OFF)
+的OFF改成ON。关于服务器端部署的更多设置，可以参考飞桨官网
 
 #### Q: 如何使用TensorRT加速PaddleOCR预测？
 
-**A**： 目前paddle的dygraph分支已经支持了python和C++ TensorRT预测的代码，python端inference预测时把参数[--use_tensorrt=True](https://github.com/PaddlePaddle/PaddleOCR/blob/3ec57e8df9263de6fa897e33d2d91bc5d0849ef3/tools/infer/utility.py#L37)即可，
+**A**： 目前paddle的dygraph分支已经支持了python和C++
+TensorRT预测的代码，python端inference预测时把参数[--use_tensorrt=True](https://github.com/PaddlePaddle/PaddleOCR/blob/3ec57e8df9263de6fa897e33d2d91bc5d0849ef3/tools/infer/utility.py#L37)
+即可，
 C++TensorRT预测需要使用支持TRT的预测库并在编译时打开[-DWITH_TENSORRT=ON](https://github.com/PaddlePaddle/PaddleOCR/blob/3ec57e8df9263de6fa897e33d2d91bc5d0849ef3/deploy/cpp_infer/tools/build.sh#L15)。
 如果想修改其他分支代码支持TensorRT预测，可以参考[PR](https://github.com/PaddlePaddle/PaddleOCR/pull/2921)。
 
 注：建议使用TensorRT大于等于6.1.0.5以上的版本。
 
 #### Q: 为什么识别模型做预测的时候，预测图片的数量数量还会影响预测的精度
+
 **A**： 推理时识别模型默认的batch_size=6, 如预测图片长度变化大，可能影响预测效果。如果出现上述问题可在推理的时候设置识别bs=1，命令如下：
 
 ```
@@ -741,17 +816,21 @@ python3 tools/infer/predict_rec.py --image_dir="./doc/imgs_words/ch/word_4.jpg" 
 
 #### Q：PaddleOCR中，对于模型预测加速，CPU加速的途径有哪些？基于TenorRT加速GPU对输入有什么要求？
 
-**A**：（1）CPU可以使用mkldnn进行加速；对于python inference的话，可以把enable_mkldnn改为true，[参考代码](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/tools/infer/utility.py#L99)，对于cpp inference的话，可参考[文档](https://github.com/PaddlePaddle/PaddleOCR/tree/dygraph/deploy/cpp_infer)
+**A**：（1）CPU可以使用mkldnn进行加速；对于python
+inference的话，可以把enable_mkldnn改为true，[参考代码](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/tools/infer/utility.py#L99)
+，对于cpp inference的话，可参考[文档](https://github.com/PaddlePaddle/PaddleOCR/tree/dygraph/deploy/cpp_infer)
 
 （2）GPU需要注意变长输入问题等，TRT6 之后才支持变长输入
 
 #### Q：hubserving、pdserving这两种部署方式区别是什么？
 
-A：hubserving原本是paddlehub的配套服务部署工具，可以很方便的将paddlehub内置的模型部署为服务，paddleocr使用了这个功能，并将模型路径等参数暴露出来方便用户自定义修改。paddle serving是面向所有paddle模型的部署工具，文档中可以看到我们提供了快速版和标准版，其中快速版和hubserving的本质是一样的，而标准版基于rpc，更稳定，更适合分布式部署。
+A：hubserving原本是paddlehub的配套服务部署工具，可以很方便的将paddlehub内置的模型部署为服务，paddleocr使用了这个功能，并将模型路径等参数暴露出来方便用户自定义修改。paddle
+serving是面向所有paddle模型的部署工具，文档中可以看到我们提供了快速版和标准版，其中快速版和hubserving的本质是一样的，而标准版基于rpc，更稳定，更适合分布式部署。
 
 #### Q: 目前paddle hub serving 只支持 imgpath，如果我想用imgurl 去哪里改呢？
 
-A：图片是在[这里](https://github.com/PaddlePaddle/PaddleOCR/blob/67ef25d593c4eabfaaceb22daade4577f53bed81/deploy/hubserving/ocr_system/module.py#L55)读取的， 可以参考下面的写法，将url path转化为np array
+A：图片是在[这里](https://github.com/PaddlePaddle/PaddleOCR/blob/67ef25d593c4eabfaaceb22daade4577f53bed81/deploy/hubserving/ocr_system/module.py#L55)
+读取的， 可以参考下面的写法，将url path转化为np array
 
 ```
 response = request.urlopen('http://i1.whymtj.com/uploads/tu/201902/9999/52491ae4ba.jpg')
@@ -761,22 +840,26 @@ img = cv.imdecode(img_array, -1)
 
 #### Q: C++ 端侧部署可以只对OCR的检测部署吗？
 
-A：可以的，识别和检测模块是解耦的。如果想对检测部署，需要自己修改一下main函数， 只保留检测相关就可以: [参考](https://github.com/PaddlePaddle/PaddleOCR/blob/de3e2e7cd3b8b65ee02d7a41e570fa5b511a3c1d/deploy/cpp_infer/src/main.cpp#L72)
+A：可以的，识别和检测模块是解耦的。如果想对检测部署，需要自己修改一下main函数，
+只保留检测相关就可以: [参考](https://github.com/PaddlePaddle/PaddleOCR/blob/de3e2e7cd3b8b65ee02d7a41e570fa5b511a3c1d/deploy/cpp_infer/src/main.cpp#L72)
 
 #### Q：服务部署可以只发布文本识别，而不带文本检测模型么？
 
-A：可以的。默认的服务部署是检测和识别串联预测的。也支持单独发布文本检测或文本识别模型，比如使用PaddleHUBPaddleOCR 模型时，deploy下有三个文件夹，分别是
+A：可以的。默认的服务部署是检测和识别串联预测的。也支持单独发布文本检测或文本识别模型，比如使用PaddleHUBPaddleOCR
+模型时，deploy下有三个文件夹，分别是
 ocr_det：检测预测
 ocr_rec: 识别预测
 ocr_system: 检测识别串联预测
 
 #### Q: lite预测库和nb模型版本不匹配，该如何解决？
 
-**A**： 如果可以正常预测就不用管，如果这个问题导致无法正常预测，可以尝试使用同一个commit的Paddle Lite代码编译预测库和opt文件，可以参考[移动端部署教程](https://github.com/PaddlePaddle/PaddleOCR/blob/release%2F2.1/deploy/lite/readme.md)。
+**A**： 如果可以正常预测就不用管，如果这个问题导致无法正常预测，可以尝试使用同一个commit的Paddle
+Lite代码编译预测库和opt文件，可以参考[移动端部署教程](https://github.com/PaddlePaddle/PaddleOCR/blob/release%2F2.1/deploy/lite/readme.md)。
 
 #### Q：如何将PaddleOCR预测模型封装成SDK
 
-**A**：如果是Python的话，可以使用tools/infer/predict_system.py中的TextSystem进行sdk封装，如果是c++的话，可以使用deploy/cpp_infer/src下面的DBDetector和CRNNRecognizer完成封装
+**A**
+：如果是Python的话，可以使用tools/infer/predict_system.py中的TextSystem进行sdk封装，如果是c++的话，可以使用deploy/cpp_infer/src下面的DBDetector和CRNNRecognizer完成封装
 
 #### Q：为什么PaddleOCR检测预测是只支持一张图片测试？即test_batch_size_per_card=1
 
@@ -796,13 +879,17 @@ ocr_system: 检测识别串联预测
 
 #### Q: 如何多进程预测？
 
-**A**: 近期PaddleOCR新增了[多进程预测控制参数](https://github.com/PaddlePaddle/PaddleOCR/blob/a312647be716776c1aac33ff939ae358a39e8188/tools/infer/utility.py#L103)，`use_mp`表示是否使用多进程，`total_process_num`表示在使用多进程时的进程数。具体使用方式请参考[文档](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/doc/doc_ch/inference.md#1-%E8%B6%85%E8%BD%BB%E9%87%8F%E4%B8%AD%E6%96%87ocr%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86)。
+**A**:
+近期PaddleOCR新增了[多进程预测控制参数](https://github.com/PaddlePaddle/PaddleOCR/blob/a312647be716776c1aac33ff939ae358a39e8188/tools/infer/utility.py#L103)，`use_mp`
+表示是否使用多进程，`total_process_num`
+表示在使用多进程时的进程数。具体使用方式请参考[文档](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/doc/doc_ch/inference.md#1-%E8%B6%85%E8%BD%BB%E9%87%8F%E4%B8%AD%E6%96%87ocr%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86)。
 
 #### Q: 怎么解决paddleOCR在T4卡上有越预测越慢的情况？
 
 **A**：
 
-1. T4 GPU没有主动散热，因此在测试的时候需要在每次infer之后需要sleep 30ms，否则机器容易因为过热而降频(inference速度会变慢)，温度过高也有可能会导致宕机。
+1. T4 GPU没有主动散热，因此在测试的时候需要在每次infer之后需要sleep 30ms，否则机器容易因为过热而降频(inference速度会变慢)
+   ，温度过高也有可能会导致宕机。
 2. T4在不使用的时候，也有可能会降频，因此在做benchmark的时候需要锁频，下面这两条命令可以进行锁频。
 
 ```
@@ -825,11 +912,10 @@ nvidia-smi --lock-gpu-clocks=1590 -i 0
 
 **A**: 30系列的显卡需要使用cuda11。
 
-
 #### Q：想在Mac上部署，从哪里下载预测库呢？
 
-**A**：Mac上的Paddle预测库可以从这里下载：[https://paddle-inference-lib.bj.bcebos.com/mac/2.0.0/cpu_avx_openblas/paddle_inference.tgz](https://paddle-inference-lib.bj.bcebos.com/mac/2.0.0/cpu_avx_openblas/paddle_inference.tgz)
-
+**A**
+：Mac上的Paddle预测库可以从这里下载：[https://paddle-inference-lib.bj.bcebos.com/mac/2.0.0/cpu_avx_openblas/paddle_inference.tgz](https://paddle-inference-lib.bj.bcebos.com/mac/2.0.0/cpu_avx_openblas/paddle_inference.tgz)
 
 #### Q：内网环境如何进行服务化部署呢？
 
@@ -837,7 +923,8 @@ nvidia-smi --lock-gpu-clocks=1590 -i 0
 
 #### Q: 使用hub_serving部署，延时较高，可能的原因是什么呀？
 
-**A**: 首先，测试的时候第一张图延时较高，可以多测试几张然后观察后几张图的速度；其次，如果是在cpu端部署serving端模型（如backbone为ResNet34），耗时较慢，建议在cpu端部署mobile（如backbone为MobileNetV3）模型。
+**A**:
+首先，测试的时候第一张图延时较高，可以多测试几张然后观察后几张图的速度；其次，如果是在cpu端部署serving端模型（如backbone为ResNet34），耗时较慢，建议在cpu端部署mobile（如backbone为MobileNetV3）模型。
 
 #### Q: 在使用PaddleLite进行预测部署时，启动预测后卡死/手机死机？
 
@@ -845,4 +932,5 @@ nvidia-smi --lock-gpu-clocks=1590 -i 0
 
 #### Q: 预测时显存爆炸、内存泄漏问题？
 
-**A**: 打开显存/内存优化开关`enable_memory_optim`可以解决该问题，相关代码已合入，[查看详情](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/tools/infer/utility.py#L153)。
+**A**: 打开显存/内存优化开关`enable_memory_optim`
+可以解决该问题，相关代码已合入，[查看详情](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.1/tools/infer/utility.py#L153)。

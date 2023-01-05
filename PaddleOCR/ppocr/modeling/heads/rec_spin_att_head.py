@@ -43,12 +43,12 @@ class SPINAttentionHead(nn.Layer):
 
     def forward(self, inputs, targets=None, batch_max_length=25):
         batch_size = paddle.shape(inputs)[0]
-        num_steps = batch_max_length + 1 # +1 for [sos] at end of sentence
+        num_steps = batch_max_length + 1  # +1 for [sos] at end of sentence
 
         hidden = (paddle.zeros((batch_size, self.hidden_size)),
-                    paddle.zeros((batch_size, self.hidden_size)))
+                  paddle.zeros((batch_size, self.hidden_size)))
         output_hiddens = []
-        if self.training: # for train
+        if self.training:  # for train
             targets = targets[0]
             for i in range(num_steps):
                 char_onehots = self._char_to_onehot(
@@ -57,7 +57,7 @@ class SPINAttentionHead(nn.Layer):
                                                                char_onehots)
                 output_hiddens.append(paddle.unsqueeze(outputs, axis=1))
             output = paddle.concat(output_hiddens, axis=1)
-            probs = self.generator(output)        
+            probs = self.generator(output)
         else:
             targets = paddle.zeros(shape=[batch_size], dtype="int32")
             probs = None

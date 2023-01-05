@@ -2,7 +2,7 @@ import os
 import shutil
 from pathlib import Path
 
-from cv2 import cv2
+import cv2
 from tqdm import tqdm
 
 if __name__ == "__main__":

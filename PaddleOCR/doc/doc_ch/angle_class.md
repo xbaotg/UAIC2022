@@ -8,7 +8,9 @@
 - [6.预测](#预测)
 
 <a name="方法介绍"></a>
+
 ## 1. 方法介绍
+
 文本方向分类器主要用于图片非0度的场景下，在这种场景下需要对图片里检测到的文本行进行一个转正的操作。在PaddleOCR系统内，
 文字检测之后得到的文本行图片经过仿射变换之后送入识别模型，此时只需要对文字进行一个0和180度的角度分类，因此PaddleOCR内置的
 文本方向分类器**只支持了0和180度的分类**。如果想支持更多角度，可以自己修改算法进行支持。
@@ -18,6 +20,7 @@
 ![](../imgs_results/angle_class_example.jpg)
 
 <a name="数据准备"></a>
+
 ## 2. 数据准备
 
 请按如下步骤设置数据集：
@@ -29,6 +32,7 @@ ln -sf <path/to/dataset> <path/to/paddle_ocr>/train_data/cls/dataset
 ```
 
 请参考下文组织您的数据。
+
 - 训练集
 
 首先建议将训练图片放入同一个文件夹，并用一个txt文件（cls_gt_train.txt）记录图片路径和标签。
@@ -44,6 +48,7 @@ train/cls/train/word_002.jpg   180
 ```
 
 最终训练集应有如下文件结构：
+
 ```
 |-train_data
     |-cls
@@ -69,10 +74,13 @@ train/cls/train/word_002.jpg   180
             |- word_003.jpg
             | ...
 ```
+
 <a name="启动训练"></a>
+
 ## 3. 启动训练
 
-将准备好的txt文件和图片文件夹路径分别写入配置文件的 `Train/Eval.dataset.label_file_list` 和 `Train/Eval.dataset.data_dir` 字段下，`Train/Eval.dataset.data_dir`字段下的路径和文件里记载的图片名构成了图片的绝对路径。
+将准备好的txt文件和图片文件夹路径分别写入配置文件的 `Train/Eval.dataset.label_file_list`
+和 `Train/Eval.dataset.data_dir` 字段下，`Train/Eval.dataset.data_dir`字段下的路径和文件里记载的图片名构成了图片的绝对路径。
 
 PaddleOCR提供了训练脚本、评估脚本和预测脚本。
 
@@ -88,9 +96,11 @@ python3 -m paddle.distributed.launch --gpus '0,1,2,3,4,5,6,7'  tools/train.py -c
 
 - 数据增强
 
-PaddleOCR提供了多种数据增强方式，如果您希望在训练时加入扰动，请在配置文件中取消`Train.dataset.transforms`下的`RecAug`和`RandAugment`字段的注释。
+PaddleOCR提供了多种数据增强方式，如果您希望在训练时加入扰动，请在配置文件中取消`Train.dataset.transforms`下的`RecAug`
+和`RandAugment`字段的注释。
 
-默认的扰动方式有：颜色空间转换(cvtColor)、模糊(blur)、抖动(jitter)、噪声(Gasuss noise)、随机切割(random crop)、透视(perspective)、颜色反转(reverse),随机数据增强(RandAugment)。
+默认的扰动方式有：颜色空间转换(cvtColor)、模糊(blur)、抖动(jitter)、噪声(Gasuss noise)、随机切割(random crop)、透视(
+perspective)、颜色反转(reverse),随机数据增强(RandAugment)。
 
 训练过程中除随机数据增强外每种扰动方式以50%的概率被选择，具体代码实现请参考：
 [rec_img_aug.py](../../ppocr/data/imaug/rec_img_aug.py)
@@ -99,9 +109,12 @@ PaddleOCR提供了多种数据增强方式，如果您希望在训练时加入�
 *由于OpenCV的兼容性问题，扰动操作暂时只支持linux*
 
 <a name="训练"></a>
+
 ## 4. 训练
 
-PaddleOCR支持训练和评估交替进行, 可以在 `configs/cls/cls_mv3.yml` 中修改 `eval_batch_step` 设置评估频率，默认每1000个iter评估一次。训练过程中将会保存如下内容：
+PaddleOCR支持训练和评估交替进行, 可以在 `configs/cls/cls_mv3.yml` 中修改 `eval_batch_step`
+设置评估频率，默认每1000个iter评估一次。训练过程中将会保存如下内容：
+
 ```bash
 ├── best_accuracy.pdopt # 最佳模型的优化器参数
 ├── best_accuracy.pdparams # 最佳模型的参数
@@ -118,6 +131,7 @@ PaddleOCR支持训练和评估交替进行, 可以在 `configs/cls/cls_mv3.yml` 
 **注意，预测/评估时的配置文件请务必与训练一致。**
 
 <a name="评估"></a>
+
 ## 5. 评估
 
 评估数据集可以通过修改`configs/cls/cls_mv3.yml`文件里的`Eval.dataset.label_file_list` 字段设置。
@@ -129,6 +143,7 @@ python3 tools/eval.py -c configs/cls/cls_mv3.yml -o Global.checkpoints={path/to/
 ```
 
 <a name="预测"></a>
+
 ## 6. 预测
 
 * 训练引擎的预测

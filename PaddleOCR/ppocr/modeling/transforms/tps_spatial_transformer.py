@@ -19,12 +19,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import math
-import paddle
-from paddle import nn, ParamAttr
-from paddle.nn import functional as F
-import numpy as np
 import itertools
+
+import numpy as np
+import paddle
+from paddle import nn
+from paddle.nn import functional as F
 
 
 def grid_sample(input, grid, canvas=None):
@@ -45,12 +45,12 @@ def compute_partial_repr(input_points, control_points):
     M = control_points.shape[0]
     pairwise_diff = paddle.reshape(
         input_points, shape=[N, 1, 2]) - paddle.reshape(
-            control_points, shape=[1, M, 2])
+        control_points, shape=[1, M, 2])
     # original implementation, very slow
     # pairwise_dist = torch.sum(pairwise_diff ** 2, dim = 2) # square of distance
     pairwise_diff_square = pairwise_diff * pairwise_diff
     pairwise_dist = pairwise_diff_square[:, :, 0] + pairwise_diff_square[:, :,
-                                                                         1]
+                                                    1]
     repr_matrix = 0.5 * pairwise_dist * paddle.log(pairwise_dist)
     # fix numerical error for 0 * log(0), substitute all nan with 0
     mask = np.array(repr_matrix != repr_matrix)

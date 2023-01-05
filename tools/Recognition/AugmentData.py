@@ -1,8 +1,8 @@
 import os
 from pathlib import Path
 
+import cv2
 import imgaug.augmenters as iaa
-from cv2 import cv2
 from tqdm import tqdm
 
 if __name__ == "__main__":
@@ -64,13 +64,13 @@ if __name__ == "__main__":
             img = cv2.imread(str(root_path / "images" / fname), cv2.IMREAD_COLOR)
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-            for idx in range(1, 5):
+            for idx in range(1, 3):
                 img_aug = seq(images=[img])
                 cv2.imwrite(str(aug_path / "images" / f"{fname[:-4]}-{idx}.jpg"),
                             cv2.cvtColor(img_aug[0], cv2.COLOR_RGB2BGR))
 
             cv2.imwrite(str(aug_path / "images" / f"{fname[:-4]}-0.jpg"), cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
-            for i in range(5):
+            for i in range(3):
                 output.write(f"images/{fname[:-4]}-{i}.jpg\t{labels[fname]}\n")
 
     output.close()

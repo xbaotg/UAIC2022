@@ -1,6 +1,7 @@
 import numpy as np
 import onnx
 from onnx import shape_inference
+
 try:
     import onnx_graphsurgeon as gs
 except Exception as e:
@@ -10,11 +11,12 @@ import logging
 
 LOGGER = logging.getLogger(__name__)
 
+
 class RegisterNMS(object):
     def __init__(
-        self,
-        onnx_model_path: str,
-        precision: str = "fp32",
+            self,
+            onnx_model_path: str,
+            precision: str = "fp32",
     ):
 
         self.graph = gs.import_onnx(onnx.load(onnx_model_path))
@@ -24,6 +26,7 @@ class RegisterNMS(object):
         self.graph.fold_constants()
         self.precision = precision
         self.batch_size = 1
+
     def infer(self):
         """
         Sanitize the graph by cleaning any unconnected nodes, do a topological resort,
@@ -70,11 +73,11 @@ class RegisterNMS(object):
         LOGGER.info(f"Saved ONNX model to {output_path}")
 
     def register_nms(
-        self,
-        *,
-        score_thresh: float = 0.25,
-        nms_thresh: float = 0.45,
-        detections_per_img: int = 100,
+            self,
+            *,
+            score_thresh: float = 0.25,
+            nms_thresh: float = 0.45,
+            detections_per_img: int = 100,
     ):
         """
         Register the ``EfficientNMS_TRT`` plugin node.

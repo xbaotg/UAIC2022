@@ -16,10 +16,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy as np
-
 import os
 import sys
+
+import numpy as np
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
@@ -38,7 +38,6 @@ from ppocr.utils.save_load import load_model
 from ppocr.utils.utility import get_image_file_list
 import tools.program as program
 from PIL import Image, ImageDraw, ImageFont
-import math
 
 
 def draw_e2e_res_for_chinese(image,
@@ -71,7 +70,7 @@ def draw_e2e_res_for_chinese(image,
     img_show.paste(img_right, (w, 0, w * 2, h))
 
     save_e2e_path = os.path.dirname(config['Global'][
-        'save_res_path']) + "/e2e_results/"
+                                        'save_res_path']) + "/e2e_results/"
     if not os.path.exists(save_e2e_path):
         os.makedirs(save_e2e_path)
     save_path = os.path.join(save_e2e_path, os.path.basename(img_name))
@@ -94,7 +93,7 @@ def draw_e2e_res(dt_boxes, strs, config, img, img_name):
                 color=(0, 255, 0),
                 thickness=1)
         save_det_path = os.path.dirname(config['Global'][
-            'save_res_path']) + "/e2e_results/"
+                                            'save_res_path']) + "/e2e_results/"
         if not os.path.exists(save_det_path):
             os.makedirs(save_det_path)
         save_path = os.path.join(save_det_path, os.path.basename(img_name))

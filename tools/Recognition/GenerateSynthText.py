@@ -2,8 +2,8 @@ import os
 import random as rd
 from pathlib import Path
 
+import cv2
 import numpy as np
-from cv2 import cv2
 from tqdm import tqdm
 from trdg.generators import GeneratorFromDict
 
@@ -17,7 +17,7 @@ if __name__ == "__main__":
     fonts = list(map(lambda x: f"configs/fonts/{x}", os.listdir("configs/fonts/")))
     output = open("result_synth/labels.txt", "w+")
 
-    for i in tqdm(range(100)):
+    for i in tqdm(range(50)):
         generator = GeneratorFromDict(
             size=rd.randint(25, 60),
             skewing_angle=10,

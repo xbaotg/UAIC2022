@@ -1,16 +1,16 @@
-import imgaug.augmenters as iaa
 import os
 import sys
+
+import imgaug.augmenters as iaa
 
 sys.path.append("../../")
 
 import mutils
 
 from pathlib import Path
-from cv2 import cv2
+import cv2
 from tqdm import tqdm
 from imgaug.augmentables.bbs import BoundingBox, BoundingBoxesOnImage
-
 
 seq = iaa.SomeOf(8, [
     iaa.AverageBlur(k=(0, 2)),
@@ -79,7 +79,8 @@ if __name__ == "__main__":
                 bbox_aug = bbox_aug.remove_out_of_image().clip_out_of_image()
                 dh, dw = img_aug[0].shape[:2]
 
-                cv2.imwrite(f"{str(save_dir)}/images/{fname[:-4]}-{idx}.jpg", cv2.cvtColor(img_aug[0], cv2.COLOR_RGB2BGR))
+                cv2.imwrite(f"{str(save_dir)}/images/{fname[:-4]}-{idx}.jpg",
+                            cv2.cvtColor(img_aug[0], cv2.COLOR_RGB2BGR))
                 output = open(f"{str(save_dir)}/labels/{fname[:-4]}-{idx}.txt", "w+")
                 for (x, y, w, h) in convert_bb_yolo(bbox_aug, dw, dh):
                     output.write(f"0 {x} {y} {w} {h}\n")

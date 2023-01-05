@@ -22,11 +22,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import math
 import paddle
-from paddle import ParamAttr
 import paddle.nn as nn
 import paddle.nn.functional as F
+
 
 class BaseDecoder(nn.Layer):
     def __init__(self, **kwargs):
@@ -42,7 +41,7 @@ class BaseDecoder(nn.Layer):
                 feat,
                 out_enc,
                 label=None,
-                valid_ratios=None, 
+                valid_ratios=None,
                 word_positions=None,
                 train_mode=True):
         self.train_mode = train_mode
@@ -50,6 +49,7 @@ class BaseDecoder(nn.Layer):
         if train_mode:
             return self.forward_train(feat, out_enc, label, valid_ratios, word_positions)
         return self.forward_test(feat, out_enc, valid_ratios, word_positions)
+
 
 class ChannelReductionEncoder(nn.Layer):
     """Change the channel number with a one by one convoluational layer.
@@ -84,12 +84,13 @@ def masked_fill(x, mask, value):
     y = paddle.full(x.shape, value, x.dtype)
     return paddle.where(mask, y, x)
 
+
 class DotProductAttentionLayer(nn.Layer):
 
     def __init__(self, dim_model=None):
         super().__init__()
 
-        self.scale = dim_model**-0.5 if dim_model is not None else 1.
+        self.scale = dim_model ** -0.5 if dim_model is not None else 1.
 
     def forward(self, query, key, value, h, w, valid_ratios=None):
         query = paddle.transpose(query, (0, 2, 1))
@@ -111,6 +112,7 @@ class DotProductAttentionLayer(nn.Layer):
         glimpse = paddle.matmul(weights, value)
         glimpse = paddle.transpose(glimpse, (0, 2, 1))
         return glimpse
+
 
 class SequenceAttentionDecoder(BaseDecoder):
     """Sequence attention decoder for RobustScanner.
@@ -273,7 +275,7 @@ class SequenceAttentionDecoder(BaseDecoder):
             Tensor: Shape :math:`(N, C-1)`. The logit tensor of predicted
             tokens at current time step.
         """
-        
+
         embed = self.embedding(decode_sequence)
 
         n, c_enc, h, w = out_enc.shape
@@ -426,16 +428,16 @@ class PositionAttentionDecoder(BaseDecoder):
         assert c_feat == self.dim_input
         _, len_q = targets.shape
         assert len_q <= self.max_seq_len
-        
+
         position_out_enc = self.position_aware_module(out_enc)
 
         query = self.embedding(position_index)
         query = paddle.transpose(query, (0, 2, 1))
         key = paddle.reshape(position_out_enc, (n, c_enc, h * w))
         if self.encode_value:
-            value = paddle.reshape(out_enc,(n, c_enc, h * w))
+            value = paddle.reshape(out_enc, (n, c_enc, h * w))
         else:
-            value = paddle.reshape(feat,(n, c_feat, h * w))
+            value = paddle.reshape(feat, (n, c_feat, h * w))
 
         attn_out = self.attention_layer(query, key, value, h, w, valid_ratios)
         attn_out = paddle.transpose(attn_out, (0, 2, 1))  # [n, len_q, dim_v]
@@ -466,14 +468,14 @@ class PositionAttentionDecoder(BaseDecoder):
         assert c_feat == self.dim_input
 
         position_out_enc = self.position_aware_module(out_enc)
-        
+
         query = self.embedding(position_index)
         query = paddle.transpose(query, (0, 2, 1))
         key = paddle.reshape(position_out_enc, (n, c_enc, h * w))
         if self.encode_value:
-            value = paddle.reshape(out_enc,(n, c_enc, h * w))
+            value = paddle.reshape(out_enc, (n, c_enc, h * w))
         else:
-            value = paddle.reshape(feat,(n, c_feat, h * w))
+            value = paddle.reshape(feat, (n, c_feat, h * w))
 
         attn_out = self.attention_layer(query, key, value, h, w, valid_ratios)
         attn_out = paddle.transpose(attn_out, (0, 2, 1))  # [n, len_q, dim_v]
@@ -482,6 +484,7 @@ class PositionAttentionDecoder(BaseDecoder):
             return attn_out
 
         return self.prediction(attn_out)
+
 
 class RobustScannerFusionLayer(nn.Layer):
 
@@ -498,6 +501,7 @@ class RobustScannerFusionLayer(nn.Layer):
         output = self.linear_layer(fusion_input)
         output = F.glu(output, self.dim)
         return output
+
 
 class RobustScannerDecoder(BaseDecoder):
     """Decoder for RobustScanner.
@@ -575,7 +579,6 @@ class RobustScannerDecoder(BaseDecoder):
             return_feature=True
         )
 
-
         self.fusion_module = RobustScannerFusionLayer(
             self.dim_model if encode_value else dim_input)
 
@@ -648,9 +651,10 @@ class RobustScannerDecoder(BaseDecoder):
 
         return outputs
 
+
 class RobustScannerHead(nn.Layer):
     def __init__(self,
-                 out_channels, # 90 + unknown + start + padding
+                 out_channels,  # 90 + unknown + start + padding
                  in_channels,
                  enc_outchannles=128,
                  hybrid_dec_rnn_layers=2,
@@ -669,7 +673,7 @@ class RobustScannerHead(nn.Layer):
             in_channels=in_channels, out_channels=enc_outchannles)
 
         # decoder module
-        self.decoder =RobustScannerDecoder(
+        self.decoder = RobustScannerDecoder(
             num_classes=out_channels,
             dim_input=in_channels,
             dim_model=enc_outchannles,
@@ -692,7 +696,7 @@ class RobustScannerHead(nn.Layer):
 
         if len(targets) > 1:
             valid_ratios = targets[-2]
-                
+
         if self.training:
             label = targets[0]  # label
             label = paddle.to_tensor(label, dtype='int64')
@@ -703,7 +707,7 @@ class RobustScannerHead(nn.Layer):
                 inputs,
                 out_enc,
                 label=None,
-                valid_ratios=valid_ratios, 
+                valid_ratios=valid_ratios,
                 word_positions=word_positions,
                 train_mode=False)
         return final_out

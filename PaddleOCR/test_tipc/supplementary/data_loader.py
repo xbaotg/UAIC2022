@@ -1,10 +1,10 @@
-import numpy as np
+from paddle.vision.datasets import Cifar100
+import os
+import signal
+
+from paddle.io import DataLoader, DistributedBatchSampler
 from paddle.vision.datasets import Cifar100
 from paddle.vision.transforms import Normalize
-from paddle.fluid.dataloader.collate import default_collate_fn
-import signal
-import os
-from paddle.io import Dataset, DataLoader, DistributedBatchSampler
 
 
 def term_mp(sig_num, frame):
@@ -22,7 +22,6 @@ def build_dataloader(mode,
                      seed=None,
                      num_workers=0,
                      device='gpu:0'):
-
     normalize = Normalize(
         mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5], data_format='HWC')
 
@@ -50,7 +49,6 @@ def build_dataloader(mode,
     signal.signal(signal.SIGTERM, term_mp)
 
     return data_loader
-
 
 # cifar100 = Cifar100(mode='train', transform=normalize)
 

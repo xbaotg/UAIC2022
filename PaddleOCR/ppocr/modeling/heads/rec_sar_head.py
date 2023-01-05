@@ -21,9 +21,7 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import math
 import paddle
-from paddle import ParamAttr
 import paddle.nn as nn
 import paddle.nn.functional as F
 
@@ -318,7 +316,7 @@ class ParallelSARDecoder(BaseDecoder):
         seq_len = self.max_seq_len
         bsz = feat.shape[0]
         start_token = paddle.full(
-            (bsz, ), fill_value=self.start_idx, dtype='int64')
+            (bsz,), fill_value=self.start_idx, dtype='int64')
         # bsz
         start_token = self.embedding(start_token)
         # bsz * emb_dim

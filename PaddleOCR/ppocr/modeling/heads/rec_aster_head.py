@@ -19,8 +19,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import sys
-
 import paddle
 from paddle import nn
 from paddle.nn import functional as F
@@ -228,7 +226,7 @@ class AttentionRecognitionHead(nn.Layer):
             stored_emitted_symbols.append(y_prev)
 
         # Do backtracking to return the optimal values
-        #====== backtrak ======#
+        # ====== backtrak ======#
         # Initialize return variables given different types
         p = list()
         l = [[self.max_len_labels] * beam_width for _ in range(batch_size)

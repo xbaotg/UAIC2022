@@ -15,12 +15,12 @@
 https://github.com/FudanVI/FudanOCR/blob/main/text-gestalt/utils/ssim_psnr.py
 """
 
+import string
 from math import exp
 
 import paddle
-import paddle.nn.functional as F
 import paddle.nn as nn
-import string
+import paddle.nn.functional as F
 
 
 class SSIM(nn.Layer):
@@ -33,7 +33,7 @@ class SSIM(nn.Layer):
 
     def gaussian(self, window_size, sigma):
         gauss = paddle.to_tensor([
-            exp(-(x - window_size // 2)**2 / float(2 * sigma**2))
+            exp(-(x - window_size // 2) ** 2 / float(2 * sigma ** 2))
             for x in range(window_size)
         ])
         return gauss / gauss.sum()
@@ -63,11 +63,11 @@ class SSIM(nn.Layer):
             img1 * img2, window, padding=window_size // 2,
             groups=channel) - mu1_mu2
 
-        C1 = 0.01**2
-        C2 = 0.03**2
+        C1 = 0.01 ** 2
+        C2 = 0.03 ** 2
 
         ssim_map = ((2 * mu1_mu2 + C1) * (2 * sigma12 + C2)) / (
-            (mu1_sq + mu2_sq + C1) * (sigma1_sq + sigma2_sq + C2))
+                (mu1_sq + mu2_sq + C1) * (sigma1_sq + sigma2_sq + C2))
 
         if size_average:
             return ssim_map.mean()
@@ -114,7 +114,7 @@ class SRMetric(object):
 
     def calculate_psnr(self, img1, img2):
         # img1 and img2 have range [0, 1]
-        mse = ((img1 * 255 - img2 * 255)**2).mean()
+        mse = ((img1 * 255 - img2 * 255) ** 2).mean()
         if mse == 0:
             return float('inf')
         return 20 * paddle.log10(255.0 / paddle.sqrt(mse))

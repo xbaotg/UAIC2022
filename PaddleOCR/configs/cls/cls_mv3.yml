@@ -6,14 +6,14 @@ Global:
   save_model_dir: ./output/cls/mv3/
   save_epoch_step: 3
   # evaluation is run every 5000 iterations after the 4000th iteration
-  eval_batch_step: [0, 1000]
+  eval_batch_step: [ 0, 1000 ]
   cal_metric_during_train: True
   pretrained_model:
   checkpoints:
   save_inference_dir:
   use_visualdl: False
   infer_img: doc/imgs_words_en/word_10.png
-  label_list: ['0','180']
+  label_list: [ '0','180' ]
 
 Architecture:
   model_type: cls
@@ -63,9 +63,9 @@ Train:
       - BaseDataAugmentation:
       - RandAugment:
       - ClsResizeImg:
-          image_shape: [3, 48, 192]
+          image_shape: [ 3, 48, 192 ]
       - KeepKeys:
-          keep_keys: ['image', 'label'] # dataloader will return list in this order
+          keep_keys: [ 'image', 'label' ] # dataloader will return list in this order
   loader:
     shuffle: True
     batch_size_per_card: 512
@@ -84,9 +84,9 @@ Eval:
           channel_first: False
       - ClsLabelEncode: # Class handling label
       - ClsResizeImg:
-          image_shape: [3, 48, 192]
+          image_shape: [ 3, 48, 192 ]
       - KeepKeys:
-          keep_keys: ['image', 'label'] # dataloader will return list in this order
+          keep_keys: [ 'image', 'label' ] # dataloader will return list in this order
   loader:
     shuffle: False
     drop_last: False

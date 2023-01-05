@@ -16,12 +16,13 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import paddle
-from paddle import nn
-import paddle.nn.functional as F
-from paddle import ParamAttr
 import os
 import sys
+
+import paddle
+import paddle.nn.functional as F
+from paddle import ParamAttr
+from paddle import nn
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
@@ -388,7 +389,7 @@ class ASFBlock(nn.Layer):
         self.conv = nn.Conv2D(in_channels, inter_channels, 3, padding=1)
 
         self.spatial_scale = nn.Sequential(
-            #Nx1xHxW
+            # Nx1xHxW
             nn.Conv2D(
                 in_channels=1,
                 out_channels=1,

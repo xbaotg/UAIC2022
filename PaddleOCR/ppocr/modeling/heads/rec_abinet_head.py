@@ -16,11 +16,9 @@ This code is refer from:
 https://github.com/FangShancheng/ABINet/tree/main/modules
 """
 
-import math
 import paddle
-from paddle import nn
 import paddle.nn.functional as F
-from paddle.nn import LayerList
+from paddle import nn
 from ppocr.modeling.heads.rec_nrtr_head import TransformerBlock, PositionalEncoding
 
 
@@ -161,12 +159,12 @@ class PositionAttention(nn.Layer):
         q = self.project(q)  # (B, N, C)
 
         # calculate attention
-        attn_scores = q @k.flatten(2)  # (B, N, (H*W))
-        attn_scores = attn_scores / (C**0.5)
+        attn_scores = q @ k.flatten(2)  # (B, N, (H*W))
+        attn_scores = attn_scores / (C ** 0.5)
         attn_scores = F.softmax(attn_scores, axis=-1)
 
         v = v.flatten(2).transpose([0, 2, 1])  # (B, (H*W), C)
-        attn_vecs = attn_scores @v  # (B, N, C)
+        attn_vecs = attn_scores @ v  # (B, N, C)
 
         return attn_vecs, attn_scores.reshape([0, self.max_length, H, W])
 

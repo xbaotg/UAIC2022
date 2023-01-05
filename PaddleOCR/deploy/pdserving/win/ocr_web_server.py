@@ -12,23 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from paddle_serving_client import Client
-import cv2
 import sys
+
+import cv2
 import numpy as np
-import os
-from paddle_serving_client import Client
-from paddle_serving_app.reader import Sequential, URL2Image, ResizeByFactor
-from paddle_serving_app.reader import Div, Normalize, Transpose
 from paddle_serving_app.reader import DBPostProcess, FilterBoxes, GetRotateCropImage, SortedBoxes
+from paddle_serving_app.reader import Div, Normalize, Transpose
+from paddle_serving_app.reader import Sequential, ResizeByFactor
+
 from ocr_reader import OCRReader
+
 try:
     from paddle_serving_server_gpu.web_service import WebService
 except ImportError:
     from paddle_serving_server.web_service import WebService
 from paddle_serving_app.local_predict import LocalPredictor
-import time
-import re
 import base64
 
 

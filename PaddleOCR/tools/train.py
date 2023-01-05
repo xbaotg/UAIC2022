@@ -23,7 +23,6 @@ __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
 sys.path.insert(0, os.path.abspath(os.path.join(__dir__, '..')))
 
-import yaml
 import paddle
 import paddle.distributed as dist
 
@@ -76,13 +75,13 @@ def main(config, device, logger, vdl_writer):
                                                    ]:  # distillation model
             for key in config['Architecture']["Models"]:
                 if config['Architecture']['Models'][key]['Head'][
-                        'name'] == 'MultiHead':  # for multi head
+                    'name'] == 'MultiHead':  # for multi head
                     if config['PostProcess'][
-                            'name'] == 'DistillationSARLabelDecode':
+                        'name'] == 'DistillationSARLabelDecode':
                         char_num = char_num - 2
                     # update SARLoss params
                     assert list(config['Loss']['loss_config_list'][-1].keys())[
-                        0] == 'DistillationSARLoss'
+                               0] == 'DistillationSARLoss'
                     config['Loss']['loss_config_list'][-1][
                         'DistillationSARLoss']['ignore_index'] = char_num + 1
                     out_channels_list = {}
@@ -94,12 +93,12 @@ def main(config, device, logger, vdl_writer):
                     config['Architecture']["Models"][key]["Head"][
                         'out_channels'] = char_num
         elif config['Architecture']['Head'][
-                'name'] == 'MultiHead':  # for multi head
+            'name'] == 'MultiHead':  # for multi head
             if config['PostProcess']['name'] == 'SARLabelDecode':
                 char_num = char_num - 2
             # update SARLoss params
             assert list(config['Loss']['loss_config_list'][1].keys())[
-                0] == 'SARLoss'
+                       0] == 'SARLoss'
             if config['Loss']['loss_config_list'][1]['SARLoss'] is None:
                 config['Loss']['loss_config_list'][1]['SARLoss'] = {
                     'ignore_index': char_num + 1

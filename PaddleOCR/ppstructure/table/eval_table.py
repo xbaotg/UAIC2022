@@ -21,7 +21,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(__dir__, '../..')))
 
 import cv2
 import pickle
-import paddle
 from tqdm import tqdm
 from ppstructure.table.table_metric import TEDS
 from ppstructure.table.predict_table import TableSystem

@@ -1,11 +1,14 @@
 # 安卓手机通过Termux连接电脑
 
-由于通过adb方式连接手机后，很多linux命令无法运行，自动化测试受阻，所以此处特此介绍另外一种通过Termux的连接方式，不仅可以运行大部分linux命令，方便开发者在手机上在线调试，甚至还可以多实现台机器同时连接手机。Termux不是真实的Linux环境，但是Termux可以安装真实的Linux，而且不会损失性能，与此同时，Termux不需要root。在配置Termux之前，请确保电脑已经安装adb工具，安装方式请参考[Lite端部署](https://github.com/PaddlePaddle/PaddleOCR/blob/develop/deploy/lite/readme.md) 。在运行以下命令后确保可以显示安卓设备信息。
+由于通过adb方式连接手机后，很多linux命令无法运行，自动化测试受阻，所以此处特此介绍另外一种通过Termux的连接方式，不仅可以运行大部分linux命令，方便开发者在手机上在线调试，甚至还可以多实现台机器同时连接手机。Termux不是真实的Linux环境，但是Termux可以安装真实的Linux，而且不会损失性能，与此同时，Termux不需要root。在配置Termux之前，请确保电脑已经安装adb工具，安装方式请参考[Lite端部署](https://github.com/PaddlePaddle/PaddleOCR/blob/develop/deploy/lite/readme.md)
+。在运行以下命令后确保可以显示安卓设备信息。
 
 ```
 adb devices
 ```
+
 连接成功信息提示：
+
 ```
 List of devices attached
 744be294    device
@@ -43,7 +46,8 @@ adb install termux-v1.0.3.apk
 
 ## 2.手机端配置termux
 
-首先将手机联网，最好可以连接外网，部分的配置需要外网。打开Termux终端，执行以下命令安装基础件`proot`，并使用`termux-chroot`命令可以模拟 root 环境与标准的 Linux 目录结构。
+首先将手机联网，最好可以连接外网，部分的配置需要外网。打开Termux终端，执行以下命令安装基础件`proot`，并使用`termux-chroot`
+命令可以模拟 root 环境与标准的 Linux 目录结构。
 
 ```
 pkg i -y proot
@@ -69,7 +73,6 @@ pkg i -y openssh
 ```
 sshd
 ```
-
 
 ### 2.2 电脑通过SSH方式连接手机
 
@@ -101,7 +104,6 @@ ls
 
 <img src="ssh_termux_ls.png" width="800">
 
-
 ### 2.3 通过scp传输数据
 
 1.在当前目录上新建test目录
@@ -113,6 +115,7 @@ mkdir test
 2.测试scp功能
 
 将电脑中的某个文件拷贝到手机上：
+
 ```
 scp -P 8022 test.txt u0_a374@172.24.162.117:/home/storage/test
 ```
@@ -120,7 +123,6 @@ scp -P 8022 test.txt u0_a374@172.24.162.117:/home/storage/test
 3.手机端查看
 
 打开手机终端，在`/home/storage/test`下查看是否存在`test.txt`
-
 
 ## 3. 更多教程
 

@@ -16,17 +16,19 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import math
+import functools
+
+import numpy as np
 import paddle
 from paddle import nn, ParamAttr
 from paddle.nn import functional as F
-import numpy as np
-import functools
+
 from .tps import GridGenerator
 
 '''This code is refer from:
 https://github.com/hikopensource/DAVAR-Lab-OCR/davarocr/davar_rcg/models/transformations/gaspin_transformation.py
 '''
+
 
 class SP_TransformerNetwork(nn.Layer):
     """
@@ -58,9 +60,9 @@ class SP_TransformerNetwork(nn.Layer):
         from math import log
         x = []
         if k != 0:
-            for i in range(1, k+1):
-                lower = round(log(1-(0.5/(k+1))*i)/log((0.5/(k+1))*i), 2)
-                upper = round(1/lower, 2)
+            for i in range(1, k + 1):
+                lower = round(log(1 - (0.5 / (k + 1)) * i) / log((0.5 / (k + 1)) * i), 2)
+                upper = round(1 / lower, 2)
                 x.append(lower)
                 x.append(upper)
         x.append(1.00)
@@ -83,7 +85,7 @@ class SP_TransformerNetwork(nn.Layer):
         """
         batch_I = (batch_I + 1) * 0.5
         if offsets is not None:
-            batch_I = batch_I*(1-lambda_color) + offsets*lambda_color
+            batch_I = batch_I * (1 - lambda_color) + offsets * lambda_color
         batch_weight_params = paddle.unsqueeze(paddle.unsqueeze(weights, -1), -1)
         batch_I_power = paddle.stack([batch_I.pow(p) for p in self.power_list], axis=1)
 
@@ -92,6 +94,7 @@ class SP_TransformerNetwork(nn.Layer):
         batch_weight_sum = self.sigmoid(batch_weight_sum)
         batch_weight_sum = batch_weight_sum * 2 - 1
         return batch_weight_sum
+
 
 class GA_SPIN_Transformer(nn.Layer):
     """
@@ -142,46 +145,46 @@ class GA_SPIN_Transformer(nn.Layer):
             self.sp_net = SP_TransformerNetwork(in_channels,
                                                 default_type)
             self.spt_convnet = nn.Sequential(
-                                  # 32*100
-                                  nn.Conv2D(in_channels, 32, 3, 1, 1, bias_attr=False),
-                                  norm_layer(32), nn.ReLU(),
-                                  nn.MaxPool2D(kernel_size=2, stride=2),
-                                  # 16*50
-                                  nn.Conv2D(32, 64, 3, 1, 1, bias_attr=False),
-                                  norm_layer(64), nn.ReLU(),
-                                  nn.MaxPool2D(kernel_size=2, stride=2),
-                                  # 8*25
-                                  nn.Conv2D(64, 128, 3, 1, 1, bias_attr=False),
-                                  norm_layer(128), nn.ReLU(),
-                                  nn.MaxPool2D(kernel_size=2, stride=2),
-                                  # 4*12
+                # 32*100
+                nn.Conv2D(in_channels, 32, 3, 1, 1, bias_attr=False),
+                norm_layer(32), nn.ReLU(),
+                nn.MaxPool2D(kernel_size=2, stride=2),
+                # 16*50
+                nn.Conv2D(32, 64, 3, 1, 1, bias_attr=False),
+                norm_layer(64), nn.ReLU(),
+                nn.MaxPool2D(kernel_size=2, stride=2),
+                # 8*25
+                nn.Conv2D(64, 128, 3, 1, 1, bias_attr=False),
+                norm_layer(128), nn.ReLU(),
+                nn.MaxPool2D(kernel_size=2, stride=2),
+                # 4*12
             )
             self.stucture_fc1 = nn.Sequential(
-                                  nn.Conv2D(128, 256, 3, 1, 1, bias_attr=False),
-                                  norm_layer(256), nn.ReLU(),
-                                  nn.MaxPool2D(kernel_size=2, stride=2),
-                                  nn.Conv2D(256, 256, 3, 1, 1, bias_attr=False),
-                                  norm_layer(256), nn.ReLU(),  # 2*6
-                                  nn.MaxPool2D(kernel_size=2, stride=2),
-                                  nn.Conv2D(256, 512, 3, 1, 1, bias_attr=False),
-                                  norm_layer(512), nn.ReLU(),  # 1*3
-                                  nn.AdaptiveAvgPool2D(1),
-                                  nn.Flatten(1, -1),  # batch_size x 512
-                                  nn.Linear(512, 256, weight_attr=nn.initializer.Normal(0.001)),
-                                  nn.BatchNorm1D(256), nn.ReLU()
-                                )
-            self.out_weight = 2*default_type+1
-            self.spt_length = 2*default_type+1
+                nn.Conv2D(128, 256, 3, 1, 1, bias_attr=False),
+                norm_layer(256), nn.ReLU(),
+                nn.MaxPool2D(kernel_size=2, stride=2),
+                nn.Conv2D(256, 256, 3, 1, 1, bias_attr=False),
+                norm_layer(256), nn.ReLU(),  # 2*6
+                nn.MaxPool2D(kernel_size=2, stride=2),
+                nn.Conv2D(256, 512, 3, 1, 1, bias_attr=False),
+                norm_layer(512), nn.ReLU(),  # 1*3
+                nn.AdaptiveAvgPool2D(1),
+                nn.Flatten(1, -1),  # batch_size x 512
+                nn.Linear(512, 256, weight_attr=nn.initializer.Normal(0.001)),
+                nn.BatchNorm1D(256), nn.ReLU()
+            )
+            self.out_weight = 2 * default_type + 1
+            self.spt_length = 2 * default_type + 1
             if offsets:
                 self.out_weight += 1
             if self.stn:
                 self.F = 20
                 self.out_weight += self.F * 2
-                self.GridGenerator = GridGenerator(self.F*2, self.F)
-                
+                self.GridGenerator = GridGenerator(self.F * 2, self.F)
+
             # self.out_weight*=nc
             # Init structure_fc2 in LocalizationNetwork
-            initial_bias = self.init_spin(default_type*2)
+            initial_bias = self.init_spin(default_type * 2)
             initial_bias = initial_bias.reshape(-1)
             param_attr = ParamAttr(
                 learning_rate=loc_lr,
@@ -190,8 +193,8 @@ class GA_SPIN_Transformer(nn.Layer):
                 learning_rate=loc_lr,
                 initializer=nn.initializer.Assign(initial_bias))
             self.stucture_fc2 = nn.Linear(256, self.out_weight,
-                                weight_attr=param_attr,
-                                bias_attr=bias_attr)
+                                          weight_attr=param_attr,
+                                          bias_attr=bias_attr)
             self.sigmoid = nn.Sigmoid()
 
             if offsets:
@@ -199,7 +202,7 @@ class GA_SPIN_Transformer(nn.Layer):
                                                           3, 1, 1,
                                                           bias_attr=False),
                                                 norm_layer(16),
-                                                nn.ReLU(),)
+                                                nn.ReLU(), )
                 self.offset_fc2 = nn.Conv2D(16, in_channels,
                                             3, 1, 1)
                 self.pool = nn.MaxPool2D(2, 2)
@@ -210,7 +213,7 @@ class GA_SPIN_Transformer(nn.Layer):
             nz (int): number of paired \betas exponents, which means the value of K x 2
 
         """
-        init_id = [0.00]*nz+[5.00]
+        init_id = [0.00] * nz + [5.00]
         if self.offsets:
             init_id += [-5.00]
             # init_id *=3

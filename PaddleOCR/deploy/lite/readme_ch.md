@@ -9,19 +9,19 @@
     - [2.2 与手机联调](#22-与手机联调)
 - [FAQ](#faq)
 
-
 本教程将介绍基于[Paddle Lite](https://github.com/PaddlePaddle/Paddle-Lite) 在移动端部署PaddleOCR超轻量中文检测、识别模型的详细步骤。
 
 Paddle Lite是飞桨轻量化推理引擎，为手机、IOT端提供高效推理能力，并广泛整合跨平台硬件，为端侧部署及应用落地问题提供轻量化的部署方案。
 
-
 ## 1. 准备环境
 
 ### 运行准备
+
 - 电脑（编译Paddle Lite）
 - 安卓手机（armv7或armv8）
 
 ### 1.1 准备交叉编译环境
+
 交叉编译环境用于编译 Paddle Lite 和 PaddleOCR 的C++ demo。
 支持多种开发环境，不同开发环境的编译流程请参考对应文档。
 
@@ -32,18 +32,23 @@ Paddle Lite是飞桨轻量化推理引擎，为手机、IOT端提供高效推理
 ### 1.2 准备预测库
 
 预测库有两种获取方式：
-- 1. [推荐]直接下载，预测库下载链接如下：
 
-      | 平台 | 预测库下载链接 |
-      |---|---|
-      |Android|[arm7](https://github.com/PaddlePaddle/Paddle-Lite/releases/download/v2.10/inference_lite_lib.android.armv7.gcc.c++_shared.with_extra.with_cv.tar.gz) / [arm8](https://github.com/PaddlePaddle/Paddle-Lite/releases/download/v2.10/inference_lite_lib.android.armv8.gcc.c++_shared.with_extra.with_cv.tar.gz)|
-      |IOS|[arm7](https://github.com/PaddlePaddle/Paddle-Lite/releases/download/v2.10/inference_lite_lib.ios.armv7.with_cv.with_extra.with_log.tiny_publish.tar.gz) / [arm8](https://github.com/PaddlePaddle/Paddle-Lite/releases/download/v2.10/inference_lite_lib.ios.armv8.with_cv.with_extra.with_log.tiny_publish.tar.gz)|
+-
+    1. [推荐]直接下载，预测库下载链接如下：
 
-      注：1. 上述预测库为PaddleLite 2.10分支编译得到，有关PaddleLite 2.10 详细信息可参考 [链接](https://github.com/PaddlePaddle/Paddle-Lite/releases/tag/v2.10) 。
+       | 平台 | 预测库下载链接 |
+             |---|---|
+       |Android|[arm7](https://github.com/PaddlePaddle/Paddle-Lite/releases/download/v2.10/inference_lite_lib.android.armv7.gcc.c++_shared.with_extra.with_cv.tar.gz) / [arm8](https://github.com/PaddlePaddle/Paddle-Lite/releases/download/v2.10/inference_lite_lib.android.armv8.gcc.c++_shared.with_extra.with_cv.tar.gz)|
+       |IOS|[arm7](https://github.com/PaddlePaddle/Paddle-Lite/releases/download/v2.10/inference_lite_lib.ios.armv7.with_cv.with_extra.with_log.tiny_publish.tar.gz) / [arm8](https://github.com/PaddlePaddle/Paddle-Lite/releases/download/v2.10/inference_lite_lib.ios.armv8.with_cv.with_extra.with_log.tiny_publish.tar.gz)|
+
+       注：1. 上述预测库为PaddleLite 2.10分支编译得到，有关PaddleLite 2.10
+       详细信息可参考 [链接](https://github.com/PaddlePaddle/Paddle-Lite/releases/tag/v2.10) 。
 
 **注：建议使用paddlelite>=2.10版本的预测库，其他预测库版本[下载链接](https://github.com/PaddlePaddle/Paddle-Lite/tags)**
 
-- 2. 编译Paddle-Lite得到预测库，Paddle-Lite的编译方式如下：
+-
+    2. 编译Paddle-Lite得到预测库，Paddle-Lite的编译方式如下：
+
 ```
 git clone https://github.com/PaddlePaddle/Paddle-Lite.git
 cd Paddle-Lite
@@ -59,6 +64,7 @@ git checkout release/v2.10
 直接下载预测库并解压后，可以得到`inference_lite_lib.android.armv8/`文件夹，通过编译Paddle-Lite得到的预测库位于
 `Paddle-Lite/build.lite.android.armv8.gcc/inference_lite_lib.android.armv8/`文件夹下。
 预测库的文件目录如下：
+
 ```
 inference_lite_lib.android.armv8/
 |-- cxx                                        C++ 预测库和头文件
@@ -95,22 +101,26 @@ Paddle-Lite 提供了多种策略来自动优化原始的模型，其中包括�
 
 下述表格中也提供了一系列中文移动端模型：
 
-|模型版本|模型简介|模型大小|检测模型|文本方向分类模型|识别模型|Paddle-Lite版本|
-|---|---|---|---|---|---|---|
-|PP-OCRv3|蒸馏版超轻量中文OCR移动端模型|16.2M|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.nb)|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_ppocr_mobile_v2.0_cls_infer_opt.nb)|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.nb)|v2.10|
-|PP-OCRv3(slim)|蒸馏版超轻量中文OCR移动端模型|5.9M|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_slim_infer.nb)|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_ppocr_mobile_v2.0_cls_slim_opt.nb)|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_slim_infer.nb)|v2.10|
-|PP-OCRv2|蒸馏版超轻量中文OCR移动端模型|11M|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_PP-OCRv2_det_infer_opt.nb)|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_ppocr_mobile_v2.0_cls_infer_opt.nb)|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_PP-OCRv2_rec_infer_opt.nb)|v2.10|
-|PP-OCRv2(slim)|蒸馏版超轻量中文OCR移动端模型|4.6M|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_PP-OCRv2_det_slim_opt.nb)|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_ppocr_mobile_v2.0_cls_slim_opt.nb)|[下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_PP-OCRv2_rec_slim_opt.nb)|v2.10|
+| 模型版本           | 模型简介             | 模型大小  | 检测模型                                                                                   | 文本方向分类模型                                                                                    | 识别模型                                                                                   | Paddle-Lite版本 |
+|----------------|------------------|-------|----------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------|---------------|
+| PP-OCRv3       | 蒸馏版超轻量中文OCR移动端模型 | 16.2M | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.nb)      | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_ppocr_mobile_v2.0_cls_infer_opt.nb) | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.nb)      | v2.10         |
+| PP-OCRv3(slim) | 蒸馏版超轻量中文OCR移动端模型 | 5.9M  | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_slim_infer.nb) | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_ppocr_mobile_v2.0_cls_slim_opt.nb)  | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_slim_infer.nb) | v2.10         |
+| PP-OCRv2       | 蒸馏版超轻量中文OCR移动端模型 | 11M   | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_PP-OCRv2_det_infer_opt.nb)     | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_ppocr_mobile_v2.0_cls_infer_opt.nb) | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_PP-OCRv2_rec_infer_opt.nb)     | v2.10         |
+| PP-OCRv2(slim) | 蒸馏版超轻量中文OCR移动端模型 | 4.6M  | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_PP-OCRv2_det_slim_opt.nb)      | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_ppocr_mobile_v2.0_cls_slim_opt.nb)  | [下载地址](https://paddleocr.bj.bcebos.com/PP-OCRv2/lite/ch_PP-OCRv2_rec_slim_opt.nb)      | v2.10         |
 
 如果直接使用上述表格中的模型进行部署，可略过下述步骤，直接阅读 [2.2节](#2.2与手机联调)。
 
 如果要部署的模型不在上述表格中，则需要按照如下步骤获得优化后的模型。
 
-- 步骤1：参考[文档](https://www.paddlepaddle.org.cn/lite/v2.10/user_guides/opt/opt_python.html)安装paddlelite，用于转换paddle inference model为paddlelite运行所需的nb模型
+- 步骤1：参考[文档](https://www.paddlepaddle.org.cn/lite/v2.10/user_guides/opt/opt_python.html)安装paddlelite，用于转换paddle
+  inference model为paddlelite运行所需的nb模型
+
 ```
 pip install paddlelite==2.10  # paddlelite版本要与预测库版本一致
 ```
+
 安装完后，如下指令可以查看帮助信息
+
 ```
 paddle_lite_opt
 ```
@@ -123,7 +133,8 @@ paddle_lite_opt 参数介绍：
 |--param_file|待优化的PaddlePaddle模型（combined形式）的权重文件路径|
 |--optimize_out_type|输出模型类型，目前支持两种类型：protobuf和naive_buffer，其中naive_buffer是一种更轻量级的序列化/反序列化实现。若您需要在mobile端执行模型预测，请将此选项设置为naive_buffer。默认为protobuf|
 |--optimize_out|优化模型的输出路径|
-|--valid_targets|指定模型可执行的backend，默认为arm。目前可支持x86、arm、opencl、npu、xpu，可以同时指定多个backend(以空格分隔)，Model Optimize Tool将会自动选择最佳方式。如果需要支持华为NPU（Kirin 810/990 Soc搭载的达芬奇架构NPU），应当设置为npu, arm|
+|--valid_targets|指定模型可执行的backend，默认为arm。目前可支持x86、arm、opencl、npu、xpu，可以同时指定多个backend(以空格分隔)
+，Model Optimize Tool将会自动选择最佳方式。如果需要支持华为NPU（Kirin 810/990 Soc搭载的达芬奇架构NPU），应当设置为npu, arm|
 |--record_tailoring_info|当使用 根据模型裁剪库文件 功能时，则设置该选项为true，以记录优化后模型含有的kernel和OP信息，默认为false|
 
 `--model_dir`适用于待优化的模型是非combined方式，PaddleOCR的inference模型是combined方式，即模型结构和模型参数使用单独一个文件存储。
@@ -151,37 +162,40 @@ paddle_lite_opt --model_file=./ch_ppocr_mobile_v2.0_cls_slim_infer/inference.pdm
 注意：使用paddle-lite部署时，需要使用opt工具优化后的模型。 opt工具的输入模型是paddle保存的inference模型
 
 <a name="2.2与手机联调"></a>
+
 ### 2.2 与手机联调
 
 首先需要进行一些准备工作。
- 1. 准备一台arm8的安卓手机，如果编译的预测库和opt文件是armv7，则需要arm7的手机，并修改Makefile中`ARM_ABI = arm7`。
- 2. 打开手机的USB调试选项，选择文件传输模式，连接电脑。
- 3. 电脑上安装adb工具，用于调试。 adb安装方式如下：
 
-    3.1. MAC电脑安装ADB:
-    ```
-    brew cask install android-platform-tools
-    ```
-    3.2. Linux安装ADB
-    ```
-    sudo apt update
-    sudo apt install -y wget adb
-    ```
-    3.3. Window安装ADB
+1. 准备一台arm8的安卓手机，如果编译的预测库和opt文件是armv7，则需要arm7的手机，并修改Makefile中`ARM_ABI = arm7`。
+2. 打开手机的USB调试选项，选择文件传输模式，连接电脑。
+3. 电脑上安装adb工具，用于调试。 adb安装方式如下：
 
-    win上安装需要去谷歌的安卓平台下载adb软件包进行安装：[链接](https://developer.android.com/studio)
+   3.1. MAC电脑安装ADB:
+   ```
+   brew cask install android-platform-tools
+   ```
+   3.2. Linux安装ADB
+   ```
+   sudo apt update
+   sudo apt install -y wget adb
+   ```
+   3.3. Window安装ADB
 
-    打开终端，手机连接电脑，在终端中输入
-    ```
-    adb devices
-    ```
-    如果有device输出，则表示安装成功。
-    ```
-       List of devices attached
-       744be294    device
-    ```
+   win上安装需要去谷歌的安卓平台下载adb软件包进行安装：[链接](https://developer.android.com/studio)
 
- 4. 准备优化后的模型、预测库文件、测试图像和使用的字典文件。
+   打开终端，手机连接电脑，在终端中输入
+   ```
+   adb devices
+   ```
+   如果有device输出，则表示安装成功。
+   ```
+      List of devices attached
+      744be294    device
+   ```
+
+4. 准备优化后的模型、预测库文件、测试图像和使用的字典文件。
+
  ```
  git clone https://github.com/PaddlePaddle/PaddleOCR.git
  cd PaddleOCR/deploy/lite/
@@ -195,10 +209,12 @@ paddle_lite_opt --model_file=./ch_ppocr_mobile_v2.0_cls_slim_infer/inference.pdm
  cp ../../../cxx/lib/libpaddle_light_api_shared.so ./debug/
  ```
 
- 准备测试图像，以`PaddleOCR/doc/imgs/11.jpg`为例，将测试的图像复制到`demo/cxx/ocr/debug/`文件夹下。
- 准备lite opt工具优化后的模型文件，比如使用`ch_PP-OCRv3_det_slim_opt.ch_PP-OCRv3_rec_slim_rec.nb, ch_ppocr_mobile_v2.0_cls_slim_opt.nb`，模型文件放置在`demo/cxx/ocr/debug/`文件夹下。
+准备测试图像，以`PaddleOCR/doc/imgs/11.jpg`为例，将测试的图像复制到`demo/cxx/ocr/debug/`文件夹下。
+准备lite
+opt工具优化后的模型文件，比如使用`ch_PP-OCRv3_det_slim_opt.ch_PP-OCRv3_rec_slim_rec.nb, ch_ppocr_mobile_v2.0_cls_slim_opt.nb`
+，模型文件放置在`demo/cxx/ocr/debug/`文件夹下。
 
- 执行完成后，ocr文件夹下将有如下文件格式：
+执行完成后，ocr文件夹下将有如下文件格式：
 
 ```
 demo/cxx/ocr/
@@ -222,8 +238,10 @@ demo/cxx/ocr/
 ```
 
 #### 注意：
+
 1. ppocr_keys_v1.txt是中文字典文件，如果使用的 nb 模型是英文数字或其他语言的模型，需要更换为对应语言的字典。
-PaddleOCR 在ppocr/utils/下存放了多种字典，包括：
+   PaddleOCR 在ppocr/utils/下存放了多种字典，包括：
+
 ```
 dict/french_dict.txt     # 法语字典
 dict/german_dict.txt     # 德语字典
@@ -234,7 +252,8 @@ ppocr_keys_v1.txt   # 中文字典
 ...
 ```
 
-2.  `config.txt` 包含了检测器、分类器、识别器的超参数，如下：
+2. `config.txt` 包含了检测器、分类器、识别器的超参数，如下：
+
 ```
 max_side_len  960         # 输入图像长宽大于960时，等比例缩放图像，使得图像最长边为960
 det_db_thresh  0.3        # 用于过滤DB预测的二值化图像，设置为0.-0.3对结果影响不明显
@@ -244,9 +263,9 @@ use_direction_classify  0  # 是否使用方向分类器，0表示不使用，1�
 rec_image_height  48      # 识别模型输入图像的高度，PP-OCRv3模型设置为48，PP-OCRv2模型需要设置为32
 ```
 
- 5. 启动调试
+5. 启动调试
 
- 上述步骤完成后就可以使用adb将文件push到手机上运行，步骤如下：
+上述步骤完成后就可以使用adb将文件push到手机上运行，步骤如下：
 
  ```
  # 执行编译，得到可执行文件ocr_db_crnn, 第一次执行此命令会下载opencv等依赖库，下载完成后，需要再执行一次
@@ -270,16 +289,16 @@ rec_image_height  48      # 识别模型输入图像的高度，PP-OCRv3模型�
 ./ocr_db_crnn  rec ch_PP-OCRv3_rec_slim_opt.nb arm8 INT8 10 1 word_1.jpg ppocr_keys_v1.txt config.txt
  ```
 
- 如果对代码做了修改，则需要重新编译并push到手机上。
+如果对代码做了修改，则需要重新编译并push到手机上。
 
- 运行效果如下：
+运行效果如下：
 
 <div align="center">
     <img src="imgs/lite_demo.png" width="600">
 </div>
 
-
 ## FAQ
+
 Q1：如果想更换模型怎么办，需要重新按照流程走一遍吗？
 
 A1：如果已经走通了上述步骤，更换模型只需要替换 .nb 模型文件即可，同时要注意更新字典

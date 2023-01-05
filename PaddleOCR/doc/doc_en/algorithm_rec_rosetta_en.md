@@ -14,6 +14,7 @@
 - [5. FAQ](#5)
 
 <a name="1"></a>
+
 ## 1. Introduction
 
 Paper information:
@@ -21,25 +22,31 @@ Paper information:
 > Borisyuk F , Gordo A , V Sivakumar
 > KDD, 2018
 
-Using MJSynth and SynthText two text recognition datasets for training, and evaluating on IIIT, SVT, IC03, IC13, IC15, SVTP, CUTE datasets, the algorithm reproduction effect is as follows:
+Using MJSynth and SynthText two text recognition datasets for training, and evaluating on IIIT, SVT, IC03, IC13, IC15,
+SVTP, CUTE datasets, the algorithm reproduction effect is as follows:
 
-|Models|Backbone Networks|Configuration Files|Avg Accuracy|Download Links|
-| --- | --- | --- | --- | --- |
-|Rosetta|Resnet34_vd|[configs/rec/rec_r34_vd_none_none_ctc.yml](../../configs/rec/rec_r34_vd_none_none_ctc.yml)|79.11%|[training model](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r34_vd_none_none_ctc_v2.0_train.tar)|
-|Rosetta|MobileNetV3|[configs/rec/rec_mv3_none_none_ctc.yml](../../configs/rec/rec_mv3_none_none_ctc.yml)|75.80%|[training model](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_none_none_ctc_v2.0_train.tar)|
-
+| Models  | Backbone Networks | Configuration Files                                                                        | Avg Accuracy | Download Links                                                                                            |
+|---------|-------------------|--------------------------------------------------------------------------------------------|--------------|-----------------------------------------------------------------------------------------------------------|
+| Rosetta | Resnet34_vd       | [configs/rec/rec_r34_vd_none_none_ctc.yml](../../configs/rec/rec_r34_vd_none_none_ctc.yml) | 79.11%       | [training model](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r34_vd_none_none_ctc_v2.0_train.tar) |
+| Rosetta | MobileNetV3       | [configs/rec/rec_mv3_none_none_ctc.yml](../../configs/rec/rec_mv3_none_none_ctc.yml)       | 75.80%       | [training model](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_mv3_none_none_ctc_v2.0_train.tar)    |
 
 <a name="2"></a>
-## 2. Environment
-Please refer to [Operating Environment Preparation](./environment_en.md) to configure the PaddleOCR operating environment, and refer to [Project Clone](./clone_en.md) to clone the project code.
 
+## 2. Environment
+
+Please refer to [Operating Environment Preparation](./environment_en.md) to configure the PaddleOCR operating
+environment, and refer to [Project Clone](./clone_en.md) to clone the project code.
 
 <a name="3"></a>
+
 ## 3. Model Training / Evaluation / Prediction
 
-Please refer to [Text Recognition Training Tutorial](./recognition_en.md). PaddleOCR modularizes the code, and training different recognition models only requires **changing the configuration file**. Take the backbone network based on Resnet34_vd as an example:
+Please refer to [Text Recognition Training Tutorial](./recognition_en.md). PaddleOCR modularizes the code, and training
+different recognition models only requires **changing the configuration file**. Take the backbone network based on
+Resnet34_vd as an example:
 
 <a name="3-1"></a>
+
 ### 3.1 Training
 
 ````
@@ -50,6 +57,7 @@ python3 -m paddle.distributed.launch --gpus '0,1,2,3' tools/train.py -c configs/
 ````
 
 <a name="3-2"></a>
+
 ### 3.2 Evaluation
 
 ````
@@ -58,6 +66,7 @@ python3 -m paddle.distributed.launch --gpus '0' tools/eval.py -c configs/rec/rec
 ````
 
 <a name="3-3"></a>
+
 ### 3.3 Prediction
 
 ````
@@ -65,11 +74,17 @@ python3 tools/infer_rec.py -c configs/rec/rec_r34_vd_none_none_ctc.yml -o Global
 ````
 
 <a name="4"></a>
+
 ## 4. Inference and Deployment
 
 <a name="4-1"></a>
+
 ### 4.1 Python Inference
-First, convert the model saved during the Rosetta text recognition training process into an inference model. Take the model trained on the MJSynth and SynthText text recognition datasets based on the Resnet34_vd backbone network as an example ( [Model download address](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r34_vd_none_none_ctc_v2.0_train.tar) ), which can be converted using the following command:
+
+First, convert the model saved during the Rosetta text recognition training process into an inference model. Take the
+model trained on the MJSynth and SynthText text recognition datasets based on the Resnet34_vd backbone network as an
+example ( [Model download address](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r34_vd_none_none_ctc_v2.0_train.tar) ),
+which can be converted using the following command:
 
 ```shell
 python3 tools/export_model.py -c configs/rec/rec_r34_vd_none_none_ctc.yml -o Global.pretrained_model=./rec_r34_vd_none_none_ctc_v2.0_train/best_accuracy Global.save_inference_dir=./inference/rec_rosetta
@@ -90,23 +105,28 @@ Predicts of doc/imgs_words/en/word_1.png:('joint', 0.9999982714653015)
 ````
 
 <a name="4-2"></a>
+
 ### 4.2 C++ Inference
 
 Not currently supported
 
 <a name="4-3"></a>
+
 ### 4.3 Serving
 
 Not currently supported
 
 <a name="4-4"></a>
+
 ### 4.4 More
 
 The Rosetta model also supports the following inference deployment methods:
 
-- Paddle2ONNX Inference: After preparing the inference model, refer to the [paddle2onnx](../../deploy/paddle2onnx/) tutorial.
+- Paddle2ONNX Inference: After preparing the inference model, refer to the [paddle2onnx](../../deploy/paddle2onnx/)
+  tutorial.
 
 <a name="5"></a>
+
 ## 5. FAQ
 
 ## Quote

@@ -1,10 +1,10 @@
 import pickle
 import sys
-import torch
 import traceback
-import numpy as np
 
-from cv2 import cv2
+import cv2
+import numpy as np
+import torch
 from tqdm import tqdm
 
 # YOLOv7
@@ -33,7 +33,6 @@ class DetectWords():
 
         self.init()
 
-
     def init(self):
         self.device = select_device(self.device)
         self.half = self.device.type != 'cpu'  # half precision only supported on CUDA
@@ -46,11 +45,11 @@ class DetectWords():
             self.model.half()  # to FP16
 
         if self.device.type != 'cpu':
-            self.model(torch.zeros(1, 3, self.imgsz, self.imgsz).to(self.device).type_as(next(self.model.parameters())))  # run once
+            self.model(torch.zeros(1, 3, self.imgsz, self.imgsz).to(self.device).type_as(
+                next(self.model.parameters())))  # run once
 
         self.old_img_w = self.old_img_h = self.imgsz
         self.old_img_b = 1
-
 
     def detect(self, source, min_h=10, min_w=10) -> tuple:
         dataset = LoadImages(source, img_size=self.imgsz, stride=self.stride)
@@ -65,7 +64,8 @@ class DetectWords():
                 img = img.unsqueeze(0)
 
             # Warmup
-            if self.device.type != 'cpu' and (self.old_img_b != img.shape[0] or self.old_img_h != img.shape[2] or self.old_img_w != img.shape[3]):
+            if self.device.type != 'cpu' and (
+                    self.old_img_b != img.shape[0] or self.old_img_h != img.shape[2] or self.old_img_w != img.shape[3]):
                 self.old_img_b = img.shape[0]
                 self.old_img_h = img.shape[2]
                 self.old_img_w = img.shape[3]
@@ -74,7 +74,7 @@ class DetectWords():
                     self.model(img)[0]
 
             # Inference
-            with torch.no_grad():   # Calculating gradients would cause a GPU memory leak
+            with torch.no_grad():  # Calculating gradients would cause a GPU memory leak
                 pred = self.model(img)[0]
 
             # Apply NMS
@@ -95,6 +95,8 @@ class DetectWords():
                     return (locs, im0s)
 
         return (None, None)
+
+
 # }}}
 # {{{ Recode PaddleOCR 
 class TextRecognizer(object):
@@ -114,7 +116,6 @@ class TextRecognizer(object):
         self.postprocess_op = build_post_process(postprocess_params)
         self.predictor, self.input_tensor, self.output_tensors, self.config = \
             utility.create_predictor(args, 'rec', self.logger)
-
 
     def resize_norm_img_srn(self, img, image_shape):
         _, imgH, imgW = image_shape
@@ -141,7 +142,6 @@ class TextRecognizer(object):
         c = 1
 
         return np.reshape(img_black, (c, row, col)).astype(np.float32)
-
 
     def srn_other_inputs(self, image_shape, num_heads, max_text_length):
         _, imgH, imgW = image_shape
@@ -173,7 +173,6 @@ class TextRecognizer(object):
             gsrm_slf_attn_bias2
         ]
 
-
     def process_image_srn(self, img, image_shape, num_heads, max_text_length):
         norm_img = self.resize_norm_img_srn(img, image_shape)
         norm_img = norm_img[np.newaxis, :]
@@ -188,7 +187,6 @@ class TextRecognizer(object):
 
         return (norm_img, encoder_word_pos, gsrm_word_pos, gsrm_slf_attn_bias1,
                 gsrm_slf_attn_bias2)
-
 
     def recognize(self, image_file_list):
         image_file_list = get_image_file_list(image_file_list)
@@ -286,4 +284,3 @@ class TextRecognizer(object):
 
         return image_file_list, rec_res
 # }}}
-

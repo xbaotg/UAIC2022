@@ -161,7 +161,7 @@ def get_rotate_crop_image(img, points):
         print(e)
 
 
-def boxPad(box, imgShape, pad : int) -> np.array:
+def boxPad(box, imgShape, pad: int) -> np.array:
     """
     Pad a box with [pad] pixels on each side.
     """
@@ -171,8 +171,8 @@ def boxPad(box, imgShape, pad : int) -> np.array:
     box[2][0], box[2][1] = box[2][0] + pad, box[2][1] + pad
     box[3][0], box[3][1] = box[3][0] - pad, box[3][1] + pad
     h, w, _ = imgShape
-    box[:,0] = np.clip(box[:,0], 0, w)
-    box[:,1] = np.clip(box[:,1], 0, h)
+    box[:, 0] = np.clip(box[:, 0], 0, w)
+    box[:, 1] = np.clip(box[:, 1], 0, h)
     return box
 
 
@@ -221,23 +221,23 @@ def convert_token(html_list):
 
 
 def rebuild_html_from_ppstructure_label(label_info):
-        from html import escape
-        html_code = label_info['html']['structure']['tokens'].copy()
-        to_insert = [
-            i for i, tag in enumerate(html_code) if tag in ('<td>', '>')
-        ]
-        for i, cell in zip(to_insert[::-1], label_info['html']['cells'][::-1]):
-            if cell['tokens']:
-                cell = [
-                    escape(token) if len(token) == 1 else token
-                    for token in cell['tokens']
-                ]
-                cell = ''.join(cell)
-                html_code.insert(i + 1, cell)
-        html_code = ''.join(html_code)
-        html_code = '<html><body><table>{}</table></body></html>'.format(
-            html_code)
-        return html_code
+    from html import escape
+    html_code = label_info['html']['structure']['tokens'].copy()
+    to_insert = [
+        i for i, tag in enumerate(html_code) if tag in ('<td>', '>')
+    ]
+    for i, cell in zip(to_insert[::-1], label_info['html']['cells'][::-1]):
+        if cell['tokens']:
+            cell = [
+                escape(token) if len(token) == 1 else token
+                for token in cell['tokens']
+            ]
+            cell = ''.join(cell)
+            html_code.insert(i + 1, cell)
+    html_code = ''.join(html_code)
+    html_code = '<html><body><table>{}</table></body></html>'.format(
+        html_code)
+    return html_code
 
 
 def stepsInfo(lang='en'):

@@ -11,15 +11,16 @@
 # CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-#!/usr/bin/env python
+import locale
+import os
+# !/usr/bin/env python
 # -*- coding: utf-8 -*-
 import re
-import os
 import sys
-import locale
+
 from libs.ustr import ustr
 
-__dir__ = os.path.dirname(os.path.abspath(__file__)) # 获取本程序文件路径
+__dir__ = os.path.dirname(os.path.abspath(__file__))  # 获取本程序文件路径
 __dirpath__ = os.path.abspath(os.path.join(__dir__, '../resources/strings'))
 
 try:
@@ -27,16 +28,16 @@ try:
 except ImportError:
     if sys.version_info.major >= 3:
         import sip
+
         sip.setapi('QVariant', 2)
     from PyQt4.QtCore import *
 
 
 class StringBundle:
-
     __create_key = object()
 
     def __init__(self, create_key, localeStr):
-        assert(create_key == StringBundle.__create_key), "StringBundle must be created using StringBundle.getBundle"
+        assert (create_key == StringBundle.__create_key), "StringBundle must be created using StringBundle.getBundle"
         self.idToMessage = {}
         paths = self.__createLookupFallbackList(localeStr)
         for path in paths:
@@ -55,7 +56,7 @@ class StringBundle:
         return StringBundle(cls.__create_key, localeStr)
 
     def getString(self, stringId):
-        assert(stringId in self.idToMessage), "Missing string id : " + stringId
+        assert (stringId in self.idToMessage), "Missing string id : " + stringId
         return self.idToMessage[stringId]
 
     def __createLookupFallbackList(self, localeStr):

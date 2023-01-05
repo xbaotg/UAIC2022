@@ -18,8 +18,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from paddle import nn
 import paddle
+from paddle import nn
 
 
 class SDMGRLoss(nn.Layer):
@@ -63,7 +63,7 @@ class SDMGRLoss(nn.Layer):
         """
         assert isinstance(topk, (int, tuple))
         if isinstance(topk, int):
-            topk = (topk, )
+            topk = (topk,)
             return_single = True
         else:
             return_single = False

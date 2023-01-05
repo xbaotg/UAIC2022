@@ -11,9 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import numpy as np
 import json
 import os
+
+import numpy as np
 
 
 def poly_to_string(poly):
@@ -49,12 +50,12 @@ def convert_label(label_dir, mode="gt", save_dir="./save_results/"):
             anno = json.loads(tmp[1])
             gt_collect = []
             for dic in anno:
-                #txt = dic['transcription'].replace(' ', '')  # ignore blank
+                # txt = dic['transcription'].replace(' ', '')  # ignore blank
                 txt = dic['transcription']
                 if 'score' in dic and float(dic['score']) < 0.5:
                     continue
                 if u'\u3000' in txt: txt = txt.replace(u'\u3000', u' ')
-                #while ' ' in txt:
+                # while ' ' in txt:
                 #    txt = txt.replace(' ', '')
                 poly = np.array(dic['points']).flatten()
                 if txt == "###":

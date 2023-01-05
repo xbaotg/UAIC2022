@@ -6,7 +6,7 @@ Global:
   save_model_dir: ./output/rec/svtr/
   save_epoch_step: 1
   # evaluation is run every 2000 iterations after the 0th iteration
-  eval_batch_step: [0, 2000]
+  eval_batch_step: [ 0, 2000 ]
   cal_metric_during_train: True
   pretrained_model:
   checkpoints:
@@ -40,22 +40,22 @@ Architecture:
   algorithm: SVTR
   Transform:
     name: STN_ON
-    tps_inputsize: [32, 64]
-    tps_outputsize: [32, 100]
+    tps_inputsize: [ 32, 64 ]
+    tps_outputsize: [ 32, 100 ]
     num_control_points: 20
-    tps_margins: [0.05,0.05]
+    tps_margins: [ 0.05,0.05 ]
     stn_activation: none
   Backbone:
     name: SVTRNet
-    img_size: [32, 100]
+    img_size: [ 32, 100 ]
     out_char_num: 25
     out_channels: 192
     patch_merging: 'Conv'
-    embed_dim: [64, 128, 256]
-    depth: [3, 6, 3]
-    num_heads: [2, 4, 8]
-    mixer: ['Local','Local','Local','Local','Local','Local','Global','Global','Global','Global','Global','Global']
-    local_mixer: [[7, 11], [7, 11], [7, 11]]
+    embed_dim: [ 64, 128, 256 ]
+    depth: [ 3, 6, 3 ]
+    num_heads: [ 2, 4, 8 ]
+    mixer: [ 'Local','Local','Local','Local','Local','Local','Global','Global','Global','Global','Global','Global' ]
+    local_mixer: [ [ 7, 11 ], [ 7, 11 ], [ 7, 11 ] ]
     last_stage: True
     prenorm: false
   Neck:
@@ -78,17 +78,17 @@ Train:
   dataset:
     name: SimpleDataSet
     data_dir: ./train_data/ic15_data/
-    label_file_list: ["./train_data/ic15_data/rec_gt_train.txt"]
+    label_file_list: [ "./train_data/ic15_data/rec_gt_train.txt" ]
     transforms:
       - DecodeImage: # load image
           img_mode: BGR
           channel_first: False
       - CTCLabelEncode: # Class handling label
       - SVTRRecResizeImg:
-          image_shape: [3, 64, 256]
+          image_shape: [ 3, 64, 256 ]
           padding: False
       - KeepKeys:
-          keep_keys: ['image', 'label', 'length'] # dataloader will return list in this order
+          keep_keys: [ 'image', 'label', 'length' ] # dataloader will return list in this order
   loader:
     shuffle: True
     batch_size_per_card: 512
@@ -99,17 +99,17 @@ Eval:
   dataset:
     name: SimpleDataSet
     data_dir: ./train_data/ic15_data
-    label_file_list: ["./train_data/ic15_data/rec_gt_test.txt"]
+    label_file_list: [ "./train_data/ic15_data/rec_gt_test.txt" ]
     transforms:
       - DecodeImage: # load image
           img_mode: BGR
           channel_first: False
       - CTCLabelEncode: # Class handling label
       - SVTRRecResizeImg:
-          image_shape: [3, 64, 256]
+          image_shape: [ 3, 64, 256 ]
           padding: False
       - KeepKeys:
-          keep_keys: ['image', 'label', 'length'] # dataloader will return list in this order
+          keep_keys: [ 'image', 'label', 'length' ] # dataloader will return list in this order
   loader:
     shuffle: False
     drop_last: False

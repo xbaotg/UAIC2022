@@ -11,18 +11,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import base64
+import copy
+import logging
+
+import cv2
+import numpy as np
+from paddle_serving_app.reader import DBPostProcess, FilterBoxes, GetRotateCropImage, SortedBoxes
+from paddle_serving_app.reader import Div, Normalize, Transpose
+from paddle_serving_app.reader import Sequential
 from paddle_serving_server.web_service import WebService, Op
 
-import logging
-import numpy as np
-import copy
-import cv2
-import base64
 # from paddle_serving_app.reader import OCRReader
 from ocr_reader import OCRReader, DetResizeForTest, ArgsParser
-from paddle_serving_app.reader import Sequential, ResizeByFactor
-from paddle_serving_app.reader import Div, Normalize, Transpose
-from paddle_serving_app.reader import DBPostProcess, FilterBoxes, GetRotateCropImage, SortedBoxes
 
 _LOGGER = logging.getLogger()
 

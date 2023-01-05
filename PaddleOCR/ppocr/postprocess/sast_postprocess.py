@@ -26,8 +26,6 @@ sys.path.append(os.path.join(__dir__, '..'))
 import numpy as np
 from .locality_aware_nms import nms_locality
 import paddle
-import cv2
-import time
 
 
 class SASTPostProcess(object):
@@ -194,7 +192,7 @@ class SASTPostProcess(object):
             dtype=np.float32).astype(np.int32)]
 
         dense_xy_center_line_diff = dense_xy_center_line[
-            1:] - dense_xy_center_line[:-1]
+                                    1:] - dense_xy_center_line[:-1]
         estimate_arc_len = np.sum(
             np.linalg.norm(
                 dense_xy_center_line_diff, axis=1))

@@ -165,7 +165,7 @@ class TimeAnalyzer(object):
             fps = gpu_num * avg_of_records
         elif mode == -1 and run_mode == 'mp':
             assert unit, "Please set the unit when mode is -1."
-            fps = gpu_num * avg_of_records  #temporarily, not used now
+            fps = gpu_num * avg_of_records  # temporarily, not used now
             print("------------this is mp")
         elif mode == 0:
             # s/step -> samples/s
@@ -298,7 +298,7 @@ if __name__ == "__main__":
                 unit=args.ips_unit)
             try:
                 if int(os.getenv('job_fail_flag')) == 1 or int(run_info[
-                        "FINAL_RESULT"]) == 0:
+                                                                   "FINAL_RESULT"]) == 0:
                     run_info["JOB_FAIL_FLAG"] = 1
             except:
                 pass
@@ -328,14 +328,14 @@ if __name__ == "__main__":
                 0] if records_fo_ratio else 0
             run_info["FINAL_RESULT"][
                 "ComputationTime_Total"] = records_ct_total[
-                    0] if records_ct_total else 0
+                0] if records_ct_total else 0
             run_info["FINAL_RESULT"]["GpuMemcpy_Total"] = records_gm_total[
                 0] if records_gm_total else 0
             run_info["FINAL_RESULT"]["GpuMemcpy_Ratio"] = records_gm_ratio[
                 0] if records_gm_ratio else 0
             run_info["FINAL_RESULT"][
                 "GpuMemcpyAsync_Total"] = records_gmas_total[
-                    0] if records_gmas_total else 0
+                0] if records_gmas_total else 0
             run_info["FINAL_RESULT"]["GpuMemcpySync_Total"] = records_gms_total[
                 0] if records_gms_total else 0
         else:

@@ -16,15 +16,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import math
-import paddle
-from paddle import ParamAttr
 import paddle.nn as nn
-import paddle.nn.functional as F
-
-from ppocr.modeling.necks.rnn import Im2Seq, EncoderWithRNN, EncoderWithFC, SequenceEncoder, EncoderWithSVTR
-from .rec_ctc_head import CTCHead
-from .rec_sar_head import SARHead
+from ppocr.modeling.necks.rnn import Im2Seq, SequenceEncoder
 
 
 class MultiHead(nn.Layer):
@@ -39,7 +32,7 @@ class MultiHead(nn.Layer):
                 # sar head
                 sar_args = self.head_list[idx][name]
                 self.sar_head = eval(name)(in_channels=in_channels, \
-                    out_channels=out_channels_list['SARLabelDecode'], **sar_args)
+                                           out_channels=out_channels_list['SARLabelDecode'], **sar_args)
             elif name == 'CTCHead':
                 # ctc neck
                 self.encoder_reshape = Im2Seq(in_channels)
@@ -47,11 +40,11 @@ class MultiHead(nn.Layer):
                 encoder_type = neck_args.pop('name')
                 self.encoder = encoder_type
                 self.ctc_encoder = SequenceEncoder(in_channels=in_channels, \
-                    encoder_type=encoder_type, **neck_args)
+                                                   encoder_type=encoder_type, **neck_args)
                 # ctc head
                 head_args = self.head_list[idx][name]['Head']
                 self.ctc_head = eval(name)(in_channels=self.ctc_encoder.out_channels, \
-                    out_channels=out_channels_list['CTCLabelDecode'], **head_args)
+                                           out_channels=out_channels_list['CTCLabelDecode'], **head_args)
             else:
                 raise NotImplementedError(
                     '{} is not supported in MultiHead yet'.format(name))

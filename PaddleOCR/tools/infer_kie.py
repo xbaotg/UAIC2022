@@ -16,11 +16,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy as np
-import paddle.nn.functional as F
-
 import os
 import sys
+
+import numpy as np
+import paddle.nn.functional as F
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
@@ -81,12 +81,13 @@ def draw_kie_result(batch, node, idx_to_cls, count):
     vis_img[:, :w] = img
     vis_img[:, w:] = pred_img
     save_kie_path = os.path.dirname(config['Global'][
-        'save_res_path']) + "/kie_results/"
+                                        'save_res_path']) + "/kie_results/"
     if not os.path.exists(save_kie_path):
         os.makedirs(save_kie_path)
     save_path = os.path.join(save_kie_path, str(count) + ".png")
     cv2.imwrite(save_path, vis_img)
     logger.info("The Kie Image saved in {}".format(save_path))
+
 
 def write_kie_result(fout, node, data):
     """
@@ -103,14 +104,15 @@ def write_kie_result(fout, node, data):
     for i, label in enumerate(node_pred_label):
         pred_score = '{:.2f}'.format(node_pred_score[i])
         pred_res = {
-                'label': label,
-                'transcription': annotations[i]['transcription'],
-                'score': pred_score,
-                'points': annotations[i]['points'],
-            }
+            'label': label,
+            'transcription': annotations[i]['transcription'],
+            'score': pred_score,
+            'points': annotations[i]['points'],
+        }
         res.append(pred_res)
     res.sort(key=lambda x: x['label'])
     fout.writelines([json.dumps(res, ensure_ascii=False) + '\n'])
+
 
 def main():
     global_config = config['Global']

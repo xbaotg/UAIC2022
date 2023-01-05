@@ -30,7 +30,7 @@ describe('e2e test ocr model', () => {
         expectResult && expectResult.forEach((item, index) => {
             const word = text[index];
             // 逐字符对比
-            for(let i = 0; i < item.length; i++) {
+            for (let i = 0; i < item.length; i++) {
                 if (item[i] !== word[i]) {
                     console.log('expect: ', item[i], ' word: ', word[i]);
                     diffNum++;

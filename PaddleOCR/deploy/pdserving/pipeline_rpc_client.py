@@ -15,10 +15,6 @@ try:
     from paddle_serving_server_gpu.pipeline import PipelineClient
 except ImportError:
     from paddle_serving_server.pipeline import PipelineClient
-import numpy as np
-import requests
-import json
-import cv2
 import base64
 import os
 
@@ -31,6 +27,7 @@ def cv2_to_base64(image):
 
 
 import argparse
+
 parser = argparse.ArgumentParser(description="args for paddleserving")
 parser.add_argument("--image_dir", type=str, default="../../doc/imgs/")
 args = parser.parse_args()

@@ -29,7 +29,7 @@ class SpectralNorm(object):
         if n_power_iterations <= 0:
             raise ValueError('Expected n_power_iterations to be positive, but '
                              'got n_power_iterations={}'.format(
-                                 n_power_iterations))
+                n_power_iterations))
         self.n_power_iterations = n_power_iterations
         self.eps = eps
 
@@ -39,7 +39,7 @@ class SpectralNorm(object):
             # transpose dim to front
             weight_mat = weight_mat.transpose([
                 self.dim,
-                * [d for d in range(weight_mat.dim()) if d != self.dim]
+                *[d for d in range(weight_mat.dim()) if d != self.dim]
             ])
 
         height = weight_mat.shape[0]
@@ -139,7 +139,6 @@ def spectral_norm(module,
                   n_power_iterations=1,
                   eps=1e-12,
                   dim=None):
-
     if dim is None:
         if isinstance(module, (nn.Conv1DTranspose, nn.Conv2DTranspose,
                                nn.Conv3DTranspose, nn.Linear)):

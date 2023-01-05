@@ -19,10 +19,9 @@ from __future__ import print_function
 import errno
 import os
 import pickle
-import six
 
 import paddle
-
+import six
 from ppocr.utils.logging import get_logger
 
 __all__ = ['load_model']

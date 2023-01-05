@@ -19,16 +19,11 @@ import torch.nn.functional as F
 from PIL import Image, ExifTags
 from torch.utils.data import Dataset
 from tqdm import tqdm
-
-import pickle
-from copy import deepcopy
-#from pycocotools import mask as maskUtils
-from torchvision.utils import save_image
-from torchvision.ops import roi_pool, roi_align, ps_roi_pool, ps_roi_align
-
 from utils.general import check_requirements, xyxy2xywh, xywh2xyxy, xywhn2xyxy, xyn2xy, segment2box, segments2boxes, \
     resample_segments, clean_str
 from utils.torch_utils import torch_distributed_zero_first
+
+# from pycocotools import mask as maskUtils
 
 # Parameters
 help_url = 'https://github.com/ultralytics/yolov5/wiki/Train-Custom-Data'
@@ -185,7 +180,7 @@ class LoadImages:  # for inference
             self.count += 1
             img0 = cv2.imread(path)  # BGR
             assert img0 is not None, 'Image Not Found ' + path
-            #print(f'image {self.count}/{self.nf} {path}: ', end='')
+            # print(f'image {self.count}/{self.nf} {path}: ', end='')
 
         # Padded resize
         img = letterbox(img0, self.img_size, stride=self.stride)[0]
@@ -361,8 +356,8 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
         self.mosaic = self.augment and not self.rect  # load 4 images at a time into a mosaic (only during training)
         self.mosaic_border = [-img_size // 2, -img_size // 2]
         self.stride = stride
-        self.path = path        
-        #self.albumentations = Albumentations() if augment else None
+        self.path = path
+        # self.albumentations = Albumentations() if augment else None
 
         try:
             f = []  # image files
@@ -390,7 +385,7 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
         cache_path = (p if p.is_file() else Path(self.label_files[0]).parent).with_suffix('.cache')  # cached labels
         if cache_path.is_file():
             cache, exists = torch.load(cache_path), True  # load
-            #if cache['hash'] != get_hash(self.label_files + self.img_files) or 'version' not in cache:  # changed
+            # if cache['hash'] != get_hash(self.label_files + self.img_files) or 'version' not in cache:  # changed
             #    cache, exists = self.cache_labels(cache_path, prefix), False  # re-cache
         else:
             cache, exists = self.cache_labels(cache_path, prefix), False  # cache
@@ -576,9 +571,8 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
                                                  scale=hyp['scale'],
                                                  shear=hyp['shear'],
                                                  perspective=hyp['perspective'])
-            
-            
-            #img, labels = self.albumentations(img, labels)
+
+            # img, labels = self.albumentations(img, labels)
 
             # Augment colorspace
             augment_hsv(img, hgain=hyp['hsv_h'], sgain=hyp['hsv_s'], vgain=hyp['hsv_v'])
@@ -586,15 +580,16 @@ class LoadImagesAndLabels(Dataset):  # for training/testing
             # Apply cutouts
             # if random.random() < 0.9:
             #     labels = cutout(img, labels)
-            
+
             if random.random() < hyp['paste_in']:
-                sample_labels, sample_images, sample_masks = [], [], [] 
+                sample_labels, sample_images, sample_masks = [], [], []
                 while len(sample_labels) < 30:
-                    sample_labels_, sample_images_, sample_masks_ = load_samples(self, random.randint(0, len(self.labels) - 1))
+                    sample_labels_, sample_images_, sample_masks_ = load_samples(self, random.randint(0,
+                                                                                                      len(self.labels) - 1))
                     sample_labels += sample_labels_
                     sample_images += sample_images_
                     sample_masks += sample_masks_
-                    #print(len(sample_labels))
+                    # print(len(sample_labels))
                     if len(sample_labels) == 0:
                         break
                 labels = pastein(img, labels, sample_labels, sample_images, sample_masks)
@@ -750,8 +745,8 @@ def load_mosaic(self, index):
     # img4, labels4 = replicate(img4, labels4)  # replicate
 
     # Augment
-    #img4, labels4, segments4 = remove_background(img4, labels4, segments4)
-    #sample_segments(img4, labels4, segments4, probability=self.hyp['copy_paste'])
+    # img4, labels4, segments4 = remove_background(img4, labels4, segments4)
+    # sample_segments(img4, labels4, segments4, probability=self.hyp['copy_paste'])
     img4, labels4, segments4 = copy_paste(img4, labels4, segments4, probability=self.hyp['copy_paste'])
     img4, labels4 = random_perspective(img4, labels4, segments4,
                                        degrees=self.hyp['degrees'],
@@ -827,7 +822,7 @@ def load_mosaic9(self, index):
     # img9, labels9 = replicate(img9, labels9)  # replicate
 
     # Augment
-    #img9, labels9, segments9 = remove_background(img9, labels9, segments9)
+    # img9, labels9, segments9 = remove_background(img9, labels9, segments9)
     img9, labels9, segments9 = copy_paste(img9, labels9, segments9, probability=self.hyp['copy_paste'])
     img9, labels9 = random_perspective(img9, labels9, segments9,
                                        degrees=self.hyp['degrees'],
@@ -885,7 +880,7 @@ def load_samples(self, index):
     # img4, labels4 = replicate(img4, labels4)  # replicate
 
     # Augment
-    #img4, labels4, segments4 = remove_background(img4, labels4, segments4)
+    # img4, labels4, segments4 = remove_background(img4, labels4, segments4)
     sample_labels, sample_images, sample_masks = sample_segments(img4, labels4, segments4, probability=0.5)
 
     return sample_labels, sample_images, sample_masks
@@ -925,7 +920,7 @@ def remove_background(img, labels, segments):
         cv2.drawContours(im_new, [segments[j].astype(np.int32)], -1, (255, 255, 255), cv2.FILLED)
 
         result = cv2.bitwise_and(src1=img, src2=im_new)
-        
+
         i = result > 0  # pixels to replace
         img_new[i] = result[i]  # cv2.imwrite('debug.jpg', img)  # debug
 
@@ -942,24 +937,25 @@ def sample_segments(img, labels, segments, probability=0.5):
         h, w, c = img.shape  # height, width, channels
         for j in random.sample(range(n), k=round(probability * n)):
             l, s = labels[j], segments[j]
-            box = l[1].astype(int).clip(0,w-1), l[2].astype(int).clip(0,h-1), l[3].astype(int).clip(0,w-1), l[4].astype(int).clip(0,h-1) 
-            
-            #print(box)
+            box = l[1].astype(int).clip(0, w - 1), l[2].astype(int).clip(0, h - 1), l[3].astype(int).clip(0, w - 1), l[
+                4].astype(int).clip(0, h - 1)
+
+            # print(box)
             if (box[2] <= box[0]) or (box[3] <= box[1]):
                 continue
-            
+
             sample_labels.append(l[0])
-            
+
             mask = np.zeros(img.shape, np.uint8)
-            
+
             cv2.drawContours(mask, [segments[j].astype(np.int32)], -1, (255, 255, 255), cv2.FILLED)
-            sample_masks.append(mask[box[1]:box[3],box[0]:box[2],:])
-            
+            sample_masks.append(mask[box[1]:box[3], box[0]:box[2], :])
+
             result = cv2.bitwise_and(src1=img, src2=mask)
             i = result > 0  # pixels to replace
             mask[i] = result[i]  # cv2.imwrite('debug.jpg', img)  # debug
-            #print(box)
-            sample_images.append(mask[box[1]:box[3],box[0]:box[2],:])
+            # print(box)
+            sample_images.append(mask[box[1]:box[3], box[0]:box[2], :])
 
     return sample_labels, sample_images, sample_masks
 
@@ -1128,7 +1124,7 @@ def bbox_ioa(box1, box2):
 
     # Intersection over box2 area
     return inter_area / box2_area
-    
+
 
 def cutout(image, labels):
     # Applies image cutout augmentation https://arxiv.org/abs/1708.04552
@@ -1156,7 +1152,7 @@ def cutout(image, labels):
             labels = labels[ioa < 0.60]  # remove >60% obscured labels
 
     return labels
-    
+
 
 def pastein(image, labels, sample_labels, sample_images, sample_masks):
     # Applies image cutout augmentation https://arxiv.org/abs/1708.04552
@@ -1174,46 +1170,48 @@ def pastein(image, labels, sample_labels, sample_images, sample_masks):
         xmin = max(0, random.randint(0, w) - mask_w // 2)
         ymin = max(0, random.randint(0, h) - mask_h // 2)
         xmax = min(w, xmin + mask_w)
-        ymax = min(h, ymin + mask_h)   
-        
+        ymax = min(h, ymin + mask_h)
+
         box = np.array([xmin, ymin, xmax, ymax], dtype=np.float32)
         if len(labels):
             ioa = bbox_ioa(box, labels[:, 1:5])  # intersection over area     
         else:
             ioa = np.zeros(1)
-        
-        if (ioa < 0.30).all() and len(sample_labels) and (xmax > xmin+20) and (ymax > ymin+20):  # allow 30% obscuration of existing labels
-            sel_ind = random.randint(0, len(sample_labels)-1)
-            #print(len(sample_labels))
-            #print(sel_ind)
-            #print((xmax-xmin, ymax-ymin))
-            #print(image[ymin:ymax, xmin:xmax].shape)
-            #print([[sample_labels[sel_ind], *box]])
-            #print(labels.shape)
+
+        if (ioa < 0.30).all() and len(sample_labels) and (xmax > xmin + 20) and (
+                ymax > ymin + 20):  # allow 30% obscuration of existing labels
+            sel_ind = random.randint(0, len(sample_labels) - 1)
+            # print(len(sample_labels))
+            # print(sel_ind)
+            # print((xmax-xmin, ymax-ymin))
+            # print(image[ymin:ymax, xmin:xmax].shape)
+            # print([[sample_labels[sel_ind], *box]])
+            # print(labels.shape)
             hs, ws, cs = sample_images[sel_ind].shape
-            r_scale = min((ymax-ymin)/hs, (xmax-xmin)/ws)
-            r_w = int(ws*r_scale)
-            r_h = int(hs*r_scale)
-            
+            r_scale = min((ymax - ymin) / hs, (xmax - xmin) / ws)
+            r_w = int(ws * r_scale)
+            r_h = int(hs * r_scale)
+
             if (r_w > 10) and (r_h > 10):
                 r_mask = cv2.resize(sample_masks[sel_ind], (r_w, r_h))
                 r_image = cv2.resize(sample_images[sel_ind], (r_w, r_h))
-                temp_crop = image[ymin:ymin+r_h, xmin:xmin+r_w]
+                temp_crop = image[ymin:ymin + r_h, xmin:xmin + r_w]
                 m_ind = r_mask > 0
                 if m_ind.astype(np.int).sum() > 60:
                     temp_crop[m_ind] = r_image[m_ind]
-                    #print(sample_labels[sel_ind])
-                    #print(sample_images[sel_ind].shape)
-                    #print(temp_crop.shape)
-                    box = np.array([xmin, ymin, xmin+r_w, ymin+r_h], dtype=np.float32)
+                    # print(sample_labels[sel_ind])
+                    # print(sample_images[sel_ind].shape)
+                    # print(temp_crop.shape)
+                    box = np.array([xmin, ymin, xmin + r_w, ymin + r_h], dtype=np.float32)
                     if len(labels):
                         labels = np.concatenate((labels, [[sample_labels[sel_ind], *box]]), 0)
                     else:
                         labels = np.array([[sample_labels[sel_ind], *box]])
-                              
-                    image[ymin:ymin+r_h, xmin:xmin+r_w] = temp_crop
+
+                    image[ymin:ymin + r_h, xmin:xmin + r_w] = temp_crop
 
     return labels
+
 
 class Albumentations:
     # YOLOv5 Albumentations class (optional, only used if package is installed)
@@ -1228,10 +1226,10 @@ class Albumentations:
             A.Blur(p=0.01),
             A.MedianBlur(p=0.01),
             A.ToGray(p=0.01),
-            A.ImageCompression(quality_lower=75, p=0.01),],
+            A.ImageCompression(quality_lower=75, p=0.01), ],
             bbox_params=A.BboxParams(format='pascal_voc', label_fields=['class_labels']))
 
-            #logging.info(colorstr('albumentations: ') + ', '.join(f'{x}' for x in self.transform.transforms if x.p))
+        # logging.info(colorstr('albumentations: ') + ', '.join(f'{x}' for x in self.transform.transforms if x.p))
 
     def __call__(self, im, labels, p=1.0):
         if self.transform and random.random() < p:
@@ -1311,10 +1309,10 @@ def autosplit(path='../coco', weights=(0.9, 0.1, 0.0), annotated_only=False):
         if not annotated_only or Path(img2label_paths([str(img)])[0]).exists():  # check label
             with open(path / txt[i], 'a') as f:
                 f.write(str(img) + '\n')  # add image to txt file
-    
-    
+
+
 def load_segmentations(self, index):
     key = '/work/handsomejw66/coco17/' + self.img_files[index]
-    #print(key)
+    # print(key)
     # /work/handsomejw66/coco17/
     return self.segs[key]

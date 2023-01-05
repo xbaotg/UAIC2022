@@ -1,10 +1,8 @@
+import numpy as np
 import paddle
 import paddle.nn as nn
-from paddle.vision.transforms import Compose, Normalize
 from paddle.utils.cpp_extension import load
-from paddle.inference import Config
-from paddle.inference import create_predictor
-import numpy as np
+from paddle.vision.transforms import Compose, Normalize
 
 EPOCH_NUM = 4
 BATCH_SIZE = 64

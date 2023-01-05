@@ -18,9 +18,8 @@ from __future__ import print_function
 
 import paddle
 from paddle import nn
-
-from ppocr.modeling.heads.rec_ctc_head import get_para_bias_attr
 from ppocr.modeling.backbones.rec_svtrnet import Block, ConvBNLayer, trunc_normal_, zeros_, ones_
+from ppocr.modeling.heads.rec_ctc_head import get_para_bias_attr
 
 
 class Im2Seq(nn.Layer):
@@ -47,6 +46,7 @@ class EncoderWithRNN(nn.Layer):
         x, _ = self.lstm(x)
         return x
 
+
 class BidirectionalLSTM(nn.Layer):
     def __init__(self, input_size,
                  hidden_size,
@@ -72,9 +72,10 @@ class BidirectionalLSTM(nn.Layer):
     def forward(self, input_feature):
         recurrent, _ = self.rnn(input_feature)  # batch_size x T x input_size -> batch_size x T x (2*hidden_size)
         if self.with_linear:
-            output = self.linear(recurrent)     # batch_size x T x output_size
+            output = self.linear(recurrent)  # batch_size x T x output_size
             return output
         return recurrent
+
 
 class EncoderWithCascadeRNN(nn.Layer):
     def __init__(self, in_channels, hidden_size, out_channels, num_layers=2, with_linear=False):
@@ -82,15 +83,14 @@ class EncoderWithCascadeRNN(nn.Layer):
         self.out_channels = out_channels[-1]
         self.encoder = nn.LayerList(
             [BidirectionalLSTM(
-                in_channels if i == 0 else out_channels[i - 1], 
-                hidden_size, 
-                output_size=out_channels[i], 
-                num_layers=1, 
-                direction='bidirectional', 
-                with_linear=with_linear) 
-            for i in range(num_layers)]
+                in_channels if i == 0 else out_channels[i - 1],
+                hidden_size,
+                output_size=out_channels[i],
+                num_layers=1,
+                direction='bidirectional',
+                with_linear=with_linear)
+                for i in range(num_layers)]
         )
-        
 
     def forward(self, x):
         for i, l in enumerate(self.encoder):

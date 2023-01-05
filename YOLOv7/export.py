@@ -25,7 +25,8 @@ if __name__ == '__main__':
     parser.add_argument('--dynamic-batch', action='store_true', help='dynamic batch onnx for tensorrt and onnx-runtime')
     parser.add_argument('--grid', action='store_true', help='export Detect() layer grid')
     parser.add_argument('--end2end', action='store_true', help='export end2end onnx')
-    parser.add_argument('--max-wh', type=int, default=None, help='None for tensorrt nms, int value for onnx-runtime nms')
+    parser.add_argument('--max-wh', type=int, default=None,
+                        help='None for tensorrt nms, int value for onnx-runtime nms')
     parser.add_argument('--topk-all', type=int, default=100, help='topk objects for every images')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='iou threshold for NMS')
     parser.add_argument('--conf-thres', type=float, default=0.25, help='conf threshold for NMS')
@@ -101,7 +102,7 @@ if __name__ == '__main__':
         print('CoreML export success, saved as %s' % f)
     except Exception as e:
         print('CoreML export failure: %s' % e)
-                     
+
     # TorchScript-Lite export
     try:
         print('\nStarting TorchScript-Lite export with torch %s...' % torch.__version__)
@@ -124,7 +125,7 @@ if __name__ == '__main__':
         dynamic_axes = None
         if opt.dynamic:
             dynamic_axes = {'images': {0: 'batch', 2: 'height', 3: 'width'},  # size(1,3,640,640)
-             'output': {0: 'batch', 2: 'y', 3: 'x'}}
+                            'output': {0: 'batch', 2: 'y', 3: 'x'}}
         if opt.dynamic_batch:
             opt.batch_size = 'batch'
             dynamic_axes = {
@@ -145,8 +146,9 @@ if __name__ == '__main__':
             dynamic_axes.update(output_axes)
         if opt.grid:
             if opt.end2end:
-                print('\nStarting export end2end onnx model for %s...' % 'TensorRT' if opt.max_wh is None else 'onnxruntime')
-                model = End2End(model,opt.topk_all,opt.iou_thres,opt.conf_thres,opt.max_wh,device,len(labels))
+                print(
+                    '\nStarting export end2end onnx model for %s...' % 'TensorRT' if opt.max_wh is None else 'onnxruntime')
+                model = End2End(model, opt.topk_all, opt.iou_thres, opt.conf_thres, opt.max_wh, device, len(labels))
                 if opt.end2end and opt.max_wh is None:
                     output_names = ['num_dets', 'det_boxes', 'det_scores', 'det_classes']
                     shapes = [opt.batch_size, 1, opt.batch_size, opt.topk_all, 4,
@@ -189,7 +191,7 @@ if __name__ == '__main__':
                 print(f'Simplifier failure: {e}')
 
         # print(onnx.helper.printable_graph(onnx_model.graph))  # print a human readable model
-        onnx.save(onnx_model,f)
+        onnx.save(onnx_model, f)
         print('ONNX export success, saved as %s' % f)
 
         if opt.include_nms:

@@ -19,10 +19,9 @@ from __future__ import print_function
 import math
 
 import paddle
-from paddle import ParamAttr, nn
-from paddle import nn, ParamAttr
+from paddle import nn
 from paddle.nn import functional as F
-import numpy as np
+
 gradient_clip = 10
 
 
@@ -161,7 +160,6 @@ class EncoderLayer(nn.Layer):
                  relu_dropout,
                  preprocess_cmd="n",
                  postprocess_cmd="da"):
-
         super(EncoderLayer, self).__init__()
         self.preprocesser1 = PrePostProcessLayer(preprocess_cmd, d_model,
                                                  prepostprocess_dropout)
@@ -250,7 +248,7 @@ class MultiHeadAttention(nn.Layer):
 
         # scale dot product attention
         product = paddle.matmul(x=q, y=k, transpose_y=True)
-        product = product * self.d_model**-0.5
+        product = product * self.d_model ** -0.5
         if attn_bias is not None:
             product += attn_bias
         weights = F.softmax(product)
@@ -294,7 +292,7 @@ class PrePostProcessLayer(nn.Layer):
             elif cmd == "d":  # add dropout
                 self.functors.append(lambda x: F.dropout(
                     x, p=dropout_rate, mode="downscale_in_infer")
-                                     if dropout_rate else x)
+                if dropout_rate else x)
 
     def forward(self, x, residual=None):
         for i, cmd in enumerate(self.process_cmd):
@@ -324,7 +322,7 @@ class PrepareEncoder(nn.Layer):
     def forward(self, src_word, src_pos):
         src_word_emb = src_word
         src_word_emb = paddle.cast(src_word_emb, 'float32')
-        src_word_emb = paddle.scale(x=src_word_emb, scale=self.src_emb_dim**0.5)
+        src_word_emb = paddle.scale(x=src_word_emb, scale=self.src_emb_dim ** 0.5)
         src_pos = paddle.squeeze(src_pos, axis=-1)
         src_pos_enc = self.emb(src_pos)
         src_pos_enc.stop_gradient = True
@@ -358,7 +356,7 @@ class PrepareDecoder(nn.Layer):
             padding_idx=bos_idx,
             weight_attr=paddle.ParamAttr(
                 name=word_emb_param_name,
-                initializer=nn.initializer.Normal(0., src_emb_dim**-0.5)))
+                initializer=nn.initializer.Normal(0., src_emb_dim ** -0.5)))
         self.emb1 = paddle.nn.Embedding(
             num_embeddings=src_max_len,
             embedding_dim=self.src_emb_dim,
@@ -369,7 +367,7 @@ class PrepareDecoder(nn.Layer):
         src_word = paddle.cast(src_word, 'int64')
         src_word = paddle.squeeze(src_word, axis=-1)
         src_word_emb = self.emb0(src_word)
-        src_word_emb = paddle.scale(x=src_word_emb, scale=self.src_emb_dim**0.5)
+        src_word_emb = paddle.scale(x=src_word_emb, scale=self.src_emb_dim ** 0.5)
         src_pos = paddle.squeeze(src_pos, axis=-1)
         src_pos_enc = self.emb1(src_pos)
         src_pos_enc.stop_gradient = True

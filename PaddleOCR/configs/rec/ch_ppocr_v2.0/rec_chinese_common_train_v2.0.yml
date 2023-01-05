@@ -6,7 +6,7 @@ Global:
   save_model_dir: ./output/rec_chinese_common_v2.0
   save_epoch_step: 3
   # evaluation is run every 5000 iterations after the 4000th iteration
-  eval_batch_step: [0, 2000]
+  eval_batch_step: [ 0, 2000 ]
   cal_metric_during_train: True
   pretrained_model:
   checkpoints:
@@ -62,17 +62,17 @@ Train:
   dataset:
     name: SimpleDataSet
     data_dir: ./train_data/
-    label_file_list: ["./train_data/train_list.txt"]
+    label_file_list: [ "./train_data/train_list.txt" ]
     transforms:
       - DecodeImage: # load image
           img_mode: BGR
           channel_first: False
-      - RecAug: 
+      - RecAug:
       - CTCLabelEncode: # Class handling label
       - RecResizeImg:
-          image_shape: [3, 32, 320]
+          image_shape: [ 3, 32, 320 ]
       - KeepKeys:
-          keep_keys: ['image', 'label', 'length'] # dataloader will return list in this order
+          keep_keys: [ 'image', 'label', 'length' ] # dataloader will return list in this order
   loader:
     shuffle: True
     batch_size_per_card: 256
@@ -83,16 +83,16 @@ Eval:
   dataset:
     name: SimpleDataSet
     data_dir: ./train_data/
-    label_file_list: ["./train_data/val_list.txt"]
+    label_file_list: [ "./train_data/val_list.txt" ]
     transforms:
       - DecodeImage: # load image
           img_mode: BGR
           channel_first: False
       - CTCLabelEncode: # Class handling label
       - RecResizeImg:
-          image_shape: [3, 32, 320]
+          image_shape: [ 3, 32, 320 ]
       - KeepKeys:
-          keep_keys: ['image', 'label', 'length'] # dataloader will return list in this order
+          keep_keys: [ 'image', 'label', 'length' ] # dataloader will return list in this order
   loader:
     shuffle: False
     drop_last: False

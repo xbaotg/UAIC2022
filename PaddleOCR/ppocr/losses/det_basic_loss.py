@@ -19,11 +19,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy as np
-
 import paddle
-from paddle import nn
 import paddle.nn.functional as F
+from paddle import nn
 
 
 class BalanceLoss(nn.Layer):
@@ -97,7 +95,7 @@ class BalanceLoss(nn.Layer):
             negative_loss = sort_loss[:negative_count]
             # negative_loss, _ = paddle.topk(negative_loss, k=negative_count_int)
             balance_loss = (positive_loss.sum() + negative_loss.sum()) / (
-                positive_count + negative_count + self.eps)
+                    positive_count + negative_count + self.eps)
         else:
             balance_loss = positive_loss.sum() / (positive_count + self.eps)
         if self.return_origin:

@@ -30,7 +30,6 @@ from ppocr.postprocess import build_post_process
 from ppocr.utils.logging import get_logger
 from ppocr.utils.utility import get_image_file_list, check_and_read
 from ppstructure.utility import parse_args
-from picodet_postprocess import PicoDetPostProcess
 
 logger = get_logger()
 
@@ -94,7 +93,7 @@ class LayoutPredictor(object):
                 .copy_to_cpu())
             np_boxes_list.append(
                 self.predictor.get_output_handle(output_names[
-                    out_idx + num_outs]).copy_to_cpu())
+                                                     out_idx + num_outs]).copy_to_cpu())
         preds = dict(boxes=np_score_list, boxes_num=np_boxes_list)
 
         post_preds = self.postprocess_op(ori_im, img, preds)

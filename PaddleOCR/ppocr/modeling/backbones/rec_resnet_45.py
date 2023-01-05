@@ -20,13 +20,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import paddle
+import paddle.nn as nn
 from paddle import ParamAttr
 from paddle.nn.initializer import KaimingNormal
-import paddle.nn as nn
-import paddle.nn.functional as F
-import numpy as np
-import math
 
 __all__ = ["ResNet45"]
 

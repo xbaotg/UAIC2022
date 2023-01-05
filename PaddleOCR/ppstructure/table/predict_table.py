@@ -93,7 +93,7 @@ class TableSystem(object):
         time_dict['rec'] = rec_elapse
 
         if return_ocr_result_in_table:
-            result['boxes'] = dt_boxes  #[x.tolist() for x in dt_boxes]
+            result['boxes'] = dt_boxes  # [x.tolist() for x in dt_boxes]
             result['rec_res'] = rec_res
 
         tic = time.time()
@@ -187,7 +187,7 @@ def main(args):
         logger.info("Predict time : {:.3f}s".format(elapse))
 
         if len(pred_res['cell_bbox']) > 0 and len(pred_res['cell_bbox'][
-                0]) == 4:
+                                                      0]) == 4:
             img = predict_strture.draw_rectangle(image_file,
                                                  pred_res['cell_bbox'])
         else:
@@ -215,6 +215,7 @@ if __name__ == "__main__":
     args = parse_args()
     if args.use_mp:
         import subprocess
+
         p_list = []
         total_process_num = args.total_process_num
         for process_id in range(total_process_num):

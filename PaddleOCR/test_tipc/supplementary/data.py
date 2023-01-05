@@ -1,8 +1,8 @@
-import numpy as np
-import paddle
-import os
-import cv2
 import glob
+import os
+
+import cv2
+import numpy as np
 
 
 def transform(data, ops=None):
@@ -92,7 +92,7 @@ class NormalizeImage(object):
         assert isinstance(img,
                           np.ndarray), "invalid input 'img' in NormalizeImage"
         data['image'] = (
-            img.astype('float32') * self.scale - self.mean) / self.std
+                                img.astype('float32') * self.scale - self.mean) / self.std
         return data
 
 

@@ -17,9 +17,9 @@ from __future__ import division
 from __future__ import print_function
 
 import paddle
-from paddle import nn
 import paddle.nn.functional as F
 from paddle import ParamAttr
+from paddle import nn
 
 
 class ConvBNLayer(nn.Layer):
@@ -44,7 +44,7 @@ class ConvBNLayer(nn.Layer):
             groups=groups,
             weight_attr=ParamAttr(name=name + '_weights'),
             bias_attr=False)
-  
+
         self.bn = nn.BatchNorm(
             num_channels=out_channels,
             act=act,
@@ -100,7 +100,7 @@ class FPN_Up_Fusion(nn.Layer):
         super(FPN_Up_Fusion, self).__init__()
         in_channels = in_channels[::-1]
         out_channels = [256, 256, 192, 192, 128]
-                
+
         self.h0_conv = ConvBNLayer(in_channels[0], out_channels[0], 1, 1, act=None, name='fpn_up_h0')
         self.h1_conv = ConvBNLayer(in_channels[1], out_channels[1], 1, 1, act=None, name='fpn_up_h1')
         self.h2_conv = ConvBNLayer(in_channels[2], out_channels[2], 1, 1, act=None, name='fpn_up_h2')
@@ -163,12 +163,12 @@ class FPN_Down_Fusion(nn.Layer):
 
         self.g1_conv = nn.Sequential(
             ConvBNLayer(out_channels[1], out_channels[1], 3, 1, act='relu', name='fpn_down_g1_1'),
-            ConvBNLayer(out_channels[1], out_channels[2], 3, 2, act=None, name='fpn_down_g1_2')            
+            ConvBNLayer(out_channels[1], out_channels[2], 3, 2, act=None, name='fpn_down_g1_2')
         )
 
         self.g2_conv = nn.Sequential(
             ConvBNLayer(out_channels[2], out_channels[2], 3, 1, act='relu', name='fpn_down_fusion_1'),
-            ConvBNLayer(out_channels[2], out_channels[2], 1, 1, act=None, name='fpn_down_fusion_2')            
+            ConvBNLayer(out_channels[2], out_channels[2], 1, 1, act=None, name='fpn_down_fusion_2')
         )
 
     def forward(self, x):
@@ -203,19 +203,19 @@ class Cross_Attention(nn.Layer):
 
     def _cal_fweight(self, f, shape):
         f_theta, f_phi, f_g = f
-        #flatten
+        # flatten
         f_theta = paddle.transpose(f_theta, [0, 2, 3, 1])
         f_theta = paddle.reshape(f_theta, [shape[0] * shape[1], shape[2], 128])
         f_phi = paddle.transpose(f_phi, [0, 2, 3, 1])
         f_phi = paddle.reshape(f_phi, [shape[0] * shape[1], shape[2], 128])
         f_g = paddle.transpose(f_g, [0, 2, 3, 1])
         f_g = paddle.reshape(f_g, [shape[0] * shape[1], shape[2], 128])
-        #correlation
+        # correlation
         f_attn = paddle.matmul(f_theta, paddle.transpose(f_phi, [0, 2, 1]))
-        #scale
-        f_attn = f_attn / (128**0.5)
+        # scale
+        f_attn = f_attn / (128 ** 0.5)
         f_attn = F.softmax(f_attn)
-        #weighted sum
+        # weighted sum
         f_weight = paddle.matmul(f_attn, f_g)
         f_weight = paddle.reshape(
             f_weight, [shape[0], shape[1], shape[2], 128])
@@ -230,11 +230,11 @@ class Cross_Attention(nn.Layer):
         f_g = self.g_conv(f_common)
 
         ######## horizon ########
-        fh_weight = self._cal_fweight([f_theta, f_phi, f_g], 
-                                        [f_shape[0], f_shape[2], f_shape[3]])
+        fh_weight = self._cal_fweight([f_theta, f_phi, f_g],
+                                      [f_shape[0], f_shape[2], f_shape[3]])
         fh_weight = paddle.transpose(fh_weight, [0, 3, 1, 2])
         fh_weight = self.fh_weight_conv(fh_weight)
-        #short cut
+        # short cut
         fh_sc = self.fh_sc_conv(f_common)
         f_h = F.relu(fh_weight + fh_sc)
 
@@ -242,11 +242,11 @@ class Cross_Attention(nn.Layer):
         fv_theta = paddle.transpose(f_theta, [0, 1, 3, 2])
         fv_phi = paddle.transpose(f_phi, [0, 1, 3, 2])
         fv_g = paddle.transpose(f_g, [0, 1, 3, 2])
-        fv_weight = self._cal_fweight([fv_theta, fv_phi, fv_g], 
-                                        [f_shape[0], f_shape[3], f_shape[2]])
+        fv_weight = self._cal_fweight([fv_theta, fv_phi, fv_g],
+                                      [f_shape[0], f_shape[3], f_shape[2]])
         fv_weight = paddle.transpose(fv_weight, [0, 3, 2, 1])
         fv_weight = self.fv_weight_conv(fv_weight)
-        #short cut
+        # short cut
         fv_sc = self.fv_sc_conv(f_common)
         f_v = F.relu(fv_weight + fv_sc)
 
@@ -267,13 +267,13 @@ class SASTFPN(nn.Layer):
         self.cross_attention = Cross_Attention(self.out_channels)
 
     def forward(self, x):
-        #down fpn
+        # down fpn
         f_down = self.FPN_Down_Fusion(x)
 
-        #up fpn
+        # up fpn
         f_up = self.FPN_Up_Fusion(x)
 
-        #fusion
+        # fusion
         f_common = paddle.add(x=f_down, y=f_up)
         f_common = F.relu(f_common)
 

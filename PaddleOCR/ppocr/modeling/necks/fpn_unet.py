@@ -51,7 +51,7 @@ class FPN_UNet(nn.Layer):
         self.out_channels = out_channels
 
         blocks_out_channels = [out_channels] + [
-            min(out_channels * 2**i, 256) for i in range(4)
+            min(out_channels * 2 ** i, 256) for i in range(4)
         ]
         blocks_in_channels = [blocks_out_channels[1]] + [
             in_channels[i] + blocks_out_channels[i + 2] for i in range(3)

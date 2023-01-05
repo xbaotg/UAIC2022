@@ -16,9 +16,10 @@ This code is refer from:
 https://github.com/whai362/PSENet/blob/python3/models/neck/fpn.py
 """
 
-import paddle.nn as nn
-import paddle
 import math
+
+import paddle
+import paddle.nn as nn
 import paddle.nn.functional as F
 
 

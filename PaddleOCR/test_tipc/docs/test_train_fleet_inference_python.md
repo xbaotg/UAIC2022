@@ -6,17 +6,15 @@ Linux GPU/CPU 多机多卡训练推理测试的主程序为`test_train_inference
 
 - 训练相关：
 
-| 算法名称 | 模型名称 | 多机多卡 |
-|  :----: |   :----:  |    :----:  |
-|  PP-OCRv3      | ch_PP-OCRv3_rec     | 分布式训练 |
-
+|   算法名称   |      模型名称       | 多机多卡  |
+|:--------:|:---------------:|:-----:|
+| PP-OCRv3 | ch_PP-OCRv3_rec | 分布式训练 |
 
 - 推理相关：
 
-| 算法名称 | 模型名称 | device_CPU | device_GPU | batchsize |
-|  :----:   |  :----: |   :----:   |  :----:  |   :----:   |
-|  PP-OCRv3   |  ch_PP-OCRv3_rec |  支持 | - | 1/6 |
-
+|   算法名称   |      模型名称       | device_CPU | device_GPU | batchsize |
+|:--------:|:---------------:|:----------:|:----------:|:---------:|
+| PP-OCRv3 | ch_PP-OCRv3_rec |     支持     |     -      |    1/6    |
 
 ## 2. 测试流程
 
@@ -26,12 +24,14 @@ Linux GPU/CPU 多机多卡训练推理测试的主程序为`test_train_inference
 
 #### 2.1.1 修改配置文件
 
-首先，修改配置文件中的`ip`设置:  假设两台机器的`ip`地址分别为`192.168.0.1`和`192.168.0.2`，则对应的配置文件`gpu_list`字段需要修改为`gpu_list:192.168.0.1,192.168.0.2;0,1`； `ip`地址查看命令为`ifconfig`。
-
+首先，修改配置文件中的`ip`设置:  假设两台机器的`ip`地址分别为`192.168.0.1`和`192.168.0.2`，则对应的配置文件`gpu_list`
+字段需要修改为`gpu_list:192.168.0.1,192.168.0.2;0,1`； `ip`地址查看命令为`ifconfig`。
 
 #### 2.1.2 准备数据
 
-运行`prepare.sh`准备数据和模型，以配置文件`test_tipc/configs/ch_PP-OCRv3_rec/train_linux_gpu_fleet_normal_infer_python_linux_gpu_cpu.txt`为例，数据准备命令如下所示。
+运行`prepare.sh`
+准备数据和模型，以配置文件`test_tipc/configs/ch_PP-OCRv3_rec/train_linux_gpu_fleet_normal_infer_python_linux_gpu_cpu.txt`
+为例，数据准备命令如下所示。
 
 ```shell
 bash test_tipc/prepare.sh test_tipc/configs/ch_PP-OCRv3_rec/train_linux_gpu_fleet_normal_infer_python_linux_gpu_cpu.txt lite_train_lite_infer
@@ -41,7 +41,8 @@ bash test_tipc/prepare.sh test_tipc/configs/ch_PP-OCRv3_rec/train_linux_gpu_flee
 
 #### 2.1.3 修改起始端口并开始测试
 
-在多机的节点上使用下面的命令设置分布式的起始端口（否则后面运行的时候会由于无法找到运行端口而hang住），一般建议设置在`10000~20000`之间。
+在多机的节点上使用下面的命令设置分布式的起始端口（否则后面运行的时候会由于无法找到运行端口而hang住），一般建议设置在`10000~20000`
+之间。
 
 ```shell
 export FLAGS_START_PORT=17000
@@ -54,7 +55,6 @@ bash test_tipc/test_train_inference_python.sh  test_tipc/configs/ch_PP-OCRv3_rec
 ```
 
 **注意：** 由于是多机训练，这里需要在所有的节点上均运行启动上述命令进行测试。
-
 
 #### 2.1.4 输出结果
 
@@ -100,7 +100,8 @@ bash test_tipc/test_train_inference_python.sh  test_tipc/configs/ch_PP-OCRv3_rec
 [2022/06/02 22:53:35] ppocr INFO:  preprocess_time(ms): 0.1136, inference_time(ms): 79.5877, postprocess_time(ms): 0.6945
 ```
 
-该信息可以在运行log中查看，以上面的`ch_PP-OCRv3_rec`为例，log位置在`./test_tipc/output/ch_PP-OCRv3_rec/lite_train_lite_infer/results_python.log`。
+该信息可以在运行log中查看，以上面的`ch_PP-OCRv3_rec`
+为例，log位置在`./test_tipc/output/ch_PP-OCRv3_rec/lite_train_lite_infer/results_python.log`。
 
 如果运行失败，也会在终端中输出运行失败的日志信息以及对应的运行命令。可以基于该命令，分析运行失败的原因。
 

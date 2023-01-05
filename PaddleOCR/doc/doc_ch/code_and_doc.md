@@ -14,71 +14,71 @@
 
 PaddleOCR的Python代码遵循 [PEP8规范](https://www.python.org/dev/peps/pep-0008/)，其中一些关注的重点包括如下内容
 
-- 空格 
+- 空格
 
-  - 空格应该加在逗号、分号、冒号后，而非他们的前面
+    - 空格应该加在逗号、分号、冒号后，而非他们的前面
 
-    ```python
-    # 正确：
-    print(x, y)
-    
-    # 错误：
-    print(x , y)
-    ```
+      ```python
+      # 正确：
+      print(x, y)
+      
+      # 错误：
+      print(x , y)
+      ```
 
-  - 在函数中指定关键字参数或默认参数值时, 不要在其两侧使用空格
+    - 在函数中指定关键字参数或默认参数值时, 不要在其两侧使用空格
 
-    ```python
-    # 正确：
-    def complex(real, imag=0.0)
-    # 错误：
-    def complex(real, imag = 0.0)
-    ```
+      ```python
+      # 正确：
+      def complex(real, imag=0.0)
+      # 错误：
+      def complex(real, imag = 0.0)
+      ```
 
 - 注释
 
-  - 行内注释：行内注释使用 `#` 号表示，在代码与 `#` 之间需要空两个空格， `#`  与注释之间应当空一个空格，例如
+    - 行内注释：行内注释使用 `#` 号表示，在代码与 `#` 之间需要空两个空格， `#`  与注释之间应当空一个空格，例如
 
-    ```python
-    x = x + 1  # Compensate for border
-    ```
+      ```python
+      x = x + 1  # Compensate for border
+      ```
 
-  - 函数和方法：每个函数的定义后的描述应该包括以下内容：
+    - 函数和方法：每个函数的定义后的描述应该包括以下内容：
 
-    - 函数描述：函数的作用，输入输出的
+        - 函数描述：函数的作用，输入输出的
 
-    - Args：每个参数的名字以及对该参数的描述
-    - Returns：返回值的含义和类型
+        - Args：每个参数的名字以及对该参数的描述
+        - Returns：返回值的含义和类型
 
-    ```python
-    def fetch_bigtable_rows(big_table, keys, other_silly_variable=None):
-        """Fetches rows from a Bigtable.
-    
-        Retrieves rows pertaining to the given keys from the Table instance
-        represented by big_table.  Silly things may happen if
-        other_silly_variable is not None.
-    
-        Args:
-            big_table: An open Bigtable Table instance.
-            keys: A sequence of strings representing the key of each table row
-                to fetch.
-            other_silly_variable: Another optional variable, that has a much
-                longer name than the other args, and which does nothing.
-    
-        Returns:
-            A dict mapping keys to the corresponding table row data
-            fetched. Each row is represented as a tuple of strings. For
-            example:
-    
-            {'Serak': ('Rigel VII', 'Preparer'),
-             'Zim': ('Irk', 'Invader'),
-             'Lrrr': ('Omicron Persei 8', 'Emperor')}
-    
-            If a key from the keys argument is missing from the dictionary,
-            then that row was not found in the table.
-        """
-        pass
-    ```
+      ```python
+      def fetch_bigtable_rows(big_table, keys, other_silly_variable=None):
+          """Fetches rows from a Bigtable.
+      
+          Retrieves rows pertaining to the given keys from the Table instance
+          represented by big_table.  Silly things may happen if
+          other_silly_variable is not None.
+      
+          Args:
+              big_table: An open Bigtable Table instance.
+              keys: A sequence of strings representing the key of each table row
+                  to fetch.
+              other_silly_variable: Another optional variable, that has a much
+                  longer name than the other args, and which does nothing.
+      
+          Returns:
+              A dict mapping keys to the corresponding table row data
+              fetched. Each row is represented as a tuple of strings. For
+              example:
+      
+              {'Serak': ('Rigel VII', 'Preparer'),
+               'Zim': ('Irk', 'Invader'),
+               'Lrrr': ('Omicron Persei 8', 'Emperor')}
+      
+              If a key from the keys argument is missing from the dictionary,
+              then that row was not found in the table.
+          """
+          pass
+      ```
 
 <a name="附录2"></a>
 
@@ -86,13 +86,15 @@ PaddleOCR的Python代码遵循 [PEP8规范](https://www.python.org/dev/peps/pep-
 
 ### 2.1 总体说明
 
-- 文档位置：如果您增加的新功能可以补充在原有的Markdown文件中，请**不要重新新建**一个文件。如果您对添加的位置不清楚，可以先PR代码，然后在commit中询问官方人员。
+- 文档位置：如果您增加的新功能可以补充在原有的Markdown文件中，请**不要重新新建**
+  一个文件。如果您对添加的位置不清楚，可以先PR代码，然后在commit中询问官方人员。
 
 - 新增Markdown文档名称：使用英文描述文档内容，一般由小写字母与下划线组合而成，例如  `add_new_algorithm.md`
 
 - 新增Markdown文档格式：目录 - 正文 - FAQ
 
-  > 目录生成方法可以使用 [此网站](https://ecotrust-canada.github.io/markdown-toc/) 将md内容复制之后自动提取目录，然后在md文件的每个标题前添加 `<a name="XXXX"></a>` 
+  > 目录生成方法可以使用 [此网站](https://ecotrust-canada.github.io/markdown-toc/)
+  将md内容复制之后自动提取目录，然后在md文件的每个标题前添加 `<a name="XXXX"></a>`
 
 - 中英双语：任何对文档的改动或新增都需要分别在中文和英文文档上进行。
 
@@ -124,8 +126,11 @@ PaddleOCR的Python代码遵循 [PEP8规范](https://www.python.org/dev/peps/pep-
 
 PaddleOCR未来将维护2种分支，分别为：
 
-- release/x.x系列分支：为稳定的发行版本分支，也是默认分支。PaddleOCR会根据功能更新情况发布新的release分支，同时适配Paddle的release版本。随着版本迭代，release/x.x系列分支会越来越多，默认维护最新版本的release分支。
-- dygraph分支：为开发分支，适配Paddle动态图的dygraph版本，主要用于开发新功能。如果有同学需要进行二次开发，请选择dygraph分支。为了保证dygraph分支能在需要的时候拉出release/x.x分支，dygraph分支的代码只能使用Paddle最新release分支中有效的api。也就是说，如果Paddle dygraph分支中开发了新的api，但尚未出现在release分支代码中，那么请不要在PaddleOCR中使用。除此之外，对于不涉及api的性能优化、参数调整、策略更新等，都可以正常进行开发。
+-
+release/x.x系列分支：为稳定的发行版本分支，也是默认分支。PaddleOCR会根据功能更新情况发布新的release分支，同时适配Paddle的release版本。随着版本迭代，release/x.x系列分支会越来越多，默认维护最新版本的release分支。
+-
+dygraph分支：为开发分支，适配Paddle动态图的dygraph版本，主要用于开发新功能。如果有同学需要进行二次开发，请选择dygraph分支。为了保证dygraph分支能在需要的时候拉出release/x.x分支，dygraph分支的代码只能使用Paddle最新release分支中有效的api。也就是说，如果Paddle
+dygraph分支中开发了新的api，但尚未出现在release分支代码中，那么请不要在PaddleOCR中使用。除此之外，对于不涉及api的性能优化、参数调整、策略更新等，都可以正常进行开发。
 
 PaddleOCR的历史分支，未来将不再维护。考虑到一些同学可能仍在使用，这些分支还会继续保留：
 
@@ -139,7 +144,8 @@ PaddleOCR欢迎大家向repo中积极贡献代码，下面给出一些贡献代�
 
 #### 3.2.1 创建你的 `远程仓库`
 
-- 在PaddleOCR的 [GitHub首页](https://github.com/PaddlePaddle/PaddleOCR)，点击左上角 `Fork`  按钮，在你的个人目录下创建 `远程仓库`，比如`https://github.com/{your_name}/PaddleOCR`。
+- 在PaddleOCR的 [GitHub首页](https://github.com/PaddlePaddle/PaddleOCR)，点击左上角 `Fork`
+  按钮，在你的个人目录下创建 `远程仓库`，比如`https://github.com/{your_name}/PaddleOCR`。
 
 ![banner](../banner.png)
 
@@ -163,10 +169,13 @@ git remote -v
 # origin    https://github.com/{your_name}/PaddleOCR.git (push)
 ```
 
-只有clone的 `远程仓库` 的信息，也就是自己用户名下的 PaddleOCR。由于Github的登录方式变化，需要通过Token的方式重新配置 `远程仓库` 的地址。生成Token的方式如下：
+只有clone的 `远程仓库` 的信息，也就是自己用户名下的
+PaddleOCR。由于Github的登录方式变化，需要通过Token的方式重新配置 `远程仓库` 的地址。生成Token的方式如下：
 
-1. 找到个人访问令牌（token）：在Github页面右上角点击自己的头像，然后依次选择 Settings --> Developer settings --> Personal access tokens
-2. 点击 Generate new token：在Note中填入token名称，例如’paddle‘。在Select scopes选择repo（必选）、admin:repo_hook、delete_repo等，可根据自身需要勾选。然后点击Generate token生成token。最后复制生成的token。
+1. 找到个人访问令牌（token）：在Github页面右上角点击自己的头像，然后依次选择 Settings --> Developer settings --> Personal
+   access tokens
+2. 点击 Generate new token：在Note中填入token名称，例如’paddle‘。在Select scopes选择repo（必选）、admin:
+   repo_hook、delete_repo等，可根据自身需要勾选。然后点击Generate token生成token。最后复制生成的token。
 
 删除原始的origin配置
 
@@ -227,7 +236,8 @@ Switched to a new branch 'new_branch'
 
 #### 3.2.4 使用pre-commit勾子
 
-Paddle 开发人员使用 pre-commit 工具来管理 Git 预提交钩子。 它可以帮助我们格式化源代码（C++，Python），在提交（commit）前自动检查一些基本事宜（如每个文件只有一个 EOL，Git 中不要添加大文件等）。
+Paddle 开发人员使用 pre-commit 工具来管理 Git 预提交钩子。 它可以帮助我们格式化源代码（C++，Python），在提交（commit）前自动检查一些基本事宜（如每个文件只有一个
+EOL，Git 中不要添加大文件等）。
 
 pre-commit测试是 Travis-CI 中单元测试的一部分，不满足钩子的 PR 不能被提交到 PaddleOCR，首先安装并在当前目录运行它：
 
@@ -236,13 +246,14 @@ pip install pre-commit
 pre-commit install
 ```
 
- >  1. Paddle 使用 clang-format 来调整 C/C++ 源代码格式，请确保 `clang-format` 版本在 3.8 以上。
- >
- >  2. 通过pip install pre-commit和conda install -c conda-forge pre-commit安装的yapf稍有不同的，PaddleOCR 开发人员使用的是 `pip install pre-commit`。
+> 1. Paddle 使用 clang-format 来调整 C/C++ 源代码格式，请确保 `clang-format` 版本在 3.8 以上。
+>
+>  2. 通过pip install pre-commit和conda install -c conda-forge pre-commit安装的yapf稍有不同的，PaddleOCR
+      开发人员使用的是 `pip install pre-commit`。
 
 #### 3.2.5 修改与提交代码
 
- 假设对PaddleOCR的 `README.md` 做了一些修改，可以通过 `git status` 查看改动的文件，然后使用 `git add` 添加改动文件。
+假设对PaddleOCR的 `README.md` 做了一些修改，可以通过 `git status` 查看改动的文件，然后使用 `git add` 添加改动文件。
 
 ```
 git status # 查看改动文件
@@ -262,7 +273,7 @@ git commit -m "your commit info"
 
 #### 3.2.6 Push到远程仓库
 
-使用push命令将修改的commit提交到 `远程仓库` 
+使用push命令将修改的commit提交到 `远程仓库`
 
 ```
 git push origin new_branch
@@ -270,17 +281,20 @@ git push origin new_branch
 
 #### 3.2.7 提交Pull Request
 
-打开自己的远程仓库界面，选择提交的分支。点击new pull request或contribute进入PR界面。选择本地分支和目标分支，如下图所示。在PR的描述说明中，填写该PR所完成的功能。接下来等待review，如果有需要修改的地方，参照上述步骤更新 origin 中的对应分支即可。
+打开自己的远程仓库界面，选择提交的分支。点击new pull
+request或contribute进入PR界面。选择本地分支和目标分支，如下图所示。在PR的描述说明中，填写该PR所完成的功能。接下来等待review，如果有需要修改的地方，参照上述步骤更新
+origin 中的对应分支即可。
 
 ![banner](../pr.png)
 
 #### 3.2.8 签署CLA协议和通过单元测试
 
-- 签署CLA 在首次向PaddlePaddle提交Pull Request时，您需要您签署一次CLA(Contributor License Agreement)协议，以保证您的代码可以被合入，具体签署方式如下：
+- 签署CLA 在首次向PaddlePaddle提交Pull Request时，您需要您签署一次CLA(Contributor License Agreement)
+  协议，以保证您的代码可以被合入，具体签署方式如下：
 
-  1. 请您查看PR中的Check部分，找到license/cla，并点击右侧detail，进入CLA网站
+    1. 请您查看PR中的Check部分，找到license/cla，并点击右侧detail，进入CLA网站
 
-  2. 点击CLA网站中的“Sign in with GitHub to agree”,点击完成后将会跳转回您的Pull Request页面
+    2. 点击CLA网站中的“Sign in with GitHub to agree”,点击完成后将会跳转回您的Pull Request页面
 
 #### 3.2.9 删除分支
 
@@ -318,11 +332,14 @@ git push origin new_branch
 
   原因：如果仅仅修改一个文件但提交了十几个commit，每个commit只做了少量的修改，这会给评审人带来很大困扰。评审人需要逐一查看每个commit才能知道做了哪些修改，且不排除commit之间的修改存在相互覆盖的情况。
 
-  建议：每次提交时，保持尽量少的commit，可以通过git commit --amend补充上次的commit。对已经Push到远程仓库的多个commit，可以参考[squash commits after push](https://stackoverflow.com/questions/5667884/how-to-squash-commits-in-git-after-they-have-been-pushed)。
+  建议：每次提交时，保持尽量少的commit，可以通过git commit
+  --amend补充上次的commit。对已经Push到远程仓库的多个commit，可以参考[squash commits after push](https://stackoverflow.com/questions/5667884/how-to-squash-commits-in-git-after-they-have-been-pushed)。
 
 - 请注意每个commit的名称：应能反映当前commit的内容，不能太随意。
 
-3）如果解决了某个Issue的问题，请在该Pull Request的第一个评论框中加上：fix #issue_number，这样当该Pull Request被合并后，会自动关闭对应的Issue。关键词包括：close, closes, closed, fix, fixes, fixed, resolve, resolves, resolved，请选择合适的词汇。详细可参考[Closing issues via commit messages](https://help.github.com/articles/closing-issues-via-commit-messages)。
+3）如果解决了某个Issue的问题，请在该Pull Request的第一个评论框中加上：fix #issue_number，这样当该Pull
+Request被合并后，会自动关闭对应的Issue。关键词包括：close, closes, closed, fix, fixes, fixed, resolve, resolves,
+resolved，请选择合适的词汇。详细可参考[Closing issues via commit messages](https://help.github.com/articles/closing-issues-via-commit-messages)。
 
 此外，在回复评审人意见时，请您遵守以下约定：
 

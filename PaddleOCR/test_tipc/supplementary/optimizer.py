@@ -1,12 +1,12 @@
 import sys
-import math
-from paddle.optimizer.lr import LinearWarmup
-from paddle.optimizer.lr import PiecewiseDecay
-from paddle.optimizer.lr import CosineAnnealingDecay
-from paddle.optimizer.lr import ExponentialDecay
+from copy import deepcopy
+
 import paddle
 import paddle.regularizer as regularizer
-from copy import deepcopy
+from paddle.optimizer.lr import CosineAnnealingDecay
+from paddle.optimizer.lr import ExponentialDecay
+from paddle.optimizer.lr import LinearWarmup
+from paddle.optimizer.lr import PiecewiseDecay
 
 
 class Cosine(CosineAnnealingDecay):
@@ -39,7 +39,7 @@ class Piecewise(PiecewiseDecay):
 
     def __init__(self, lr, step_each_epoch, decay_epochs, gamma=0.1, **kwargs):
         boundaries = [step_each_epoch * e for e in decay_epochs]
-        lr_values = [lr * (gamma**i) for i in range(len(boundaries) + 1)]
+        lr_values = [lr * (gamma ** i) for i in range(len(boundaries) + 1)]
         super(Piecewise, self).__init__(boundaries=boundaries, values=lr_values)
 
         self.update_specified = False
@@ -296,7 +296,7 @@ def create_optimizer(config, parameter_list=None):
     lr_config['params'].update({
         'epochs': config['epoch'],
         'step_each_epoch':
-        config['total_images'] // config['TRAIN']['batch_size'],
+            config['total_images'] // config['TRAIN']['batch_size'],
     })
     lr = LearningRateBuilder(**lr_config)()
 
@@ -315,7 +315,7 @@ def create_multi_optimizer(config, parameter_list=None):
     lr_config['params'].update({
         'epochs': config['epoch'],
         'step_each_epoch':
-        config['total_images'] // config['TRAIN']['batch_size'],
+            config['total_images'] // config['TRAIN']['batch_size'],
     })
     lr = LearningRateBuilder(**lr_config)()
 

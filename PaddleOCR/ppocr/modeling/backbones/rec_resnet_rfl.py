@@ -20,10 +20,8 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import paddle
 import paddle.nn as nn
-
-from paddle.nn.initializer import TruncatedNormal, Constant, Normal, KaimingNormal
+from paddle.nn.initializer import Constant, KaimingNormal
 
 kaiming_init_ = KaimingNormal()
 zeros_ = Constant(value=0.)
@@ -60,7 +58,6 @@ class BasicBlock(nn.Layer):
         self.stride = stride
 
     def _conv3x3(self, in_planes, out_planes, stride=1):
-
         return nn.Conv2D(
             in_planes,
             out_planes,

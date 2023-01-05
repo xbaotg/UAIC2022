@@ -1,7 +1,7 @@
 import json
 
+import cv2
 import numpy as np
-from cv2 import cv2
 
 
 def convert_yolo_to_points(x, y, w, h, dw, dh):

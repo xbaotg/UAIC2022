@@ -19,8 +19,6 @@ __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
 sys.path.insert(0, os.path.abspath(os.path.join(__dir__, "..")))
 
-import argparse
-
 import paddle
 from paddle.jit import to_static
 
@@ -42,16 +40,16 @@ def export_single_model(model,
         other_shape = [
             paddle.static.InputSpec(
                 shape=[None, 1, 64, 256], dtype="float32"), [
-                    paddle.static.InputSpec(
-                        shape=[None, 256, 1],
-                        dtype="int64"), paddle.static.InputSpec(
-                            shape=[None, max_text_length, 1], dtype="int64"),
-                    paddle.static.InputSpec(
-                        shape=[None, 8, max_text_length, max_text_length],
-                        dtype="int64"), paddle.static.InputSpec(
-                            shape=[None, 8, max_text_length, max_text_length],
-                            dtype="int64")
-                ]
+                paddle.static.InputSpec(
+                    shape=[None, 256, 1],
+                    dtype="int64"), paddle.static.InputSpec(
+                    shape=[None, max_text_length, 1], dtype="int64"),
+                paddle.static.InputSpec(
+                    shape=[None, 8, max_text_length, max_text_length],
+                    dtype="int64"), paddle.static.InputSpec(
+                    shape=[None, 8, max_text_length, max_text_length],
+                    dtype="int64")
+            ]
         ]
         model = to_static(model, input_spec=other_shape)
     elif arch_config["algorithm"] == "SAR":
@@ -116,11 +114,11 @@ def export_single_model(model,
         other_shape = [
             paddle.static.InputSpec(
                 shape=[None, 3, 48, 160], dtype="float32"), [
-                    paddle.static.InputSpec(
-                        shape=[None, ], dtype="float32"),
-                    paddle.static.InputSpec(
-                        shape=[None, max_text_length], dtype="int64")
-                ]
+                paddle.static.InputSpec(
+                    shape=[None, ], dtype="float32"),
+                paddle.static.InputSpec(
+                    shape=[None, max_text_length], dtype="int64")
+            ]
         ]
         model = to_static(model, input_spec=other_shape)
     elif arch_config["algorithm"] == "CAN":
@@ -128,7 +126,7 @@ def export_single_model(model,
             paddle.static.InputSpec(
                 shape=[None, 1, None, None],
                 dtype="float32"), paddle.static.InputSpec(
-                    shape=[None, 1, None, None], dtype="float32"),
+                shape=[None, 1, None, None], dtype="float32"),
             paddle.static.InputSpec(
                 shape=[None, arch_config['Head']['max_text_length']],
                 dtype="int64")
@@ -162,8 +160,8 @@ def export_single_model(model,
         if arch_config["model_type"] == "rec":
             infer_shape = [3, 32, -1]  # for rec model, H must be 32
             if "Transform" in arch_config and arch_config[
-                    "Transform"] is not None and arch_config["Transform"][
-                        "name"] == "TPS":
+                "Transform"] is not None and arch_config["Transform"][
+                "name"] == "TPS":
                 logger.info(
                     "When there is tps in the network, variable length input is not supported, and the input size needs to be the same as during training"
                 )
@@ -207,10 +205,10 @@ def main():
                                                    ]:  # distillation model
             for key in config["Architecture"]["Models"]:
                 if config["Architecture"]["Models"][key]["Head"][
-                        "name"] == 'MultiHead':  # multi head
+                    "name"] == 'MultiHead':  # multi head
                     out_channels_list = {}
                     if config['PostProcess'][
-                            'name'] == 'DistillationSARLabelDecode':
+                        'name'] == 'DistillationSARLabelDecode':
                         char_num = char_num - 2
                     out_channels_list['CTCLabelDecode'] = char_num
                     out_channels_list['SARLabelDecode'] = char_num + 2
@@ -223,7 +221,7 @@ def main():
                 config["Architecture"]["Models"][key][
                     "return_all_feats"] = False
         elif config['Architecture']['Head'][
-                'name'] == 'MultiHead':  # multi head
+            'name'] == 'MultiHead':  # multi head
             out_channels_list = {}
             char_num = len(getattr(post_process_class, 'character'))
             if config['PostProcess']['name'] == 'SARLabelDecode':
@@ -247,7 +245,7 @@ def main():
     arch_config = config["Architecture"]
 
     if arch_config["algorithm"] == "SVTR" and arch_config["Head"][
-            "name"] != 'MultiHead':
+        "name"] != 'MultiHead':
         input_shape = config["Eval"]["dataset"]["transforms"][-2][
             'SVTRRecResizeImg']['image_shape']
     else:

@@ -20,9 +20,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import collections
 import math
 import re
-import collections
+
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
@@ -138,7 +139,7 @@ class MbConvBlock(nn.Layer):
         super(MbConvBlock, self).__init__()
         self._block_args = block_args
         self.has_se = (self._block_args.se_ratio is not None) and \
-            (0 < self._block_args.se_ratio <= 1)
+                      (0 < self._block_args.se_ratio <= 1)
         self.id_skip = block_args.id_skip
 
         # expansion phase
@@ -206,7 +207,7 @@ class MbConvBlock(nn.Layer):
 
         # skip conntection and drop connect
         if self.id_skip and self._block_args.stride == 1 and \
-            self.inp == self.final_oup:
+                self.inp == self.final_oup:
             if drop_connect_rate:
                 x = self._drop_connect(
                     x, p=drop_connect_rate, training=self.training)
@@ -259,7 +260,7 @@ class EfficientNetb3_PREN(nn.Layer):
                     input_filters=block_args.output_filters, stride=1)
             for j in range(block_args.num_repeat - 1):
                 self._blocks.append(
-                    self.add_sublayer(f'{i}-{j+1}', MbConvBlock(block_args)))
+                    self.add_sublayer(f'{i}-{j + 1}', MbConvBlock(block_args)))
                 _concerned_idx += 1
                 if _concerned_idx in self._concerned_block_idxes:
                     self.out_channels.append(block_args.output_filters)

@@ -20,10 +20,11 @@ from __future__ import division
 from __future__ import print_function
 
 import math
-import paddle
-from paddle import nn, ParamAttr
-from paddle.nn import functional as F
+
 import numpy as np
+import paddle
+from paddle import nn
+from paddle.nn import functional as F
 
 from .tps_spatial_transformer import TPSSpatialTransformer
 
@@ -51,10 +52,10 @@ class STN(nn.Layer):
         self.num_ctrlpoints = num_ctrlpoints
         self.activation = activation
         self.stn_convnet = nn.Sequential(
-            conv3x3_block(in_channels, 32),  #32x64
+            conv3x3_block(in_channels, 32),  # 32x64
             nn.MaxPool2D(
                 kernel_size=2, stride=2),
-            conv3x3_block(32, 64),  #16x32
+            conv3x3_block(32, 64),  # 16x32
             nn.MaxPool2D(
                 kernel_size=2, stride=2),
             conv3x3_block(64, 128),  # 8*16

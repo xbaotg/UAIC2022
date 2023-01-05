@@ -16,11 +16,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-from paddle import nn
 import paddle
+from paddle import nn
+from ppocr.utils.e2e_utils.extract_batchsize import pre_process
 
 from .det_basic_loss import DiceLoss
-from ppocr.utils.e2e_utils.extract_batchsize import pre_process
 
 
 class PGLoss(nn.Layer):
@@ -122,7 +122,7 @@ class PGLoss(nn.Layer):
             self.max_text_nums, self.pad_num, self.tcl_bs)
 
         f_score, f_border, f_direction, f_char = predicts['f_score'], predicts['f_border'], predicts['f_direction'], \
-                                                 predicts['f_char']
+            predicts['f_char']
         score_loss = self.dice_loss(f_score, tcl_maps, training_masks)
         border_loss = self.border_loss(f_border, border_maps, tcl_maps,
                                        training_masks)

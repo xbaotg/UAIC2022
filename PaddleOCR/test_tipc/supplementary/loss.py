@@ -121,7 +121,6 @@ class DMLLoss(object):
 
         return loss_dict
 
-
 # def build_distill_loss(config, epsilon=None):
 #     class_dim = config['class_dim']
 #     loss = LossDistill(model_name_list=['student', 'student1'], )

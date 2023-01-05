@@ -14,13 +14,13 @@ Predictor:
   algorithm: StyleTextRec
   scale: 0.00392156862745098
   mean:
-  - 0.5
-  - 0.5
-  - 0.5
+    - 0.5
+    - 0.5
+    - 0.5
   std:
-  - 0.5
-  - 0.5
-  - 0.5
+    - 0.5
+    - 0.5
+    - 0.5
   expand_result: false
   bg_generator:
     pretrain: style_text_models/bg_generator

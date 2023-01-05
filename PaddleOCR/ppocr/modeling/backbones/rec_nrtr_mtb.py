@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from paddle import nn
 import paddle
+from paddle import nn
 
 
 class MTB(nn.Layer):
@@ -28,14 +28,14 @@ class MTB(nn.Layer):
                     'conv_{}'.format(i),
                     nn.Conv2D(
                         in_channels=in_channels
-                        if i == 0 else 32 * (2**(i - 1)),
-                        out_channels=32 * (2**i),
+                        if i == 0 else 32 * (2 ** (i - 1)),
+                        out_channels=32 * (2 ** i),
                         kernel_size=3,
                         stride=2,
                         padding=1))
                 self.block.add_sublayer('relu_{}'.format(i), nn.ReLU())
                 self.block.add_sublayer('bn_{}'.format(i),
-                                        nn.BatchNorm2D(32 * (2**i)))
+                                        nn.BatchNorm2D(32 * (2 ** i)))
 
     def forward(self, images):
         x = self.block(images)

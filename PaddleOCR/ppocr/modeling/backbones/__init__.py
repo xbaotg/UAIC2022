@@ -61,8 +61,6 @@ def build_backbone(config, model_type):
             'LayoutLMv2ForRe', 'LayoutXLMForSer', 'LayoutXLMForRe'
         ]
     elif model_type == 'table':
-        from .table_resnet_vd import ResNet
-        from .table_mobilenet_v3 import MobileNetV3
         support_dict = ['ResNet', 'MobileNetV3']
     else:
         raise NotImplementedError

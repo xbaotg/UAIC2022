@@ -6,7 +6,7 @@
 
 需要准备 PaddleOCR、Paddle2ONNX 模型转化环境，和 ONNXRuntime 预测环境
 
-###  PaddleOCR
+### PaddleOCR
 
 克隆PaddleOCR的仓库，使用release/2.4分支，并进行安装，由于PaddleOCR仓库比较大，git clone速度比较慢，所以本教程已下载
 
@@ -15,24 +15,26 @@ git clone  -b release/2.4 https://github.com/PaddlePaddle/PaddleOCR.git
 cd PaddleOCR && python3.7 setup.py install
 ```
 
-###  Paddle2ONNX
+### Paddle2ONNX
 
-Paddle2ONNX 支持将 PaddlePaddle 模型格式转化到 ONNX 模型格式，算子目前稳定支持导出 ONNX Opset 9~11，部分Paddle算子支持更低的ONNX Opset转换。
+Paddle2ONNX 支持将 PaddlePaddle 模型格式转化到 ONNX 模型格式，算子目前稳定支持导出 ONNX Opset 9~11，部分Paddle算子支持更低的ONNX
+Opset转换。
 更多细节可参考 [Paddle2ONNX](https://github.com/PaddlePaddle/Paddle2ONNX/blob/develop/README_zh.md)
 
 - 安装 Paddle2ONNX
+
 ```
 python3.7 -m pip install paddle2onnx
 ```
 
 - 安装 ONNXRuntime
+
 ```
 # 建议安装 1.9.0 版本，可根据环境更换版本号
 python3.7 -m pip install onnxruntime==1.9.0
 ```
 
 ## 2. 模型转换
-
 
 - Paddle 模型下载
 
@@ -84,7 +86,8 @@ paddle2onnx --model_dir ./inference/ch_ppocr_mobile_v2.0_cls_infer \
 
 执行完毕后，ONNX 模型会被分别保存在 `./inference/det_onnx/`，`./inference/rec_onnx/`，`./inference/cls_onnx/`路径下
 
-* 注意：对于OCR模型，转化过程中必须采用动态shape的形式，即加入选项--input_shape_dict="{'x': [-1, 3, -1, -1]}"，否则预测结果可能与直接使用Paddle预测有细微不同。
+* 注意：对于OCR模型，转化过程中必须采用动态shape的形式，即加入选项--input_shape_dict="{'x': [-1, 3, -1, -1]}"
+  ，否则预测结果可能与直接使用Paddle预测有细微不同。
   另外，以下几个模型暂不支持转换为 ONNX 模型：
   NRTR、SAR、RARE、SRN
 
@@ -110,7 +113,6 @@ python3.7 tools/infer/predict_system.py --use_gpu=False \
 --image_dir=./deploy/lite/imgs/lite_demo.png
 ```
 
-
 执行命令后在终端会打印出预测的识别信息，并在 `./inference_results/` 下保存可视化结果。
 
 ONNXRuntime 执行效果：
@@ -127,6 +129,7 @@ Paddle Inference 执行效果：
 
 
 使用 ONNXRuntime 预测，终端输出：
+
 ```
 [2022/02/22 17:48:27] root DEBUG: dt_boxes num : 38, elapse : 0.043187856674194336
 [2022/02/22 17:48:27] root DEBUG: rec_res num  : 38, elapse : 0.592170000076294

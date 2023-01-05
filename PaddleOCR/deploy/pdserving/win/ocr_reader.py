@@ -12,15 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import cv2
-import copy
-import numpy as np
 import math
-import re
-import sys
-import argparse
 import string
+import sys
 from copy import deepcopy
+
+import cv2
+import numpy as np
 
 
 class DetResizeForTest(object):
@@ -197,10 +195,10 @@ class BaseRecLabelDecode(object):
                 if is_remove_duplicate:
                     # only for predict
                     if idx > 0 and text_index[batch_idx][idx - 1] == text_index[
-                            batch_idx][idx]:
+                        batch_idx][idx]:
                         continue
                 char_list.append(self.character[int(text_index[batch_idx][
-                    idx])])
+                                                        idx])])
                 if text_prob is not None:
                     conf_list.append(text_prob[batch_idx][idx])
                 else:
@@ -219,9 +217,9 @@ class CTCLabelDecode(BaseRecLabelDecode):
     def __init__(
             self,
             config,
-            #character_dict_path=None,
-            #character_type='ch',
-            #use_space_char=False,
+            # character_dict_path=None,
+            # character_type='ch',
+            # use_space_char=False,
             **kwargs):
         super(CTCLabelDecode, self).__init__(config)
 
@@ -327,12 +325,12 @@ class CharacterOps(object):
             elif beg_or_end == "end":
                 idx = np.array(self.dict[self.end_str])
             else:
-                assert False, "Unsupport type %s in get_beg_end_flag_idx"\
-                    % beg_or_end
+                assert False, "Unsupport type %s in get_beg_end_flag_idx" \
+                              % beg_or_end
             return idx
         else:
-            err = "error in get_beg_end_flag_idx when using the loss %s"\
-                % (self.loss_type)
+            err = "error in get_beg_end_flag_idx when using the loss %s" \
+                  % (self.loss_type)
             assert False, err
 
 

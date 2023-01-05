@@ -51,20 +51,20 @@ class E2EMetric(object):
                 gt_strs_batch.append(t)
 
             for pred, gt_polyons, gt_strs, ignore_tags in zip(
-                [preds], gt_polyons_batch, [gt_strs_batch], ignore_tags_batch):
+                    [preds], gt_polyons_batch, [gt_strs_batch], ignore_tags_batch):
                 # prepare gt
                 gt_info_list = [{
                     'points': gt_polyon,
                     'text': gt_str,
                     'ignore': ignore_tag
                 } for gt_polyon, gt_str, ignore_tag in
-                                zip(gt_polyons, gt_strs, ignore_tags)]
+                    zip(gt_polyons, gt_strs, ignore_tags)]
                 # prepare det
                 e2e_info_list = [{
                     'points': det_polyon,
                     'texts': pred_str
                 } for det_polyon, pred_str in
-                                 zip(pred['points'], pred['texts'])]
+                    zip(pred['points'], pred['texts'])]
 
                 result = get_socre_A(gt_info_list, e2e_info_list)
                 self.results.append(result)

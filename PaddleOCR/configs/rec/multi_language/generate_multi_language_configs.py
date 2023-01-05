@@ -12,10 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import yaml
-from argparse import ArgumentParser, RawDescriptionHelpFormatter
-import os.path
 import logging
+import os.path
+from argparse import ArgumentParser, RawDescriptionHelpFormatter
+
+import yaml
+
 logging.basicConfig(level=logging.INFO)
 
 support_list = {
@@ -120,10 +122,10 @@ class ArgsParser(ArgumentParser):
     def _set_language(self, type):
         lang = type[0]
         assert (type), "please use -l or --language to choose language type"
-        assert(
+        assert (
                 lang in support_list.keys() or lang in multi_lang
-               ),"the sub_keys(-l or --language) can only be one of support list: \n{},\nbut get: {}, " \
-                 "please check your running command".format(multi_lang, type)
+        ), "the sub_keys(-l or --language) can only be one of support list: \n{},\nbut get: {}, " \
+           "please check your running command".format(multi_lang, type)
         if lang in latin_lang:
             lang = "latin"
         elif lang in arabic_lang:
@@ -167,7 +169,7 @@ def merge_config(config):
         else:
             sub_keys = key.split('.')
             assert (
-                sub_keys[0] in global_config
+                    sub_keys[0] in global_config
             ), "the sub_keys can only be one of global_config: {}, but get: {}, please check your running command".format(
                 global_config.keys(), sub_keys[0])
             cur = global_config[sub_keys[0]]
@@ -215,12 +217,12 @@ if __name__ == '__main__':
             dict(global_config), f, default_flow_style=False, sort_keys=False)
     logging.info("Project path is          :{}".format(project_path))
     logging.info("Train list path set to   :{}".format(global_config['Train'][
-        'dataset']['label_file_list'][0]))
+                                                           'dataset']['label_file_list'][0]))
     logging.info("Eval list path set to    :{}".format(global_config['Eval'][
-        'dataset']['label_file_list'][0]))
+                                                           'dataset']['label_file_list'][0]))
     logging.info("Dataset root path set to :{}".format(global_config['Eval'][
-        'dataset']['data_dir']))
+                                                           'dataset']['data_dir']))
     logging.info("Dict path set to         :{}".format(global_config['Global'][
-        'character_dict_path']))
+                                                           'character_dict_path']))
     logging.info("Config file set to       :configs/rec/multi_language/{}".
                  format(save_file_path))

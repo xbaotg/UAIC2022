@@ -1,28 +1,28 @@
-#copyright (c) 2021 PaddlePaddle Authors. All Rights Reserve.
+# copyright (c) 2021 PaddlePaddle Authors. All Rights Reserve.
 #
-#Licensed under the Apache License, Version 2.0 (the "License");
-#you may not use this file except in compliance with the License.
-#You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #    http://www.apache.org/licenses/LICENSE-2.0
 #
-#Unless required by applicable law or agreed to in writing, software
-#distributed under the License is distributed on an "AS IS" BASIS,
-#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#See the License for the specific language governing permissions and
-#limitations under the License.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # This code is refer from: https://github.com/KaiyangZhou/pytorch-center-loss
 
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
+
 import os
 import pickle
 
 import paddle
 import paddle.nn as nn
-import paddle.nn.functional as F
 
 
 class CenterLoss(nn.Layer):
@@ -57,7 +57,7 @@ class CenterLoss(nn.Layer):
 
         batch_size = feats_reshape.shape[0]
 
-        #calc l2 distance between feats and centers  
+        # calc l2 distance between feats and centers
         square_feat = paddle.sum(paddle.square(feats_reshape),
                                  axis=1,
                                  keepdim=True)
@@ -75,7 +75,7 @@ class CenterLoss(nn.Layer):
                                         paddle.transpose(self.centers, [1, 0]))
         distmat = distmat - 2.0 * feat_dot_center
 
-        #generate the mask
+        # generate the mask
         classes = paddle.arange(self.num_classes).astype("int64")
         label = paddle.expand(
             paddle.unsqueeze(label, 1), (batch_size, self.num_classes))

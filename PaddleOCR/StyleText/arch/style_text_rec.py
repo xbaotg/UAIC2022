@@ -13,10 +13,9 @@
 # limitations under the License.
 import paddle
 import paddle.nn as nn
-
 from arch.base_module import MiddleNet, ResBlock
+from arch.decoder import Decoder, SingleDecoder
 from arch.encoder import Encoder
-from arch.decoder import Decoder, DecoderUnet, SingleDecoder
 from utils.load_params import load_dygraph_pretrain
 from utils.logging import get_logger
 
@@ -26,11 +25,11 @@ class StyleTextRec(nn.Layer):
         super(StyleTextRec, self).__init__()
         self.logger = get_logger()
         self.text_generator = TextGenerator(config["Predictor"][
-            "text_generator"])
+                                                "text_generator"])
         self.bg_generator = BgGeneratorWithMask(config["Predictor"][
-            "bg_generator"])
+                                                    "bg_generator"])
         self.fusion_generator = FusionGeneratorSimple(config["Predictor"][
-            "fusion_generator"])
+                                                          "fusion_generator"])
         bg_generator_pretrain = config["Predictor"]["bg_generator"]["pretrain"]
         text_generator_pretrain = config["Predictor"]["text_generator"][
             "pretrain"]
@@ -223,7 +222,7 @@ class BgGeneratorWithMask(nn.Layer):
 
         fake_c_temp = decode_bg_output["out_conv"]
         fake_bg_mask = self.decoder_mask.forward(encode_bg_output[
-            "res_blocks"])["out_conv"]
+                                                     "res_blocks"])["out_conv"]
         fake_bg = self.middle(
             paddle.concat(
                 (fake_c_temp, fake_bg_mask), axis=1))

@@ -17,11 +17,12 @@ from __future__ import division
 from __future__ import print_function
 
 import math
+
+import numpy as np
 import paddle
 import paddle.nn as nn
-from paddle import ParamAttr
 import paddle.nn.functional as F
-import numpy as np
+from paddle import ParamAttr
 
 from .rec_att_head import AttentionGRUCell
 

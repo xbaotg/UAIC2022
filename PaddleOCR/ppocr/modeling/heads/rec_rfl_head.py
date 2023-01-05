@@ -15,9 +15,8 @@
 This code is refer from: 
 https://github.com/hikopensource/DAVAR-Lab-OCR/blob/main/davarocr/davar_rcg/models/sequence_heads/counting_head.py
 """
-import paddle
 import paddle.nn as nn
-from paddle.nn.initializer import TruncatedNormal, Constant, Normal, KaimingNormal
+from paddle.nn.initializer import Constant, KaimingNormal
 
 from .rec_att_head import AttentionLSTM
 
@@ -41,7 +40,6 @@ class CNTHead(nn.Layer):
                                            self.out_channels)
 
     def forward(self, visual_feature):
-
         b, c, h, w = visual_feature.shape
         visual_feature = visual_feature.reshape([b, c, h * w]).transpose(
             [0, 2, 1])

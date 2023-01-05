@@ -44,7 +44,7 @@ def build_head(config):
     # cls head
     from .cls_head import ClsHead
 
-    #kie head
+    # kie head
     from .kie_sdmgr_head import SDMGRHead
 
     from .table_att_head import TableAttentionHead, SLAHead
@@ -63,7 +63,7 @@ def build_head(config):
         from .det_drrg_head import DRRGHead
         support_dict.append('DRRGHead')
 
-    #table head
+    # table head
 
     module_name = config.pop('name')
     assert module_name in support_dict, Exception('head only support {}'.format(

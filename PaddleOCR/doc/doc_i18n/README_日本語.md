@@ -1,4 +1,5 @@
-[English](../../README.md) | [简体中文](../../README_ch.md) | [हिन्दी](./README_हिन्द.md) | 日本語 | [한국인](./README_한국어.md) | [Pу́сский язы́к](./README_Ру́сский_язы́к.md)
+[English](../../README.md) | [简体中文](../../README_ch.md) | [हिन्दी](./README_हिन्द.md) |
+日本語 | [한국인](./README_한국어.md) | [Pу́сский язы́к](./README_Ру́сский_язы́к.md)
 
 <p align="center">
 <img src="../PaddleOCR_log.png" align="middle" width = "600"/>
@@ -12,7 +13,6 @@
     <a href="https://pypi.org/project/PaddleOCR/"><img src="https://img.shields.io/pypi/dm/PaddleOCR?color=9cf"></a>
     <a href="https://github.com/PaddlePaddle/PaddleOCR/stargazers"><img src="https://img.shields.io/github/stars/PaddlePaddle/PaddleOCR?color=ccf"></a>
 </p>
-
 
 ## 紹介
 
@@ -32,26 +32,32 @@ PaddleOCR は、さまざまな言語で、優れた最先端かつ実用的な 
 </div>
 
 ## 📣 最新アップデート
+
 - **🔥2022.8.24 リリース PaddleOCR [release/2.6 ](https://github.com/PaddlePaddle/PaddleOCR/tree/release/2.6)**
-  -  [PP-Structurev2](../../ppstructure/)がリリース。機能と使いやすさがアップグレード、中国語のさまざまな文字に適応、 [レイアウトの復旧](../../ppstructure/recovery)  さらに**1 行のコマンドをPDFへ転換、そして Word**に変換可能。
-  - [レイアウト分析](../../ppstructure/layout) の最適化：モデルのストレージが 95% 削減、速度が 11 倍向上、平均 CPU 時間コストはわずか 41 ミリ秒です。
-  - [表認識](../../ppstructure/table) 最適化：3つの最適化戦略設計、モデルの精度が従来より同時間比が 6% 向上。
-  - [キー情報抽出](../../ppstructure/kie) 最適化:視覚に依存しないモデル構造設計、語彙の実態識別精度が 2.8% 向上、関係抽出の精度が 9.1% 向上。
+    - [PP-Structurev2](../../ppstructure/)
+      がリリース。機能と使いやすさがアップグレード、中国語のさまざまな文字に適応、 [レイアウトの復旧](../../ppstructure/recovery)  さらに**1
+      行のコマンドをPDFへ転換、そして Word**に変換可能。
+    - [レイアウト分析](../../ppstructure/layout) の最適化：モデルのストレージが 95% 削減、速度が 11 倍向上、平均 CPU 時間コストはわずか 41 ミリ秒です。
+    - [表認識](../../ppstructure/table) 最適化：3つの最適化戦略設計、モデルの精度が従来より同時間比が 6% 向上。
+    - [キー情報抽出](../../ppstructure/kie) 最適化:視覚に依存しないモデル構造設計、語彙の実態識別精度が 2.8% 向上、関係抽出の精度が
+      9.1% 向上。
 
 - **🔥2022.7 リリース [OCR scene application collection](../../applications/README_en.md)**
-   - デジタルチューブ、液晶画面、ナンバー プレート、手書き認識モデル、高精度 SVTR モデルなど、**9つの垂直モデル**をリリース、一般、製造、金融、運輸業界の主要な OCR 垂直アプリケーションをカバー。
+    - デジタルチューブ、液晶画面、ナンバー プレート、手書き認識モデル、高精度 SVTR モデルなど、**9つの垂直モデル**をリリース、一般、製造、金融、運輸業界の主要な OCR
+      垂直アプリケーションをカバー。
 
 - **🔥2022.5.9 リリース PaddleOCR [release/2.5](https://github.com/PaddlePaddle/PaddleOCR/tree/release/2.5)**
-    -  [PP-OCRv3](../doc_en/ppocr_introduction_en.md#pp-ocrv3)リリース: 同等の速度で、中国語の識別効果は PP-OCRv2 より 5% 向上、英語の識別効果は 11% 向上し、80 言語の多言語モデルの平均認識精度は 5% 以上向上。
-    -  [PPOCRLabelv2](./PPOCRLabel)リリース: 表認識タスク、キー情報抽出タスク、イレギュラーテキスト画像のアノテーション機能を追加。
+    - [PP-OCRv3](../doc_en/ppocr_introduction_en.md#pp-ocrv3)リリース: 同等の速度で、中国語の識別効果は PP-OCRv2 より 5%
+      向上、英語の識別効果は 11% 向上し、80 言語の多言語モデルの平均認識精度は 5% 以上向上。
+    - [PPOCRLabelv2](./PPOCRLabel)リリース: 表認識タスク、キー情報抽出タスク、イレギュラーテキスト画像のアノテーション機能を追加。
     - インタラクティブな電子書籍 [*"OCR に没入"*](../doc_en/ocr_book_en.md)、 をリリース。 OCRフルスタック技術の最先端の理論とコードの実践をカバー。
 
 - [もっと](../doc_en/update_en.md)
 
-
 ## 🌟 PaddleOCRとは？
 
-PaddleOCRは、OCRに関連するさまざまな最先端のアルゴリズムに対応する、産業用の機能モデル/ソリューション [PP-OCR](../doc_en/ppocr_introduction_en.md) や [PP-Structure](../../ppstructure/README.md) を開発。これに基づき、データの生成、モデルのトレーニング、圧縮、推論、展開の全プロセスを実行可能。
+PaddleOCRは、OCRに関連するさまざまな最先端のアルゴリズムに対応する、産業用の機能モデル/ソリューション [PP-OCR](../doc_en/ppocr_introduction_en.md)
+や [PP-Structure](../../ppstructure/README.md) を開発。これに基づき、データの生成、モデルのトレーニング、圧縮、推論、展開の全プロセスを実行可能。
 
 <div align="center">
     <img src="https://user-images.githubusercontent.com/50011306/195771471-fad5eb1d-190d-4a7b-8b0c-0433fb32445f.png">
@@ -65,29 +71,30 @@ pip3 install paddleocr
 paddleocr --image_dir /your/test/image.jpg --lang=japan # change for i18n abbr
 ```
 
->Python環境がない場合は [環境の準備](../doc_en/environment_en.md)に従ってください。[チュートリアル](#Tutorials) から始めることをお勧めします。
+> Python環境がない場合は [環境の準備](../doc_en/environment_en.md)に従ってください。[チュートリアル](#Tutorials) から始めることをお勧めします。
 
 <a name="本"></a>
 
 ## 📚 電子書籍：*OCRに入る*
+
 - [OCRに没入](../doc_en/ocr_book_en.md)
 
 <a name="コミュニティ"></a>
 
 ## 👫コミュニティー
 
-他国の開発者の方は [PaddleOCR Discussions](https://github.com/PaddlePaddle/PaddleOCR/discussions) を国際的なコミュニティ プラットフォームとして使用します。みなさんのアイデアや質問がある場合、ここで英語で話し合うことができます。
+他国の開発者の方は [PaddleOCR Discussions](https://github.com/PaddlePaddle/PaddleOCR/discussions) を国際的なコミュニティ
+プラットフォームとして使用します。みなさんのアイデアや質問がある場合、ここで英語で話し合うことができます。
 
 <a name="対応中国機種一覧"></a>
 
 ## 🛠️ シリーズ モデル式一覧
 
-| モデル紹介                                           | モデル名                   | 推奨のシーン | 検出モデル                                             | 認識モデル                                           |
-| ------------------------------------------------------------ | ---------------------------- | ----------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
-| 日本語超軽量 PP-OCRv3 モデル(14.8M) | japan_PP-OCRv3_xx | モバイル & サーバー |[推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/Multilingual_PP-OCRv3_det_infer.tar)/[トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/Multilingual_PP-OCRv3_det_distill_train.tar) |[推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/japan_PP-OCRv3_rec_infer.tar)/[トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/japan_PP-OCRv3_rec_train.tar) |
-| 英語超軽量PP-OCRv3モデル（13.4M） | en_PP-OCRv3_xx | モバイル & サーバー | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_det_infer.tar) / [トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_det_distill_train.tar) | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_rec_infer.tar) / [トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_rec_train.tar) |
-| 中国語と英語の超軽量 PP-OCRv3 モデル（16.2M）    | ch_PP-OCRv3_xx          | モバイル & サーバー | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar) / [トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_distill_train.tar) | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.tar) / [トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar) |
-
+| モデル紹介                          | モデル名              | 推奨のシーン      | 検出モデル                                                                                                                                                                                                             | 認識モデル                                                                                                                                                                                       |
+|--------------------------------|-------------------|-------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 日本語超軽量 PP-OCRv3 モデル(14.8M)     | japan_PP-OCRv3_xx | モバイル & サーバー | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/Multilingual_PP-OCRv3_det_infer.tar)/[トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/Multilingual_PP-OCRv3_det_distill_train.tar) | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/japan_PP-OCRv3_rec_infer.tar)/[トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/multilingual/japan_PP-OCRv3_rec_train.tar) |
+| 英語超軽量PP-OCRv3モデル（13.4M）        | en_PP-OCRv3_xx    | モバイル & サーバー | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_det_infer.tar) / [トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_det_distill_train.tar)                             | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_rec_infer.tar) / [トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_rec_train.tar)               |
+| 中国語と英語の超軽量 PP-OCRv3 モデル（16.2M） | ch_PP-OCRv3_xx    | モバイル & サーバー | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar) / [トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_distill_train.tar)                             | [推論モデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.tar) / [トレーニングモデル](https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar)               |
 
 - その他のモデルのダウンロード (多言語を含む) については、[PP-OCR シリーズ モデルのダウンロード] (../doc_en/models_list_en.md)をご参照ください。
 - 新しい言語のリクエストについては、 [新しい言語_リクエストのガイドライン](#language_requests)を参照してください。
@@ -116,11 +123,11 @@ paddleocr --image_dir /your/test/image.jpg --lang=japan # change for i18n abbr
         - [モバイル](./deploy/lite/readme.md)
         - [Paddle2ONNX](./deploy/paddle2onnx/readme.md)
         - [PaddleCloud](./deploy/paddlecloud/README.md)
-        - [Benchmark](../doc_en/benchmark_en.md)  
+        - [Benchmark](../doc_en/benchmark_en.md)
 - [PP-Structure 🔥](../../ppstructure/README.md)
     - [クイックスタート](../../ppstructure/docs/quickstart_en.md)
     - [Model Zoo](../../ppstructure/docs/models_list_en.md)
-    - [トレーニング モデル](../doc_en/training_en.md)  
+    - [トレーニング モデル](../doc_en/training_en.md)
         - [レイアウト分析](../../ppstructure/layout/README.md)
         - [表認識](../../ppstructure/table/README.md)
         - [キー情報抽出](../../ppstructure/kie/README.md)
@@ -133,7 +140,7 @@ paddleocr --image_dir /your/test/image.jpg --lang=japan # change for i18n abbr
     - [テキスト認識](../doc_en/algorithm_overview_en.md)
     - [エンド・ツー・エンド OCR](../doc_en/algorithm_overview_en.md)
     - [表認識](../doc_en/algorithm_overview_en.md)
-    - [キー情報抽出](../doc_en/algorithm_overview_en.md)    
+    - [キー情報抽出](../doc_en/algorithm_overview_en.md)
     - [PaddleOCR に新しいアルゴリズムを追加する](../doc_en/add_new_algorithm_en.md)
 - データの注釈と合成
     - [半自動注釈ツール: PPOCRLabel](./PPOCRLabel/README.md)
@@ -159,9 +166,12 @@ paddleocr --image_dir /your/test/image.jpg --lang=japan # change for i18n abbr
 
 ## 🇺🇳 新しい言語リクエストのガイドライン
 
-**新言語モデルをリクエスト**したい場合、[多言語モデルのアップグレードへの投票](https://github.com/PaddlePaddle/PaddleOCR/discussions/7253)で投票してください。投票結果に応じて定期的にモデルがアップグレードされます。**友達を招待して一緒に投票しましょう!**
+**新言語モデルをリクエスト**したい場合、[多言語モデルのアップグレードへの投票](https://github.com/PaddlePaddle/PaddleOCR/discussions/7253)
+で投票してください。投票結果に応じて定期的にモデルがアップグレードされます。**友達を招待して一緒に投票しましょう!**
 
-シナリオに基づいて**新しい言語モデルをトレーニング** する必要がある場合は、[多言語モデル トレーニング プロジェクト](https://github.com/PaddlePaddle/PaddleOCR/discussions/7252) のチュートリアルがデータセットの準備にご利用でき、 プロセス全体を段階的に表示することができます。
+シナリオに基づいて**新しい言語モデルをトレーニング**
+する必要がある場合は、[多言語モデル トレーニング プロジェクト](https://github.com/PaddlePaddle/PaddleOCR/discussions/7252)
+のチュートリアルがデータセットの準備にご利用でき、 プロセス全体を段階的に表示することができます。
 
 元の[多言語 OCR 開発計画](https://github.com/PaddlePaddle/PaddleOCR/issues/1048) には、まだ多くの有用なコーパスと辞書が表示されています
 
@@ -224,4 +234,6 @@ paddleocr --image_dir /your/test/image.jpg --lang=japan # change for i18n abbr
 <a name="ライセンス"></a>
 
 ## 📄 ライセンス
-このプロジェクトは以下の場所でリリースされています <a href="https://github.com/PaddlePaddle/PaddleOCR/blob/master/LICENSE">Apache 2.0 license</a>
+
+このプロジェクトは以下の場所でリリースされています <a href="https://github.com/PaddlePaddle/PaddleOCR/blob/master/LICENSE">Apache 2.0
+license</a>

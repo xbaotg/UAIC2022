@@ -15,31 +15,32 @@
 from __future__ import absolute_import, division, print_function
 
 import os
+
 import paddle
 import paddle.nn as nn
 from paddle import ParamAttr
-from paddle.nn import AdaptiveAvgPool2D, BatchNorm, Conv2D, Dropout, Linear
-from paddle.regularizer import L2Decay
+from paddle.nn import AdaptiveAvgPool2D, BatchNorm, Conv2D
 from paddle.nn.initializer import KaimingNormal
+from paddle.regularizer import L2Decay
 from paddle.utils.download import get_path_from_url
 
 MODEL_URLS = {
     "PPLCNet_x0.25":
-    "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x0_25_pretrained.pdparams",
+        "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x0_25_pretrained.pdparams",
     "PPLCNet_x0.35":
-    "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x0_35_pretrained.pdparams",
+        "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x0_35_pretrained.pdparams",
     "PPLCNet_x0.5":
-    "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x0_5_pretrained.pdparams",
+        "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x0_5_pretrained.pdparams",
     "PPLCNet_x0.75":
-    "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x0_75_pretrained.pdparams",
+        "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x0_75_pretrained.pdparams",
     "PPLCNet_x1.0":
-    "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x1_0_pretrained.pdparams",
+        "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x1_0_pretrained.pdparams",
     "PPLCNet_x1.5":
-    "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x1_5_pretrained.pdparams",
+        "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x1_5_pretrained.pdparams",
     "PPLCNet_x2.0":
-    "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x2_0_pretrained.pdparams",
+        "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x2_0_pretrained.pdparams",
     "PPLCNet_x2.5":
-    "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x2_5_pretrained.pdparams"
+        "https://paddle-imagenet-models-name.bj.bcebos.com/dygraph/legendary_models/PPLCNet_x2_5_pretrained.pdparams"
 }
 
 MODEL_STAGES_PATTERN = {
@@ -58,12 +59,12 @@ __all__ = list(MODEL_URLS.keys())
 NET_CONFIG = {
     "blocks2":
     # k, in_c, out_c, s, use_se
-    [[3, 16, 32, 1, False]],
+        [[3, 16, 32, 1, False]],
     "blocks3": [[3, 32, 64, 2, False], [3, 64, 64, 1, False]],
     "blocks4": [[3, 64, 128, 2, False], [3, 128, 128, 1, False]],
     "blocks5":
-    [[3, 128, 256, 2, False], [5, 256, 256, 1, False], [5, 256, 256, 1, False],
-     [5, 256, 256, 1, False], [5, 256, 256, 1, False], [5, 256, 256, 1, False]],
+        [[3, 128, 256, 2, False], [5, 256, 256, 1, False], [5, 256, 256, 1, False],
+         [5, 256, 256, 1, False], [5, 256, 256, 1, False], [5, 256, 256, 1, False]],
     "blocks6": [[5, 256, 512, 2, True], [5, 512, 512, 1, True]]
 }
 
@@ -191,7 +192,7 @@ class PPLCNet(nn.Layer):
             num_filters=make_divisible(16 * scale),
             stride=2)
 
-        self.blocks2 = nn.Sequential(* [
+        self.blocks2 = nn.Sequential(*[
             DepthwiseSeparable(
                 num_channels=make_divisible(in_c * scale),
                 num_filters=make_divisible(out_c * scale),
@@ -201,7 +202,7 @@ class PPLCNet(nn.Layer):
             for i, (k, in_c, out_c, s, se) in enumerate(NET_CONFIG["blocks2"])
         ])
 
-        self.blocks3 = nn.Sequential(* [
+        self.blocks3 = nn.Sequential(*[
             DepthwiseSeparable(
                 num_channels=make_divisible(in_c * scale),
                 num_filters=make_divisible(out_c * scale),
@@ -211,7 +212,7 @@ class PPLCNet(nn.Layer):
             for i, (k, in_c, out_c, s, se) in enumerate(NET_CONFIG["blocks3"])
         ])
 
-        self.blocks4 = nn.Sequential(* [
+        self.blocks4 = nn.Sequential(*[
             DepthwiseSeparable(
                 num_channels=make_divisible(in_c * scale),
                 num_filters=make_divisible(out_c * scale),
@@ -221,7 +222,7 @@ class PPLCNet(nn.Layer):
             for i, (k, in_c, out_c, s, se) in enumerate(NET_CONFIG["blocks4"])
         ])
 
-        self.blocks5 = nn.Sequential(* [
+        self.blocks5 = nn.Sequential(*[
             DepthwiseSeparable(
                 num_channels=make_divisible(in_c * scale),
                 num_filters=make_divisible(out_c * scale),
@@ -231,7 +232,7 @@ class PPLCNet(nn.Layer):
             for i, (k, in_c, out_c, s, se) in enumerate(NET_CONFIG["blocks5"])
         ])
 
-        self.blocks6 = nn.Sequential(* [
+        self.blocks6 = nn.Sequential(*[
             DepthwiseSeparable(
                 num_channels=make_divisible(in_c * scale),
                 num_filters=make_divisible(out_c * scale),

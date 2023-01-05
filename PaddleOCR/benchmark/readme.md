@@ -1,4 +1,3 @@
-
 # PaddleOCR DB/EAST/PSE 算法训练benchmark测试
 
 PaddleOCR/benchmark目录下的文件用于获取并分析训练日志。
@@ -7,6 +6,7 @@ PaddleOCR/benchmark目录下的文件用于获取并分析训练日志。
 ## 运行训练benchmark
 
 benchmark/run_det.sh 中包含了三个过程：
+
 - 安装依赖
 - 下载数据
 - 执行训练
@@ -22,6 +22,7 @@ bash benchmark/run_det.sh
 ```
 
 以DB为例，将得到四个日志文件，如下：
+
 ```
 det_res18_db_v2.0_sp_bs16_fp32_1
 det_res18_db_v2.0_sp_bs8_fp32_1

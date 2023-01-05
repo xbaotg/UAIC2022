@@ -6,16 +6,19 @@ PaddleServing预测功能测试的主程序为`test_paddle2onnx.sh`，可以测�
 
 基于训练是否使用量化，进行本测试的模型可以分为`正常模型`和`量化模型`，这两类模型对应的Paddle2ONNX预测功能汇总如下：
 
-| 模型类型 |device |
-|  ----   |  ---- |  
-| 正常模型 | GPU |
-| 正常模型 | CPU |
-| 量化模型 | GPU |
-| 量化模型 | CPU |
+| 模型类型 | device |
+|------|--------|  
+| 正常模型 | GPU    |
+| 正常模型 | CPU    |
+| 量化模型 | GPU    |
+| 量化模型 | CPU    |
 
 ## 2. 测试流程
+
 ### 2.1 功能测试
-先运行`prepare.sh`准备数据和模型，然后运行`test_paddle2onnx.sh`进行测试，最终在```test_tipc/output/{model_name}/paddle2onnx```目录下生成`paddle2onnx_infer_*.log`后缀的日志文件。
+
+先运行`prepare.sh`准备数据和模型，然后运行`test_paddle2onnx.sh`
+进行测试，最终在```test_tipc/output/{model_name}/paddle2onnx```目录下生成`paddle2onnx_infer_*.log`后缀的日志文件。
 
 ```shell
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2_det/model_linux_gpu_normal_normal_paddle2onnx_python_linux_cpu.txt "paddle2onnx_infer"
@@ -41,7 +44,6 @@ Run successfully with command - ch_PP-OCRv2_det - python3.7 tools/infer/predict_
 Run failed with command - ch_PP-OCRv2_det -  paddle2onnx --model_dir=./inference/ch_PP-OCRv2_det_infer/ --model_filename=inference.pdmodel --params_filename=inference.pdiparams --save_file=./inference/det_v2_onnx/model.onnx --opset_version=10 --enable_onnx_checker=True!
 ...
 ```
-
 
 ## 3. 更多教程
 

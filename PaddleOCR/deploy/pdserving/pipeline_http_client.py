@@ -12,13 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import numpy as np
-import requests
-import json
+import argparse
 import base64
+import json
 import os
 
-import argparse
+import requests
 
 
 def str2bool(v):

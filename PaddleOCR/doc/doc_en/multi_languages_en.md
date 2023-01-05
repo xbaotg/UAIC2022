@@ -2,7 +2,8 @@
 
 **Recent Update**
 
-- 2022.5.8 update the `PP-OCRv3` version of the multi-language detection and recognition model, and the average recognition accuracy has increased by more than 5%.
+- 2022.5.8 update the `PP-OCRv3` version of the multi-language detection and recognition model, and the average
+  recognition accuracy has increased by more than 5%.
 - 2021.4.9 supports the detection and recognition of 80 languages
 - 2021.4.9 supports **lightweight high-precision** English model detection and recognition
 
@@ -40,10 +41,13 @@ This document will briefly introduce how to use the multilingual model.
 - [4 Supported languages and abbreviations](#language_abbreviations)
 
 <a name="Install"></a>
+
 ## 1 Installation
 
 <a name="paddle_install"></a>
+
 ### 1.1 Paddle installation
+
 ```
 # cpu
 pip install paddlepaddle
@@ -53,23 +57,28 @@ pip install paddlepaddle-gpu
 ```
 
 <a name="paddleocr_package_install"></a>
+
 ### 1.2 PaddleOCR package installation
 
-
 pip install
+
 ```
 pip install "paddleocr>=2.0.6" # 2.0.6 version is recommended
 ```
+
 Build and install locally
+
 ```
 python3 setup.py bdist_wheel
 pip3 install dist/paddleocr-x.x.x-py3-none-any.whl # x.x.x is the version number of paddleocr
 ```
 
 <a name="Quick_use"></a>
+
 ## 2 Quick use
 
 <a name="Command_line_operation"></a>
+
 ### 2.1 Command line operation
 
 View help information
@@ -86,12 +95,14 @@ The supported languages are listed in the [table](#language_abbreviations).
 ``` bash
 paddleocr --image_dir doc/imgs_en/254.jpg --lang=en
 ```
+
 <div align="center">
     <img src="../imgs_en/254.jpg" width="300" height="600">
     <img src="../imgs_results/multi_lang/img_02.jpg" width="600" height="600">
 </div>
 
 The result is a list. Each item contains a text box, text and recognition confidence
+
 ```text
 [('PHO CAPITAL', 0.95723116), [[66.0, 50.0], [327.0, 44.0], [327.0, 76.0], [67.0, 82.0]]]
 [('107 State Street', 0.96311164), [[72.0, 90.0], [451.0, 84.0], [452.0, 116.0], [73.0, 121.0]]]
@@ -133,6 +144,7 @@ The result is a list. Each item represents the coordinates of a text box.
 ```
 
 <a name="python_script_running"></a>
+
 ### 2.2 Run with Python script
 
 PPOCR is able to run with Python scripts for easy integration with your own code:
@@ -167,20 +179,24 @@ im_show.save('result.jpg')
 Visualization of results:
 ![](https://raw.githubusercontent.com/PaddlePaddle/PaddleOCR/release/2.1/doc/imgs_results/korean.jpg)
 
-
-PPOCR also supports direction classification. For more detailed usage, please refer to: [whl package instructions](whl_en.md).
+PPOCR also supports direction classification. For more detailed usage, please refer
+to: [whl package instructions](whl_en.md).
 
 <a name="Custom_training"></a>
+
 ## 3 Custom training
 
-PPOCR supports using your own data for custom training or fine-tune, where the recognition model can refer to [French configuration file](../../configs/rec/multi_language/rec_french_lite_train.yml)
+PPOCR supports using your own data for custom training or fine-tune, where the recognition model can refer
+to [French configuration file](../../configs/rec/multi_language/rec_french_lite_train.yml)
 Modify the training data path, dictionary and other parameters.
 
-For specific data preparation and training process, please refer to: [Text Detection](../doc_en/detection_en.md), [Text Recognition](../doc_en/recognition_en.md), more functions such as predictive deployment,
+For specific data preparation and training process, please refer
+to: [Text Detection](../doc_en/detection_en.md), [Text Recognition](../doc_en/recognition_en.md), more functions such as
+predictive deployment,
 For functions such as data annotation, you can read the complete [Document Tutorial](../../README.md).
 
-
 <a name="inference"></a>
+
 ## 4 Inference and Deployment
 
 In addition to installing the whl package for quick forecasting,
@@ -193,47 +209,47 @@ If necessary, you can read related documents:
 - [Mobile](../../deploy/lite/readme.md)
 - [Benchmark](./benchmark_en.md)
 
-
 <a name="language_abbreviations"></a>
+
 ## 5 Support languages and abbreviations
 
-| Language  | Abbreviation | | Language  | Abbreviation |
-| ---  | --- | --- | ---  | --- |
-|Chinese & English|ch| |Arabic|ar|
-|English|en| |Hindi|hi|
-|French|fr| |Uyghur|ug|
-|German|german| |Persian|fa|
-|Japan|japan| |Urdu|ur|
-|Korean|korean| | Serbian(latin) |rs_latin|
-|Chinese Traditional |chinese_cht| |Occitan |oc|
-| Italian |it| |Marathi|mr|
-|Spanish |es| |Nepali|ne|
-| Portuguese|pt| |Serbian(cyrillic)|rs_cyrillic|
-|Russia|ru||Bulgarian |bg|
-|Ukranian|uk| |Estonian |et|
-|Belarusian|be| |Irish |ga|
-|Telugu |te| |Croatian |hr|
-|Saudi Arabia|sa| |Hungarian |hu|
-|Tamil |ta| |Indonesian|id|
-|Afrikaans |af| |Icelandic|is|
-|Azerbaijani  |az||Kurdish|ku|
-|Bosnian|bs| |Lithuanian |lt|
-|Czech|cs| |Latvian |lv|
-|Welsh |cy| |Maori|mi|
-|Danish|da| |Malay|ms|
-|Maltese |mt| |Adyghe |ady|
-|Dutch |nl| |Kabardian |kbd|
-|Norwegian |no| |Avar |ava|
-|Polish |pl| |Dargwa |dar|
-|Romanian |ro| |Ingush |inh|
-|Slovak |sk| |Lak |lbe|
-|Slovenian |sl| |Lezghian |lez|
-|Albanian |sq| |Tabassaran |tab|
-|Swedish |sv| |Bihari |bh|
-|Swahili |sw| |Maithili |mai|
-|Tagalog |tl| |Angika |ang|
-|Turkish |tr| |Bhojpuri |bho|
-|Uzbek |uz| |Magahi |mah|
-|Vietnamese |vi| |Nagpur |sck|
-|Mongolian |mn| |Newari |new|
-|Abaza |abq| |Goan Konkani|gom|
+| Language            | Abbreviation |           | Language          | Abbreviation |
+|---------------------|--------------|-----------|-------------------|--------------|
+| Chinese & English   | ch           |           | Arabic            | ar           |
+| English             | en           |           | Hindi             | hi           |
+| French              | fr           |           | Uyghur            | ug           |
+| German              | german       |           | Persian           | fa           |
+| Japan               | japan        |           | Urdu              | ur           |
+| Korean              | korean       |           | Serbian(latin)    | rs_latin     |
+| Chinese Traditional | chinese_cht  |           | Occitan           | oc           |
+| Italian             | it           |           | Marathi           | mr           |
+| Spanish             | es           |           | Nepali            | ne           |
+| Portuguese          | pt           |           | Serbian(cyrillic) | rs_cyrillic  |
+| Russia              | ru           || Bulgarian | bg                |
+| Ukranian            | uk           |           | Estonian          | et           |
+| Belarusian          | be           |           | Irish             | ga           |
+| Telugu              | te           |           | Croatian          | hr           |
+| Saudi Arabia        | sa           |           | Hungarian         | hu           |
+| Tamil               | ta           |           | Indonesian        | id           |
+| Afrikaans           | af           |           | Icelandic         | is           |
+| Azerbaijani         | az           || Kurdish   | ku                |
+| Bosnian             | bs           |           | Lithuanian        | lt           |
+| Czech               | cs           |           | Latvian           | lv           |
+| Welsh               | cy           |           | Maori             | mi           |
+| Danish              | da           |           | Malay             | ms           |
+| Maltese             | mt           |           | Adyghe            | ady          |
+| Dutch               | nl           |           | Kabardian         | kbd          |
+| Norwegian           | no           |           | Avar              | ava          |
+| Polish              | pl           |           | Dargwa            | dar          |
+| Romanian            | ro           |           | Ingush            | inh          |
+| Slovak              | sk           |           | Lak               | lbe          |
+| Slovenian           | sl           |           | Lezghian          | lez          |
+| Albanian            | sq           |           | Tabassaran        | tab          |
+| Swedish             | sv           |           | Bihari            | bh           |
+| Swahili             | sw           |           | Maithili          | mai          |
+| Tagalog             | tl           |           | Angika            | ang          |
+| Turkish             | tr           |           | Bhojpuri          | bho          |
+| Uzbek               | uz           |           | Magahi            | mah          |
+| Vietnamese          | vi           |           | Nagpur            | sck          |
+| Mongolian           | mn           |           | Newari            | new          |
+| Abaza               | abq          |           | Goan Konkani      | gom          |

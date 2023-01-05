@@ -1,6 +1,5 @@
-from PIL import Image, ImageDraw, ImageFont
 import numpy as np
-import cv2
+from PIL import Image, ImageDraw, ImageFont
 from utils.logging import get_logger
 
 
@@ -27,7 +26,7 @@ class StdTextDrawer(object):
         if font_height <= self.height - 4:
             return self.height - 4
         else:
-            return int((self.height - 4)**2 / font_height)
+            return int((self.height - 4) ** 2 / font_height)
 
     def draw_text(self,
                   corpus,

@@ -12,12 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import numpy as np
-import cv2
 
+from engine import style_samplers, corpus_generators, text_drawers, predictors, writers
 from utils.config import ArgsParser, load_config, override_config
 from utils.logging import get_logger
-from engine import style_samplers, corpus_generators, text_drawers, predictors, writers
 
 
 class ImageSynthesiser(object):

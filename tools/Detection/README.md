@@ -1,11 +1,14 @@
 # Xử lý dữ liệu cho việc train Recognition
 ---
 Quá trình này sẽ gồm các bước:
+
 - Tạo ra các file labels theo format của YOLO từ tập dữ liệu BTC cung cấp
 - Thực hiện Augment các ảnh trên
 - Tiến hành split các ảnh thành tập train và val (tỉ lệ 80-20)
+
 ---
 Chuẩn bị thư mục data theo format sau:
+
 - data
     - images: chứa các ảnh
     - labels: chứa các file label dạng json

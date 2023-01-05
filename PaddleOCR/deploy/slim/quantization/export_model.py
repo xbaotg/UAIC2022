@@ -21,11 +21,6 @@ sys.path.insert(0, os.path.abspath(os.path.join(__dir__, '..', '..', '..')))
 sys.path.insert(
     0, os.path.abspath(os.path.join(__dir__, '..', '..', '..', 'tools')))
 
-import argparse
-
-import paddle
-from paddle.jit import to_static
-
 from ppocr.modeling.architectures import build_model
 from ppocr.postprocess import build_post_process
 from ppocr.utils.save_load import load_model
@@ -80,13 +75,13 @@ def main():
                                                    ]:  # distillation model
             for key in config['Architecture']["Models"]:
                 if config['Architecture']['Models'][key]['Head'][
-                        'name'] == 'MultiHead':  # for multi head
+                    'name'] == 'MultiHead':  # for multi head
                     if config['PostProcess'][
-                            'name'] == 'DistillationSARLabelDecode':
+                        'name'] == 'DistillationSARLabelDecode':
                         char_num = char_num - 2
                     # update SARLoss params
                     assert list(config['Loss']['loss_config_list'][-1].keys())[
-                        0] == 'DistillationSARLoss'
+                               0] == 'DistillationSARLoss'
                     config['Loss']['loss_config_list'][-1][
                         'DistillationSARLoss']['ignore_index'] = char_num + 1
                     out_channels_list = {}
@@ -98,12 +93,12 @@ def main():
                     config['Architecture']["Models"][key]["Head"][
                         'out_channels'] = char_num
         elif config['Architecture']['Head'][
-                'name'] == 'MultiHead':  # for multi head
+            'name'] == 'MultiHead':  # for multi head
             if config['PostProcess']['name'] == 'SARLabelDecode':
                 char_num = char_num - 2
             # update SARLoss params
             assert list(config['Loss']['loss_config_list'][1].keys())[
-                0] == 'SARLoss'
+                       0] == 'SARLoss'
             if config['Loss']['loss_config_list'][1]['SARLoss'] is None:
                 config['Loss']['loss_config_list'][1]['SARLoss'] = {
                     'ignore_index': char_num + 1
@@ -152,7 +147,7 @@ def main():
     arch_config = config["Architecture"]
 
     if arch_config["algorithm"] == "SVTR" and arch_config["Head"][
-            "name"] != 'MultiHead':
+        "name"] != 'MultiHead':
         input_shape = config["Eval"]["dataset"]["transforms"][-2][
             'SVTRRecResizeImg']['image_shape']
     else:

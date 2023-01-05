@@ -1,12 +1,14 @@
 # 垂类多语言OCR数据集
+
 这里整理了常用垂类和多语言OCR数据集，持续更新中，欢迎各位小伙伴贡献数据集～
+
 - [中国城市车牌数据集](#中国城市车牌数据集)
 - [银行信用卡数据集](#银行信用卡数据集)
 - [验证码数据集-Captcha](#验证码数据集-Captcha)
 - [多语言数据集](#多语言数据集)
 
-
 <a name="中国城市车牌数据集"></a>
+
 ## 中国城市车牌数据集
 
 - **数据来源**：[https://github.com/detectRecog/CCPD](https://github.com/detectRecog/CCPD)
@@ -22,18 +24,21 @@
     * CCPD-Challenge: 至今在车牌检测识别任务中最有挑战性的一些图片
     * CCPD-NP: 没有安装车牌的新车图片。
 
-    ![](../../datasets/ccpd_demo.png)
+  ![](../../datasets/ccpd_demo.png)
 
 
 - **下载地址**
-    * 百度云下载地址(提取码是hm0U): [https://pan.baidu.com/s/1i5AOjAbtkwb17Zy-NQGqkw](https://pan.baidu.com/s/1i5AOjAbtkwb17Zy-NQGqkw)
-    * Google drive下载地址：[https://drive.google.com/file/d/1rdEsCUcIUaYOVRkx5IMTRNA7PcGMmSgc/view](https://drive.google.com/file/d/1rdEsCUcIUaYOVRkx5IMTRNA7PcGMmSgc/view)
-
+    * 百度云下载地址(
+      提取码是hm0U): [https://pan.baidu.com/s/1i5AOjAbtkwb17Zy-NQGqkw](https://pan.baidu.com/s/1i5AOjAbtkwb17Zy-NQGqkw)
+    * Google
+      drive下载地址：[https://drive.google.com/file/d/1rdEsCUcIUaYOVRkx5IMTRNA7PcGMmSgc/view](https://drive.google.com/file/d/1rdEsCUcIUaYOVRkx5IMTRNA7PcGMmSgc/view)
 
 <a name="银行信用卡数据集"></a>
+
 ## 银行信用卡数据集
 
-- **数据来源**: [https://www.kesci.com/home/dataset/5954cf1372ead054a5e25870](https://www.kesci.com/home/dataset/5954cf1372ead054a5e25870)
+- **数据来源
+  **: [https://www.kesci.com/home/dataset/5954cf1372ead054a5e25870](https://www.kesci.com/home/dataset/5954cf1372ead054a5e25870)
 
 - **数据简介**: 训练数据共提供了三类数据
     * 1.招行样卡数据： 包括卡面图片数据及标注数据，总共618张图片
@@ -46,26 +51,24 @@
         * 有效期结束：07/41
         * 卡用户拼音：MICHAEL
 
-    ![](../../datasets/cmb_demo.jpg)
+  ![](../../datasets/cmb_demo.jpg)
 
 - **下载地址**: [https://cdn.kesci.com/cmb2017-2.zip](https://cdn.kesci.com/cmb2017-2.zip)
 
-
-
 <a name="验证码数据集-Captcha"></a>
+
 ## 验证码数据集-Captcha
 
 - **数据来源**: [https://github.com/lepture/captcha](https://github.com/lepture/captcha)
 
 - **数据简介**: 这是一个数据合成的工具包，可以根据输入的文本，输出验证码图片，使用该工具包生成几张demo图片如下。
 
-    ![](../../datasets/captcha_demo.png)
+  ![](../../datasets/captcha_demo.png)
 
 - **下载地址**: 该数据集是生成得到，无下载地址。
 
-
-
 <a name="多语言数据集"></a>
+
 ## 多语言数据集(Multi-lingual scene text detection and recognition)
 
 - **数据来源**: [https://rrc.cvc.uab.es/?ch=15&com=downloads](https://rrc.cvc.uab.es/?ch=15&com=downloads)
@@ -76,4 +79,4 @@
 
 
 - **下载地址**: 训练集较大，分2部分下载，需要在网站上注册之后才能下载：
-[https://rrc.cvc.uab.es/?ch=15&com=downloads](https://rrc.cvc.uab.es/?ch=15&com=downloads)
+  [https://rrc.cvc.uab.es/?ch=15&com=downloads](https://rrc.cvc.uab.es/?ch=15&com=downloads)

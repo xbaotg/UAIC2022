@@ -20,12 +20,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import warnings
-import cv2
 import numpy as np
 import paddle
 import paddle.nn as nn
 import paddle.nn.functional as F
+
 from .gcn import GCN
 from .local_graph import LocalGraphs
 from .proposal_local_graph import ProposalLocalGraphs
@@ -108,7 +107,7 @@ class DRRGHead(nn.Layer):
 
         pool_w, pool_h = self.pooling_output_size
         node_feat_len = (pool_w * pool_h) * (
-            self.in_channels + self.out_channels) + self.node_geo_feat_len
+                self.in_channels + self.out_channels) + self.node_geo_feat_len
         self.gcn = GCN(node_feat_len)
 
     def forward(self, inputs, targets=None):

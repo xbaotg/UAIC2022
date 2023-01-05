@@ -18,11 +18,11 @@ from __future__ import print_function
 
 import os
 import sys
+
 sys.path.insert(0, ".")
 import copy
-import paddlehub
 from paddlehub.common.logger import logger
-from paddlehub.module.module import moduleinfo, runnable, serving
+from paddlehub.module.module import moduleinfo, serving
 import cv2
 import paddlehub as hub
 

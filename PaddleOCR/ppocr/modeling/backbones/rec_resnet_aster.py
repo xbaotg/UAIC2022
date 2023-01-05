@@ -18,9 +18,6 @@ https://github.com/ayumiymk/aster.pytorch/blob/master/lib/models/resnet_aster.py
 import paddle
 import paddle.nn as nn
 
-import sys
-import math
-
 
 def conv3x3(in_planes, out_planes, stride=1):
     """3x3 convolution with padding"""
@@ -48,7 +45,7 @@ def get_sinusoid_encoding(n_position, feat_dim, wave_length=10000):
     # [n_position, feat_dim]
     angles = paddle.unsqueeze(
         positions, axis=1) / paddle.unsqueeze(
-            dim_range, axis=0)
+        dim_range, axis=0)
     angles = paddle.cast(angles, "float32")
     angles[:, 0::2] = paddle.sin(angles[:, 0::2])
     angles[:, 1::2] = paddle.cos(angles[:, 1::2])

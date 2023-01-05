@@ -1,12 +1,9 @@
-import paddleslim
 import paddle
-import numpy as np
 
 from paddleslim.dygraph import FPGMFilterPruner
 
 
 def prune_model(model, input_shape, prune_ratio=0.1):
-
     flops = paddle.flops(model, input_shape)
     pruner = FPGMFilterPruner(model, input_shape)
 

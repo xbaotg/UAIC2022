@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import os
-import sys
 import subprocess
+import sys
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
@@ -199,7 +199,7 @@ def save_structure_res(res, save_folder, img_name, img_idx=0):
             f.write('{}\n'.format(json.dumps(region)))
 
             if region['type'].lower() == 'table' and len(region[
-                    'res']) > 0 and 'html' in region['res']:
+                                                             'res']) > 0 and 'html' in region['res']:
                 excel_path = os.path.join(
                     excel_save_folder,
                     '{}_{}.xlsx'.format(region['bbox'], img_idx))

@@ -1,37 +1,35 @@
 # KIE Algorithm - VI-LayoutXLM
 
-
 - [1. Introduction](#1-introduction)
 - [2. Environment](#2-environment)
 - [3. Model Training / Evaluation / Prediction](#3-model-training--evaluation--prediction)
 - [4. Inference and Deployment](#4-inference-and-deployment)
-  - [4.1 Python Inference](#41-python-inference)
-  - [4.2 C++ Inference](#42-c-inference)
-  - [4.3 Serving](#43-serving)
-  - [4.4 More](#44-more)
+    - [4.1 Python Inference](#41-python-inference)
+    - [4.2 C++ Inference](#42-c-inference)
+    - [4.3 Serving](#43-serving)
+    - [4.4 More](#44-more)
 - [5. FAQ](#5-faq)
 - [Citation](#Citation)
 
-
 ## 1. Introduction
 
-VI-LayoutXLM is improved based on LayoutXLM. In the process of downstream finetuning, the visual backbone network module is removed, and the model infernce speed is further improved on the basis of almost lossless accuracy.
+VI-LayoutXLM is improved based on LayoutXLM. In the process of downstream finetuning, the visual backbone network module
+is removed, and the model infernce speed is further improved on the basis of almost lossless accuracy.
 
 On XFUND_zh dataset, the algorithm reproduction Hmean is as follows.
 
-|Model|Backbone|Task |Cnnfig|Hmean|Download link|
-| --- | --- |---| --- | --- | --- |
-|VI-LayoutXLM |VI-LayoutXLM-base | SER |[ser_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml)|93.19%|[trained model](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar)/[inference model](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_infer.tar)|
-|VI-LayoutXLM |VI-LayoutXLM-base |RE | [re_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh_udml.yml)|83.92%|[trained model](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar)/[inference model](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_infer.tar)|
+| Model        | Backbone          | Task | Cnnfig                                                                                                  | Hmean  | Download link                                                                                                                                                                                                                              |
+|--------------|-------------------|------|---------------------------------------------------------------------------------------------------------|--------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| VI-LayoutXLM | VI-LayoutXLM-base | SER  | [ser_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml) | 93.19% | [trained model](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar)/[inference model](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_infer.tar) |
+| VI-LayoutXLM | VI-LayoutXLM-base | RE   | [re_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh_udml.yml)   | 83.92% | [trained model](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar)/[inference model](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_infer.tar)   |
 
-
-Please refer to ["Environment Preparation"](./environment_en.md) to configure the PaddleOCR environment, and refer to ["Project Clone"](./clone_en.md) to clone the project code.
-
+Please refer to ["Environment Preparation"](./environment_en.md) to configure the PaddleOCR environment, and refer
+to ["Project Clone"](./clone_en.md) to clone the project code.
 
 ## 3. Model Training / Evaluation / Prediction
 
-Please refer to [KIE tutorial](./kie_en.md)。PaddleOCR has modularized the code structure, so that you only need to **replace the configuration file** to train different models.
-
+Please refer to [KIE tutorial](./kie_en.md)。PaddleOCR has modularized the code structure, so that you only need to *
+*replace the configuration file** to train different models.
 
 ## 4. Inference and Deployment
 
@@ -39,8 +37,9 @@ Please refer to [KIE tutorial](./kie_en.md)。PaddleOCR has modularized the code
 
 - SER
 
-First, we need to export the trained model into inference model. Take VI-LayoutXLM model trained on XFUND_zh as an example ([trained model download link](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar)). Use the following command to export.
-
+First, we need to export the trained model into inference model. Take VI-LayoutXLM model trained on XFUND_zh as an
+example ([trained model download link](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar)).
+Use the following command to export.
 
 ``` bash
 wget https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/ser_vi_layoutxlm_xfund_pretrained.tar
@@ -49,7 +48,6 @@ python3 tools/export_model.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund
 ```
 
 Use the following command to infer using VI-LayoutXLM SER model.
-
 
 ```bash
 cd ppstructure
@@ -69,11 +67,11 @@ The SER visualization results are saved in the `./output` folder by default. The
     <img src="../../ppstructure/docs/kie/result_ser/zh_val_42_ser.jpg" width="800">
 </div>
 
-
 - RE
 
-First, we need to export the trained model into inference model. Take VI-LayoutXLM model trained on XFUND_zh as an example ([trained model download link](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar)). Use the following command to export.
-
+First, we need to export the trained model into inference model. Take VI-LayoutXLM model trained on XFUND_zh as an
+example ([trained model download link](https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar)).
+Use the following command to export.
 
 ``` bash
 wget https://paddleocr.bj.bcebos.com/ppstructure/models/vi_layoutxlm/re_vi_layoutxlm_xfund_pretrained.tar
@@ -82,7 +80,6 @@ python3 tools/export_model.py -c configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_
 ```
 
 Use the following command to infer using VI-LayoutXLM RE model.
-
 
 ```bash
 cd ppstructure
@@ -104,7 +101,6 @@ The RE visualization results are saved in the `./output` folder by default. The 
     <img src="../../ppstructure/docs/kie/result_re/zh_val_42_re.jpg" width="800">
 </div>
 
-
 ### 4.2 C++ Inference
 
 Not supported
@@ -120,7 +116,6 @@ Not supported
 ## 5. FAQ
 
 ## Citation
-
 
 ```bibtex
 @article{DBLP:journals/corr/abs-2104-08836,

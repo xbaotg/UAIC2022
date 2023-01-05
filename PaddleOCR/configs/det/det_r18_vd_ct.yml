@@ -6,7 +6,7 @@ Global:
   save_model_dir: ./output/det_ct/
   save_epoch_step: 10
   # evaluation is run every 2000 iterations
-  eval_batch_step: [0,1000]
+  eval_batch_step: [ 0,1000 ]
   cal_metric_during_train: False
   pretrained_model: ./pretrain_models/ResNet18_vd_pretrained.pdparams
   checkpoints:
@@ -35,8 +35,8 @@ Loss:
 
 Optimizer:
   name: Adam
-  lr:  #PolynomialDecay
-    name: Linear 
+  lr: #PolynomialDecay
+    name: Linear
     learning_rate: 0.001
     end_lr: 0.
     epochs: 600
@@ -57,7 +57,7 @@ Train:
     data_dir: ./train_data/total_text/train
     label_file_list:
       - ./train_data/total_text/train/train.txt
-    ratio_list: [1.0]
+    ratio_list: [ 1.0 ]
     transforms:
       - DecodeImage:
           img_mode: RGB
@@ -71,11 +71,11 @@ Train:
       - MakeCentripetalShift:
       - ColorJitter:
           brightness: 0.125
-          saturation: 0.5 
-      - ToCHWImage: 
+          saturation: 0.5
+      - ToCHWImage:
       - NormalizeImage:
       - KeepKeys:
-          keep_keys: ['image', 'gt_kernel', 'training_mask', 'gt_instance', 'gt_kernel_instance', 'training_mask_distance', 'gt_distance'] # the order of the dataloader list
+          keep_keys: [ 'image', 'gt_kernel', 'training_mask', 'gt_instance', 'gt_kernel_instance', 'training_mask_distance', 'gt_distance' ] # the order of the dataloader list
   loader:
     shuffle: True
     drop_last: True
@@ -88,7 +88,7 @@ Eval:
     data_dir: ./train_data/total_text/test
     label_file_list:
       - ./train_data/total_text/test/test.txt
-    ratio_list: [1.0]
+    ratio_list: [ 1.0 ]
     transforms:
       - DecodeImage:
           img_mode: RGB
@@ -97,9 +97,9 @@ Eval:
       - ScaleAlignedShort:
       - NormalizeImage:
           order: 'hwc'
-      - ToCHWImage: 
+      - ToCHWImage:
       - KeepKeys:
-          keep_keys: ['image', 'shape', 'polys', 'texts'] # the order of the dataloader list          
+          keep_keys: [ 'image', 'shape', 'polys', 'texts' ] # the order of the dataloader list
   loader:
     shuffle: False
     drop_last: False

@@ -21,14 +21,15 @@ import os.path
 import platform
 import subprocess
 import sys
-import xlrd
 from functools import partial
 
+import xlrd
 from PyQt5.QtCore import QSize, Qt, QPoint, QByteArray, QTimer, QFileInfo, QPointF, QProcess
 from PyQt5.QtGui import QImage, QCursor, QPixmap, QImageReader
 from PyQt5.QtWidgets import QMainWindow, QListWidget, QVBoxLayout, QToolButton, QHBoxLayout, QDockWidget, QWidget, \
-    QSlider, QGraphicsOpacityEffect, QMessageBox, QListView, QScrollArea, QWidgetAction, QApplication, QLabel, QGridLayout, \
-    QFileDialog, QListWidgetItem, QComboBox, QDialog, QAbstractItemView, QSizePolicy
+    QSlider, QGraphicsOpacityEffect, QMessageBox, QListView, QScrollArea, QWidgetAction, QApplication, QLabel, \
+    QGridLayout, \
+    QFileDialog, QListWidgetItem, QComboBox, QDialog, QAbstractItemView
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 
@@ -231,17 +232,17 @@ class MainWindow(QMainWindow):
 
         # Create and add a widget for showing current label item index
         self.indexList = QListWidget()
-        self.indexList.setMaximumSize(30, 16777215) # limit max width
-        self.indexList.setEditTriggers(QAbstractItemView.NoEditTriggers) # no editable
+        self.indexList.setMaximumSize(30, 16777215)  # limit max width
+        self.indexList.setEditTriggers(QAbstractItemView.NoEditTriggers)  # no editable
         self.indexList.itemSelectionChanged.connect(self.indexSelectionChanged)
-        self.indexList.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff) # no scroll Bar
+        self.indexList.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)  # no scroll Bar
         self.indexListDock = QDockWidget('No.', self)
         self.indexListDock.setWidget(self.indexList)
         self.indexListDock.setFeatures(QDockWidget.NoDockWidgetFeatures)
         labelIndexListlBox.addWidget(self.indexListDock, 1)
         # no margin between two boxes
         labelIndexListlBox.setSpacing(0)
-        
+
         # Create and add a widget for showing current label items
         self.labelList = EditInList()
         labelListContainer = QWidget()
@@ -255,8 +256,8 @@ class MainWindow(QMainWindow):
         self.labelListDock = QDockWidget(self.labelListDockName, self)
         self.labelListDock.setWidget(self.labelList)
         self.labelListDock.setFeatures(QDockWidget.NoDockWidgetFeatures)
-        labelIndexListlBox.addWidget(self.labelListDock, 10) # label list is wider than index list
-        
+        labelIndexListlBox.addWidget(self.labelListDock, 10)  # label list is wider than index list
+
         # enable labelList drag_drop to adjust bbox order
         # 设置选择模式为单选  
         self.labelList.setSelectionMode(QAbstractItemView.SingleSelection)
@@ -267,7 +268,7 @@ class MainWindow(QMainWindow):
         # 设置显示将要被放置的位置
         self.labelList.setDropIndicatorShown(True)
         # 设置拖放模式为移动项目，如果不设置，默认为复制项目
-        self.labelList.setDragDropMode(QAbstractItemView.InternalMove) 
+        self.labelList.setDragDropMode(QAbstractItemView.InternalMove)
         # 触发放置
         self.labelList.model().rowsMoved.connect(self.drag_drop_happened)
 
@@ -503,19 +504,19 @@ class MainWindow(QMainWindow):
 
         createpoly = action(getStr('creatPolygon'), self.createPolygon,
                             'q', 'new', getStr('creatPolygon'), enabled=False)
-        
+
         tableRec = action(getStr('TableRecognition'), self.TableRecognition,
-                        '', 'Auto', getStr('TableRecognition'), enabled=False)
+                          '', 'Auto', getStr('TableRecognition'), enabled=False)
 
         cellreRec = action(getStr('cellreRecognition'), self.cellreRecognition,
-                        '', 'reRec', getStr('cellreRecognition'), enabled=False)
+                           '', 'reRec', getStr('cellreRecognition'), enabled=False)
 
         saveRec = action(getStr('saveRec'), self.saveRecResult,
                          '', 'save', getStr('saveRec'), enabled=False)
 
         saveLabel = action(getStr('saveLabel'), self.saveLabelFile,  #
                            'Ctrl+S', 'save', getStr('saveLabel'), enabled=False)
-        
+
         exportJSON = action(getStr('exportJSON'), self.exportJSON,
                             '', 'save', getStr('exportJSON'), enabled=False)
 
@@ -590,7 +591,8 @@ class MainWindow(QMainWindow):
 
         # Store actions for further handling.
         self.actions = struct(save=save, resetAll=resetAll, deleteImg=deleteImg,
-                              lineColor=color1, create=create, createpoly=createpoly, tableRec=tableRec, delete=delete, edit=edit, copy=copy,
+                              lineColor=color1, create=create, createpoly=createpoly, tableRec=tableRec, delete=delete,
+                              edit=edit, copy=copy,
                               saveRec=saveRec, singleRere=singleRere, AutoRec=AutoRec, reRec=reRec, cellreRec=cellreRec,
                               createMode=createMode, editMode=editMode,
                               shapeLineColor=shapeLineColor, shapeFillColor=shapeFillColor,
@@ -601,11 +603,13 @@ class MainWindow(QMainWindow):
                               rotateLeft=rotateLeft, rotateRight=rotateRight, lock=lock, exportJSON=exportJSON,
                               fileMenuActions=(opendir, open_dataset_dir, saveLabel, exportJSON, resetAll, quit),
                               beginner=(), advanced=(),
-                              editMenu=(createpoly, edit, copy, delete, singleRere, cellreRec, None, undo, undoLastPoint,
-                                        None, rotateLeft, rotateRight, None, color1, self.drawSquaresOption, lock,
-                                        None, change_cls),
+                              editMenu=(
+                              createpoly, edit, copy, delete, singleRere, cellreRec, None, undo, undoLastPoint,
+                              None, rotateLeft, rotateRight, None, color1, self.drawSquaresOption, lock,
+                              None, change_cls),
                               beginnerContext=(
-                                  create, createpoly, edit, copy, delete, singleRere, cellreRec, rotateLeft, rotateRight, lock, change_cls),
+                                  create, createpoly, edit, copy, delete, singleRere, cellreRec, rotateLeft,
+                                  rotateRight, lock, change_cls),
                               advancedContext=(createMode, editMode, edit, copy,
                                                delete, shapeLineColor, shapeFillColor),
                               onLoadActive=(create, createpoly, createMode, editMode),
@@ -649,8 +653,10 @@ class MainWindow(QMainWindow):
         self.autoSaveOption.triggered.connect(self.autoSaveFunc)
 
         addActions(self.menus.file,
-                   (opendir, open_dataset_dir, None, saveLabel, saveRec, exportJSON, self.autoSaveOption, None, resetAll, deleteImg,
-                    quit))
+                   (
+                   opendir, open_dataset_dir, None, saveLabel, saveRec, exportJSON, self.autoSaveOption, None, resetAll,
+                   deleteImg,
+                   quit))
 
         addActions(self.menus.help, (showKeys, showSteps, showInfo))
         addActions(self.menus.view, (
@@ -1066,7 +1072,7 @@ class MainWindow(QMainWindow):
         self.labelList.scrollToItem(self.currentItem())  # QAbstractItemView.EnsureVisible
         # map current label item to index item and select it
         index = self.labelList.indexFromItem(self.currentItem()).row()
-        self.indexList.scrollToItem(self.indexList.item(index)) 
+        self.indexList.scrollToItem(self.indexList.item(index))
         self.BoxList.scrollToItem(self.currentBox())
 
         if self.kie_mode:
@@ -1320,7 +1326,7 @@ class MainWindow(QMainWindow):
                 # self.actions.save.setEnabled(True)
         else:
             print('enter labelItemChanged slot with unhashable item: ', item, item.text())
-    
+
     def drag_drop_happened(self):
         '''
         label list drag drop signal slot
@@ -1334,14 +1340,14 @@ class MainWindow(QMainWindow):
         assert len(self.canvas.selectedShapes) > 0
         for shape in self.canvas.selectedShapes:
             selectedShapeIndex = shape.idx
-        
+
         if newIndex == selectedShapeIndex:
             return
 
         # move corresponding item in shape list
         shape = self.canvas.shapes.pop(selectedShapeIndex)
         self.canvas.shapes.insert(newIndex, shape)
-            
+
         # update bbox index
         self.canvas.updateShapeIndex()
 
@@ -1934,7 +1940,7 @@ class MainWindow(QMainWindow):
                     self.openNextImg()
                 self.actions.saveRec.setEnabled(True)
                 self.actions.saveLabel.setEnabled(True)
-                self.actions.exportJSON.setEnabled(True) 
+                self.actions.exportJSON.setEnabled(True)
 
         elif mode == 'Auto':
             if annotationFilePath and self.saveLabels(annotationFilePath, mode=mode):
@@ -2185,7 +2191,7 @@ class MainWindow(QMainWindow):
         self.init_key_list(self.Cachelabel)
 
     def reRecognition(self):
-        img = cv2.imdecode(np.fromfile(self.filePath,dtype=np.uint8),1)
+        img = cv2.imdecode(np.fromfile(self.filePath, dtype=np.uint8), 1)
         # org_box = [dic['points'] for dic in self.PPlabel[self.getImglabelidx(self.filePath)]]
         if self.canvas.shapes:
             self.result_dic = []
@@ -2254,7 +2260,7 @@ class MainWindow(QMainWindow):
             QMessageBox.information(self, "Information", "Draw a box!")
 
     def singleRerecognition(self):
-        img = cv2.imdecode(np.fromfile(self.filePath,dtype=np.uint8),1)
+        img = cv2.imdecode(np.fromfile(self.filePath, dtype=np.uint8), 1)
         for shape in self.canvas.selectedShapes:
             box = [[int(p.x()), int(p.y())] for p in shape.points]
             if len(box) > 4:
@@ -2299,13 +2305,13 @@ class MainWindow(QMainWindow):
         filename, _ = os.path.splitext(os.path.basename(self.filePath))
 
         excel_path = TableRec_excel_dir + '{}.xlsx'.format(filename)
-        
+
         if res is None:
             msg = 'Can not recognise the table in ' + self.filePath + '. Please change manually'
             QMessageBox.information(self, "Information", msg)
-            to_excel('', excel_path) # create an empty excel
+            to_excel('', excel_path)  # create an empty excel
             return
-        
+
         # save res
         # ONLY SUPPORT ONE TABLE in one image
         hasTable = False
@@ -2314,7 +2320,7 @@ class MainWindow(QMainWindow):
                 if region['res']['boxes'] is None:
                     msg = 'Can not recognise the detection box in ' + self.filePath + '. Please change manually'
                     QMessageBox.information(self, "Information", msg)
-                    to_excel('', excel_path) # create an empty excel
+                    to_excel('', excel_path)  # create an empty excel
                     return
                 hasTable = True
                 # save table ocr result on PPOCRLabel
@@ -2355,18 +2361,18 @@ class MainWindow(QMainWindow):
                     shapes.append(shape)
                 self.setDirty()
                 self.canvas.loadShapes(shapes)
-                
+
                 # save HTML result to excel
                 try:
                     to_excel(region['res']['html'], excel_path)
                 except:
                     print('Can not save excel file, maybe Permission denied (.xlsx is being occupied)')
                 break
-        
+
         if not hasTable:
             msg = 'Can not recognise the table in ' + self.filePath + '. Please change manually'
             QMessageBox.information(self, "Information", msg)
-            to_excel('', excel_path) # create an empty excel
+            to_excel('', excel_path)  # create an empty excel
             return
 
         # automatically open excel annotation file
@@ -2375,7 +2381,7 @@ class MainWindow(QMainWindow):
                 import win32com.client
             except:
                 print("CANNOT OPEN .xlsx. It could be one of the following reasons: " \
-                    "Only support Windows | No python win32com")
+                      "Only support Windows | No python win32com")
 
             try:
                 xl = win32com.client.Dispatch("Excel.Application")
@@ -2387,10 +2393,10 @@ class MainWindow(QMainWindow):
                 # os.startfile(excel_path)
             except:
                 print("CANNOT OPEN .xlsx. It could be the following reasons: " \
-                    ".xlsx is not existed")
+                      ".xlsx is not existed")
         else:
             os.system('open ' + os.path.normpath(excel_path))
-                
+
         print('time cost: ', time.time() - start)
 
     def cellreRecognition(self):
@@ -2415,16 +2421,16 @@ class MainWindow(QMainWindow):
 
             # merge the text result in the cell
             texts = ''
-            probs = 0. # the probability of the cell is avgerage prob of every text box in the cell
+            probs = 0.  # the probability of the cell is avgerage prob of every text box in the cell
             bboxes = self.ocr.ocr(img_crop, det=True, rec=False, cls=False)[0]
             if len(bboxes) > 0:
-                bboxes.reverse() # top row text at first
+                bboxes.reverse()  # top row text at first
                 for _bbox in bboxes:
                     patch = get_rotate_crop_image(img_crop, np.array(_bbox, np.float32))
                     rec_res = self.ocr.ocr(patch, det=False, rec=True, cls=False)[0]
                     text = rec_res[0][0]
                     if text != '':
-                        texts += text + ('' if text[0].isalpha() else ' ') # add space between english word
+                        texts += text + ('' if text[0].isalpha() else ' ')  # add space between english word
                         probs += rec_res[0][1]
                 probs = probs / len(bboxes)
             result = [(texts.strip(), probs)]
@@ -2449,7 +2455,6 @@ class MainWindow(QMainWindow):
         '''
             export PPLabel and CSV to JSON (PubTabNet)
         '''
-        import pandas as pd
 
         # automatically save annotations
         self.saveFilestate()
@@ -2472,7 +2477,7 @@ class MainWindow(QMainWindow):
                         labeldict[file] = eval(label)
                     else:
                         labeldict[file] = []
-        
+
         # read table recognition output
         TableRec_excel_dir = os.path.join(
             self.lastOpenDir, 'tableRec_excel_output')
@@ -2490,7 +2495,7 @@ class MainWindow(QMainWindow):
 
             excel = xlrd.open_workbook(csv_path)
             sheet0 = excel.sheet_by_index(0)  # only sheet 0
-            merged_cells = sheet0.merged_cells # (0,1,1,3) start row, end row, start col, end col
+            merged_cells = sheet0.merged_cells  # (0,1,1,3) start row, end row, start col, end col
 
             html_list = [['td'] * sheet0.ncols for i in range(sheet0.nrows)]
 
@@ -2504,27 +2509,27 @@ class MainWindow(QMainWindow):
             for anno in labeldict[image_path]:
                 tokens = list(anno['transcription'])
                 cells.append({
-                    'tokens': tokens, 
+                    'tokens': tokens,
                     'bbox': anno['points']
-                    })
+                })
 
             # 构造标注信息
             html = {
                 'structure': {
                     'tokens': token_list
-                    }, 
+                },
                 'cells': cells
-                }
+            }
             d = {
-                'filename': os.path.basename(image_path), 
+                'filename': os.path.basename(image_path),
                 'html': html
-                }
+            }
             # 重构HTML
             d['gt'] = rebuild_html_from_ppstructure_label(d)
             fid.write('{}\n'.format(
                 json.dumps(
                     d, ensure_ascii=False)))
-                    
+
         # convert to PP-Structure label format
         fid.close()
         msg = 'JSON sucessfully saved in {}/gt.txt'.format(self.lastOpenDir)
@@ -2716,7 +2721,7 @@ class MainWindow(QMainWindow):
 
             self._update_shape_color(shape)
             self.keyDialog.addLabelHistory(key_text)
-            
+
         # save changed shape
         self.setDirty()
 

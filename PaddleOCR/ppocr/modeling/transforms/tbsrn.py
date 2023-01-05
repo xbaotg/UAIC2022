@@ -17,11 +17,12 @@ https://github.com/FudanVI/FudanOCR/blob/main/scene-text-telescope/model/tbsrn.p
 """
 
 import math
+import string
 import warnings
+
 import numpy as np
 import paddle
 from paddle import nn
-import string
 
 warnings.filterwarnings("ignore")
 

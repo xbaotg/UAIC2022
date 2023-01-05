@@ -6,10 +6,10 @@ Global:
   save_model_dir: ./output/rec/nrtr/
   save_epoch_step: 1
   # evaluation is run every 2000 iterations
-  eval_batch_step: [0, 2000]
+  eval_batch_step: [ 0, 2000 ]
   cal_metric_during_train: True
   pretrained_model:
-  checkpoints: 
+  checkpoints:
   save_inference_dir:
   use_visualdl: False
   infer_img: doc/imgs_words_en/word_10.png
@@ -46,7 +46,7 @@ Architecture:
     d_model: 512
     num_encoder_layers: 6
     beam_size: -1 # When Beam size is greater than 0, it means to use beam search when evaluation.
-    
+
 
 Loss:
   name: CELoss
@@ -63,17 +63,17 @@ Train:
   dataset:
     name: SimpleDataSet
     data_dir: ./train_data/ic15_data/
-    label_file_list: ["./train_data/ic15_data/rec_gt_train.txt"]
+    label_file_list: [ "./train_data/ic15_data/rec_gt_train.txt" ]
     transforms:
       - DecodeImage: # load image
           img_mode: BGR
           channel_first: False
       - NRTRLabelEncode: # Class handling label
       - GrayRecResizeImg:
-          image_shape: [100, 32]
+          image_shape: [ 100, 32 ]
           resize_type: PIL # PIL or OpenCV
       - KeepKeys:
-          keep_keys: ['image', 'label', 'length'] # dataloader will return list in this order
+          keep_keys: [ 'image', 'label', 'length' ] # dataloader will return list in this order
   loader:
     shuffle: True
     batch_size_per_card: 512
@@ -84,17 +84,17 @@ Eval:
   dataset:
     name: SimpleDataSet
     data_dir: ./train_data/ic15_data
-    label_file_list: ["./train_data/ic15_data/rec_gt_test.txt"]
+    label_file_list: [ "./train_data/ic15_data/rec_gt_test.txt" ]
     transforms:
       - DecodeImage: # load image
           img_mode: BGR
           channel_first: False
       - NRTRLabelEncode: # Class handling label
       - GrayRecResizeImg:
-          image_shape: [100, 32]
+          image_shape: [ 100, 32 ]
           resize_type: PIL # PIL or OpenCV
       - KeepKeys:
-          keep_keys: ['image', 'label', 'length'] # dataloader will return list in this order
+          keep_keys: [ 'image', 'label', 'length' ] # dataloader will return list in this order
   loader:
     shuffle: False
     drop_last: False

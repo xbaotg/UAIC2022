@@ -1,29 +1,27 @@
-#copyright (c) 2021 PaddlePaddle Authors. All Rights Reserve.
+# copyright (c) 2021 PaddlePaddle Authors. All Rights Reserve.
 #
-#Licensed under the Apache License, Version 2.0 (the "License");
-#you may not use this file except in compliance with the License.
-#You may obtain a copy of the License at
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
 #
 #    http://www.apache.org/licenses/LICENSE-2.0
 #
-#Unless required by applicable law or agreed to in writing, software
-#distributed under the License is distributed on an "AS IS" BASIS,
-#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#See the License for the specific language governing permissions and
-#limitations under the License.
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-import paddle
-import paddle.nn as nn
-import numpy as np
 import cv2
+import numpy as np
+import paddle
 
-from .rec_ctc_loss import CTCLoss
-from .rec_sar_loss import SARLoss
 from .basic_loss import DMLLoss
 from .basic_loss import DistanceLoss
 from .basic_loss import LossFromOutput
 from .det_db_loss import DBLoss
-from .det_basic_loss import BalanceLoss, MaskL1Loss, DiceLoss
+from .rec_ctc_loss import CTCLoss
+from .rec_sar_loss import SARLoss
 from .vqa_token_layoutlm_loss import VQASerTokenLayoutLMLoss
 
 
@@ -275,7 +273,7 @@ class DistillationDilaDBLoss(DBLoss):
             th_shrink_maps = paddle.to_tensor(dilate_maps)
 
             label_threshold_map, label_threshold_mask, label_shrink_map, label_shrink_mask = batch[
-                1:]
+                                                                                             1:]
 
             # calculate the shrink map loss
             bce_loss = self.alpha * self.bce_loss(

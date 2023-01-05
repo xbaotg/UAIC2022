@@ -18,17 +18,15 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import math
-import numpy as np
 import paddle
-from paddle import ParamAttr, reshape, transpose
 import paddle.nn as nn
 import paddle.nn.functional as F
-from paddle.nn import Conv2D, BatchNorm, Linear, Dropout
-from paddle.nn import AdaptiveAvgPool2D, MaxPool2D, AvgPool2D
+from paddle import ParamAttr
+from paddle.nn import AdaptiveAvgPool2D
+from paddle.nn import Conv2D, BatchNorm
+from paddle.nn.functional import hardsigmoid
 from paddle.nn.initializer import KaimingNormal
 from paddle.regularizer import L2Decay
-from paddle.nn.functional import hardswish, hardsigmoid
 
 
 class ConvBNLayer(nn.Layer):

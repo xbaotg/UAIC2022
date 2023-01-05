@@ -1,8 +1,8 @@
 # coding:utf8
-import os
-import shutil
-import random
 import argparse
+import os
+import random
+import shutil
 
 
 # 删除划分的训练集、验证集、测试集文件夹，重新创建一个空的文件夹
@@ -89,7 +89,8 @@ def genDetRecTrainVal(args):
     recValTxt = open(os.path.join(args.recRootPath, "val.txt"), "a", encoding="UTF-8")
     recTestTxt = open(os.path.join(args.recRootPath, "test.txt"), "a", encoding="UTF-8")
 
-    splitTrainVal(args.datasetRootPath, detAbsTrainRootPath, detAbsValRootPath, detAbsTestRootPath, detTrainTxt, detValTxt,
+    splitTrainVal(args.datasetRootPath, detAbsTrainRootPath, detAbsValRootPath, detAbsTestRootPath, detTrainTxt,
+                  detValTxt,
                   detTestTxt, "det")
 
     for root, dirs, files in os.walk(args.datasetRootPath):
@@ -100,7 +101,6 @@ def genDetRecTrainVal(args):
             else:
                 continue
         break
-
 
 
 if __name__ == "__main__":

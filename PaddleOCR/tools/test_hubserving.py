@@ -13,11 +13,13 @@
 # limitations under the License.
 import os
 import sys
+
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
 sys.path.append(os.path.abspath(os.path.join(__dir__, '..')))
 
 from ppocr.utils.logging import get_logger
+
 logger = get_logger()
 
 import cv2
@@ -26,7 +28,6 @@ import time
 from PIL import Image
 from ppocr.utils.utility import get_image_file_list
 from tools.infer.utility import draw_ocr, draw_boxes, str2bool
-from ppstructure.utility import draw_structure_result
 from ppstructure.predict_system import to_excel
 
 import requests

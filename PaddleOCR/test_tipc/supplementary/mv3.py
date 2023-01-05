@@ -16,18 +16,16 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy as np
 import paddle
-from paddle import ParamAttr
 import paddle.nn as nn
 import paddle.nn.functional as F
-from paddle.nn.functional import hardswish, hardsigmoid
+from paddle import ParamAttr
+from paddle.nn import AdaptiveAvgPool2D
 from paddle.nn import Conv2D, BatchNorm, Linear, Dropout
-from paddle.nn import AdaptiveAvgPool2D, MaxPool2D, AvgPool2D
+from paddle.nn.functional import hardswish, hardsigmoid
 from paddle.regularizer import L2Decay
-import math
-
 from paddle.utils.cpp_extension import load
+
 # jit compile custom op
 custom_ops = load(
     name="custom_jit_ops",

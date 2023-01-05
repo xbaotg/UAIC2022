@@ -16,11 +16,9 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import math
-import paddle
-from paddle import nn
 import paddle.nn.functional as F
 from paddle import ParamAttr
+from paddle import nn
 
 
 class ConvBNLayer(nn.Layer):
@@ -64,6 +62,7 @@ class ConvBNLayer(nn.Layer):
 class EASTHead(nn.Layer):
     """
     """
+
     def __init__(self, in_channels, model_name, **kwargs):
         super(EASTHead, self).__init__()
         self.model_name = model_name

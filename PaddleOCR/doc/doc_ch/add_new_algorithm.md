@@ -15,7 +15,8 @@ PaddleOCR将一个算法分解为以下几个部分，并对各部分进行模�
 
 ## 1. 数据加载和处理
 
-数据加载和处理由不同的模块(module)组成，其完成了图片的读取、数据增强和label的制作。这一部分在[ppocr/data](../../ppocr/data)下。 各个文件及文件夹作用说明如下:
+数据加载和处理由不同的模块(module)组成，其完成了图片的读取、数据增强和label的制作。这一部分在[ppocr/data](../../ppocr/data)
+下。 各个文件及文件夹作用说明如下:
 
 ```bash
 ppocr/data/
@@ -70,7 +71,8 @@ transforms:
 
 ## 2. 网络
 
-网络部分完成了网络的组网操作，PaddleOCR将网络划分为四部分，这一部分在[ppocr/modeling](../../ppocr/modeling)下。 进入网络的数据将按照顺序(transforms->backbones->
+网络部分完成了网络的组网操作，PaddleOCR将网络划分为四部分，这一部分在[ppocr/modeling](../../ppocr/modeling)下。
+进入网络的数据将按照顺序(transforms->backbones->
 necks->heads)依次通过这四个部分。
 
 ```bash
@@ -220,7 +222,8 @@ Loss:
 
 ## 5. 指标评估
 
-指标评估用于计算网络在当前batch上的性能。这一部分在[ppocr/metrics](../../ppocr/metrics)下。 PaddleOCR内置了检测，分类和识别等算法相关的指标评估模块，对于没有内置的模块可通过如下步骤添加:
+指标评估用于计算网络在当前batch上的性能。这一部分在[ppocr/metrics](../../ppocr/metrics)下。
+PaddleOCR内置了检测，分类和识别等算法相关的指标评估模块，对于没有内置的模块可通过如下步骤添加:
 
 1. 在 [ppocr/metrics](../../ppocr/metrics) 文件夹下新建文件，如my_metric.py。
 2. 在 my_metric.py 文件内添加相关代码，示例代码如下:
@@ -276,7 +279,8 @@ Metric:
 
 ## 6. 优化器
 
-优化器用于训练网络。优化器内部还包含了网络正则化和学习率衰减模块。 这一部分在[ppocr/optimizer](../../ppocr/optimizer)下。 PaddleOCR内置了`Momentum`,`Adam`
+优化器用于训练网络。优化器内部还包含了网络正则化和学习率衰减模块。 这一部分在[ppocr/optimizer](../../ppocr/optimizer)下。
+PaddleOCR内置了`Momentum`,`Adam`
 和`RMSProp`等常用的优化器模块，`Linear`,`Cosine`,`Step`和`Piecewise`等常用的正则化模块与`L1Decay`和`L2Decay`等常用的学习率衰减模块。
 对于没有内置的模块可通过如下步骤添加，以`optimizer`为例:
 

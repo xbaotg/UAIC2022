@@ -81,7 +81,7 @@ class MultiHeadedAttention(nn.Layer):
         nbatches = query.shape[0]
 
         query, key, value = \
-            [paddle.transpose(l(x).reshape([nbatches, -1, self.h, self.d_k]), [0,2,1,3])
+            [paddle.transpose(l(x).reshape([nbatches, -1, self.h, self.d_k]), [0, 2, 1, 3])
              for l, x in zip(self.linears, (query, key, value))]
 
         x, attention_map = attention(
@@ -418,7 +418,7 @@ class Transformer(nn.Layer):
             for index, length in enumerate(text_length):
                 length = int(length.numpy())
                 probs_res[start:start + length, :] = word_decoder_result[
-                    index, 0:0 + length, :]
+                                                     index, 0:0 + length, :]
 
                 start = start + length
 

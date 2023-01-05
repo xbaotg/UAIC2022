@@ -15,9 +15,11 @@
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
-import paddle
+
 import os
 import sys
+
+import paddle
 
 __dir__ = os.path.dirname(__file__)
 sys.path.append(__dir__)
@@ -155,7 +157,7 @@ class PGNet_PostProcess(object):
             if self.valid_set == 'partvgg':
                 middle_point = len(detected_poly) // 2
                 detected_poly = detected_poly[
-                    [0, middle_point - 1, middle_point, -1], :]
+                                [0, middle_point - 1, middle_point, -1], :]
                 poly_list.append(detected_poly)
             elif self.valid_set == 'totaltext':
                 poly_list.append(detected_poly)

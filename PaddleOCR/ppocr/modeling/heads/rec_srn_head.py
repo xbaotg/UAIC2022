@@ -16,17 +16,15 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import math
-import paddle
-from paddle import nn, ParamAttr
-from paddle.nn import functional as F
-import numpy as np
-from .self_attention import WrapEncoderForFeature
-from .self_attention import WrapEncoder
-from paddle.static import Program
-from ppocr.modeling.backbones.rec_resnet_fpn import ResNetFPN
-
 from collections import OrderedDict
+
+import paddle
+from paddle import nn
+from paddle.nn import functional as F
+
+from .self_attention import WrapEncoder
+from .self_attention import WrapEncoderForFeature
+
 gradient_clip = 10
 
 
@@ -95,7 +93,7 @@ class PVAM(nn.Layer):
             attention_weight, shape=[-1, self.max_length, t])
         attention_weight = F.softmax(attention_weight, axis=-1)
         pvam_features = paddle.matmul(attention_weight,
-                                      word_features)  #[b, max_length, c]
+                                      word_features)  # [b, max_length, c]
         return pvam_features
 
 
@@ -157,7 +155,7 @@ class GSRM(nn.Layer):
         word_ids = paddle.argmax(F.softmax(word_out), axis=1)
         word_ids = paddle.reshape(x=word_ids, shape=[-1, t, 1])
 
-        #===== GSRM Semantic reasoning block =====
+        # ===== GSRM Semantic reasoning block =====
         """
         This module is achieved through bi-transformers,
         ngram_feature1 is the froward one, ngram_fetaure2 is the backward one
@@ -210,7 +208,7 @@ class VSFD(nn.Layer):
         img_comb_feature_map = paddle.reshape(
             img_comb_feature_map, shape=[-1, t, c1])
         combine_feature = img_comb_feature_map * pvam_feature + (
-            1.0 - img_comb_feature_map) * gsrm_feature
+                1.0 - img_comb_feature_map) * gsrm_feature
         img_comb_feature = paddle.reshape(combine_feature, shape=[-1, c1])
 
         out = self.fc1(img_comb_feature)

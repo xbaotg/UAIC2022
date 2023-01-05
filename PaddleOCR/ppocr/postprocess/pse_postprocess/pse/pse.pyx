@@ -1,11 +1,22 @@
-
-import numpy as np
+mport numpy as np
 import cv2
 cimport numpy as np
 cimport cython
 cimport libcpp
-cimport libcpp.pair
 cimport libcpp.queue
+from libcpp.pair cimport *
+from libcpp.queue  cimport *
+
+cimport
+numpy as np
+cimport
+cython
+cimport
+libcpp
+cimport
+libcpp.queue
+import cv2
+import numpy as np
 from libcpp.pair cimport *
 from libcpp.queue  cimport *
 
@@ -23,21 +34,21 @@ cdef np.ndarray[np.int32_t, ndim=2] _pse(np.ndarray[np.uint8_t, ndim=3] kernels,
         if np.sum(label == label_idx) < min_area:
             label[label == label_idx] = 0
 
-    cdef libcpp.queue.queue[libcpp.pair.pair[np.int16_t,np.int16_t]] que = \
-        queue[libcpp.pair.pair[np.int16_t,np.int16_t]]()
-    cdef libcpp.queue.queue[libcpp.pair.pair[np.int16_t,np.int16_t]] nxt_que = \
-        queue[libcpp.pair.pair[np.int16_t,np.int16_t]]()
-    cdef np.int16_t* dx = [-1, 1, 0, 0]
-    cdef np.int16_t* dy = [0, 0, -1, 1]
+    cdef libcpp.queue.queue[libcpp.pair.pair[np.int16_t, np.int16_t]] que = \
+        queue[libcpp.pair.pair[np.int16_t, np.int16_t]]()
+    cdef libcpp.queue.queue[libcpp.pair.pair[np.int16_t, np.int16_t]] nxt_que = \
+        queue[libcpp.pair.pair[np.int16_t, np.int16_t]]()
+    cdef np.int16_t * dx = [-1, 1, 0, 0]
+    cdef np.int16_t * dy = [0, 0, -1, 1]
     cdef np.int16_t tmpx, tmpy
 
     points = np.array(np.where(label > 0)).transpose((1, 0))
     for point_idx in range(points.shape[0]):
         tmpx, tmpy = points[point_idx, 0], points[point_idx, 1]
-        que.push(pair[np.int16_t,np.int16_t](tmpx, tmpy))
+        que.push(pair[np.int16_t, np.int16_t](tmpx, tmpy))
         pred[tmpx, tmpy] = label[tmpx, tmpy]
 
-    cdef libcpp.pair.pair[np.int16_t,np.int16_t] cur
+    cdef libcpp.pair.pair[np.int16_t, np.int16_t] cur
     cdef int cur_label
     for kernel_idx in range(kernel_num - 1, -1, -1):
         while not que.empty():
@@ -54,7 +65,7 @@ cdef np.ndarray[np.int32_t, ndim=2] _pse(np.ndarray[np.uint8_t, ndim=3] kernels,
                 if kernels[kernel_idx, tmpx, tmpy] == 0 or pred[tmpx, tmpy] > 0:
                     continue
 
-                que.push(pair[np.int16_t,np.int16_t](tmpx, tmpy))
+                que.push(pair[np.int16_t, np.int16_t](tmpx, tmpy))
                 pred[tmpx, tmpy] = cur_label
                 is_edge = False
             if is_edge:

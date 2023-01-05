@@ -17,10 +17,11 @@ from __future__ import division
 from __future__ import print_function
 
 import math
+
 import paddle
-from paddle import nn
 import paddle.nn.functional as F
 from paddle import ParamAttr
+from paddle import nn
 
 
 def get_bias_attr(k):

@@ -16,11 +16,12 @@ This code is refer from:
 https://github.com/open-mmlab/mmocr/blob/main/mmocr/models/textdet/losses/fce_loss.py
 """
 
+from functools import partial
+
 import numpy as np
-from paddle import nn
 import paddle
 import paddle.nn.functional as F
-from functools import partial
+from paddle import nn
 
 
 def multi_apply(func, *args, **kwargs):
@@ -54,7 +55,7 @@ class FCELoss(nn.Layer):
         preds = preds['levels']
 
         p3_maps, p4_maps, p5_maps = labels[1:]
-        assert p3_maps[0].shape[0] == 4 * self.fourier_degree + 5,\
+        assert p3_maps[0].shape[0] == 4 * self.fourier_degree + 5, \
             'fourier degree not equal in FCEhead and FCEtarget'
 
         # to tensor
@@ -131,7 +132,7 @@ class FCELoss(nn.Layer):
         if tr_train_mask.sum().item() > 0:
             weight = (tr_mask.masked_select(tr_train_mask.astype('bool'))
                       .astype('float32') + tcl_mask.masked_select(
-                          tr_train_mask.astype('bool')).astype('float32')) / 2
+                tr_train_mask.astype('bool')).astype('float32')) / 2
             weight = weight.reshape([-1, 1])
 
             ft_x, ft_y = self.fourier2poly(x_map, y_map)

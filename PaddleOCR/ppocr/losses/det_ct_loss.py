@@ -20,10 +20,10 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import paddle
-from paddle import nn
-import paddle.nn.functional as F
 import numpy as np
+import paddle
+import paddle.nn.functional as F
+from paddle import nn
 
 
 def ohem_single(score, gt_text, training_mask):
@@ -68,7 +68,7 @@ def ohem_batch(scores, gt_texts, training_masks):
     for i in range(scores.shape[0]):
         selected_masks.append(
             ohem_single(scores[i, :, :], gt_texts[i, :, :], training_masks[
-                i, :, :]))
+                                                            i, :, :]))
 
     selected_masks = paddle.cast(paddle.concat(selected_masks, 0), "float32")
     return selected_masks
@@ -98,7 +98,7 @@ def iou(a, b, mask, n_class=2, reduce=True):
     b = b.reshape((batch_size, -1))
     mask = mask.reshape((batch_size, -1))
 
-    iou = paddle.zeros((batch_size, ), dtype="float32")
+    iou = paddle.zeros((batch_size,), dtype="float32")
     for i in range(batch_size):
         iou[i] = iou_single(a[i], b[i], mask[i], n_class)
 
@@ -189,8 +189,8 @@ class SmoothL1Loss(nn.Layer):
             off_points = paddle.clip(off_points, 0, distance.shape[-1] - 1)
 
             selected_mask = (
-                gt_instance[self.coord[:, 1], self.coord[:, 0]] !=
-                gt_kernel_instance[off_points[:, 1], off_points[:, 0]])
+                    gt_instance[self.coord[:, 1], self.coord[:, 0]] !=
+                    gt_kernel_instance[off_points[:, 1], off_points[:, 0]])
             selected_mask = paddle.cast(
                 selected_mask.reshape((1, -1, distance.shape[-1])), "int64")
             selected_training_mask = selected_mask * training_mask
@@ -210,7 +210,7 @@ class SmoothL1Loss(nn.Layer):
             selected_training_masks.append(
                 self.select_single(distances[i, :, :, :], gt_instances[i, :, :],
                                    gt_kernel_instances[i, :, :], training_masks[
-                                       i, :, :]))
+                                                                 i, :, :]))
         selected_training_masks = paddle.cast(
             paddle.concat(selected_training_masks, 0), "float32")
 
@@ -243,7 +243,7 @@ class CTLoss(nn.Layer):
         imgs = batch[0]
         out = preds['maps']
         gt_kernels, training_masks, gt_instances, gt_kernel_instances, training_mask_distances, gt_distances = batch[
-            1:]
+                                                                                                               1:]
 
         kernels = out[:, 0, :, :]
         distances = out[:, 1:, :, :]

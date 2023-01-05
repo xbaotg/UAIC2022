@@ -17,8 +17,8 @@ from __future__ import division
 from __future__ import print_function
 
 import os
-import sys
 import pickle
+import sys
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
@@ -28,7 +28,6 @@ from ppocr.data import build_dataloader
 from ppocr.modeling.architectures import build_model
 from ppocr.postprocess import build_post_process
 from ppocr.utils.save_load import load_model
-from ppocr.utils.utility import print_dict
 import tools.program as program
 
 
@@ -52,7 +51,7 @@ def main():
         char_num = len(getattr(post_process_class, 'character'))
         config['Architecture']["Head"]['out_channels'] = char_num
 
-    #set return_features = True
+    # set return_features = True
     config['Architecture']["Head"]["return_feats"] = True
 
     model = build_model(config['Architecture'])
@@ -66,7 +65,7 @@ def main():
     # get features from train data
     char_center = program.get_center(model, eval_dataloader, post_process_class)
 
-    #serialize to disk
+    # serialize to disk
     with open("train_center.pkl", 'wb') as f:
         pickle.dump(char_center, f)
     return

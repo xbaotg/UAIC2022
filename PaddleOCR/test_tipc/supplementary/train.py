@@ -1,8 +1,9 @@
-import paddle
-import numpy as np
 import os
-import paddle.nn as nn
+
+import numpy as np
+import paddle
 import paddle.distributed as dist
+
 dist.get_world_size()
 dist.init_parallel_env()
 
@@ -10,7 +11,7 @@ from loss import build_loss, LossDistill, DMLLoss, KLJSLoss
 from optimizer import create_optimizer
 from data_loader import build_dataloader
 from metric import create_metric
-from mv3 import MobileNetV3_large_x0_5, distillmv3_large_x0_5, build_model
+from mv3 import build_model
 from config import preprocess
 import time
 
@@ -170,7 +171,7 @@ def train(config, scaler=None):
                 strs = f"epoch: [{epoch}/{EPOCH}], iter: [{idx}/{data_num}], "
                 strs += f"loss: {avg_loss.numpy()[0]}"
                 strs += f", acc_topk1: {acc['top1'].numpy()[0]}, acc_top5: {acc['top5'].numpy()[0]}"
-                strs += f", batch_time: {round(et-st, 4)} s"
+                strs += f", batch_time: {round(et - st, 4)} s"
                 logger.info(strs)
                 st = time.time()
 
@@ -278,7 +279,7 @@ def train_distill(config, scaler=None):
                 strs = f"epoch: [{epoch}/{EPOCH}], iter: [{idx}/{data_num}], "
                 strs += f"loss: {avg_loss.numpy()[0]}"
                 strs += f", acc_topk1: {acc['top1'].numpy()[0]}, acc_top5: {acc['top5'].numpy()[0]}"
-                strs += f", batch_time: {round(et-st, 4)} s"
+                strs += f", batch_time: {round(et - st, 4)} s"
                 logger.info(strs)
                 st = time.time()
 
@@ -370,10 +371,10 @@ def train_distill_multiopt(config, scaler=None):
             # cal loss
             avg_loss = loss_func_distill(outs,
                                          label)['student'] + loss_func_dml(
-                                             outs, label)['student_student1']
+                outs, label)['student_student1']
             avg_loss1 = loss_func_distill(outs,
                                           label)['student1'] + loss_func_dml(
-                                              outs, label)['student_student1']
+                outs, label)['student_student1']
 
             if scaler is None:
                 # backward
@@ -403,7 +404,7 @@ def train_distill_multiopt(config, scaler=None):
                 strs = f"epoch: [{epoch}/{EPOCH}], iter: [{idx}/{data_num}], "
                 strs += f"loss: {avg_loss.numpy()[0]}, loss1: {avg_loss1.numpy()[0]}"
                 strs += f", acc_topk1: {acc['top1'].numpy()[0]}, acc_top5: {acc['top5'].numpy()[0]}"
-                strs += f", batch_time: {round(et-st, 4)} s"
+                strs += f", batch_time: {round(et - st, 4)} s"
                 logger.info(strs)
                 st = time.time()
 

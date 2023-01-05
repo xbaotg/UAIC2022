@@ -2,7 +2,6 @@
 
 The overall directory structure of PaddleOCR is introduced as follows:
 
-
 ```
 PaddleOCR
 ├── configs                                 // Configuration file, you can config the model structure and modify the hyperparameters through the yml file

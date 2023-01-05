@@ -49,10 +49,10 @@ def main():
                                                    ]:  # distillation model
             for key in config['Architecture']["Models"]:
                 if config['Architecture']['Models'][key]['Head'][
-                        'name'] == 'MultiHead':  # for multi head
+                    'name'] == 'MultiHead':  # for multi head
                     out_channels_list = {}
                     if config['PostProcess'][
-                            'name'] == 'DistillationSARLabelDecode':
+                        'name'] == 'DistillationSARLabelDecode':
                         char_num = char_num - 2
                     out_channels_list['CTCLabelDecode'] = char_num
                     out_channels_list['SARLabelDecode'] = char_num + 2
@@ -62,7 +62,7 @@ def main():
                     config['Architecture']["Models"][key]["Head"][
                         'out_channels'] = char_num
         elif config['Architecture']['Head'][
-                'name'] == 'MultiHead':  # for multi head
+            'name'] == 'MultiHead':  # for multi head
             out_channels_list = {}
             if config['PostProcess']['name'] == 'SARLabelDecode':
                 char_num = char_num - 2

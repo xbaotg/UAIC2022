@@ -1,56 +1,64 @@
 <a name="0"></a>
+
 # 知识蒸馏
 
 - [知识蒸馏](#知识蒸馏)
-  - [1. 简介](#1-简介)
-    - [1.1 知识蒸馏介绍](#11-知识蒸馏介绍)
-    - [1.2 PaddleOCR知识蒸馏简介](#12-paddleocr知识蒸馏简介)
-  - [2. 配置文件解析](#2-配置文件解析)
-    - [2.1 识别配置文件解析](#21-识别配置文件解析)
-      - [2.1.1 模型结构](#211-模型结构)
-      - [2.1.2 损失函数](#212-损失函数)
-      - [2.1.3 后处理](#213-后处理)
-      - [2.1.4 指标计算](#214-指标计算)
-      - [2.1.5 蒸馏模型微调](#215-蒸馏模型微调)
-    - [2.2 检测配置文件解析](#22-检测配置文件解析)
-      - [2.2.1 模型结构](#221-模型结构)
-      - [2.2.2 损失函数](#222-损失函数)
-      - [2.2.3 后处理](#223-后处理)
-      - [2.2.4 蒸馏指标计算](#224-蒸馏指标计算)
-      - [2.2.5 检测蒸馏模型finetune](#225-检测蒸馏模型finetune)
+    - [1. 简介](#1-简介)
+        - [1.1 知识蒸馏介绍](#11-知识蒸馏介绍)
+        - [1.2 PaddleOCR知识蒸馏简介](#12-paddleocr知识蒸馏简介)
+    - [2. 配置文件解析](#2-配置文件解析)
+        - [2.1 识别配置文件解析](#21-识别配置文件解析)
+            - [2.1.1 模型结构](#211-模型结构)
+            - [2.1.2 损失函数](#212-损失函数)
+            - [2.1.3 后处理](#213-后处理)
+            - [2.1.4 指标计算](#214-指标计算)
+            - [2.1.5 蒸馏模型微调](#215-蒸馏模型微调)
+        - [2.2 检测配置文件解析](#22-检测配置文件解析)
+            - [2.2.1 模型结构](#221-模型结构)
+            - [2.2.2 损失函数](#222-损失函数)
+            - [2.2.3 后处理](#223-后处理)
+            - [2.2.4 蒸馏指标计算](#224-蒸馏指标计算)
+            - [2.2.5 检测蒸馏模型finetune](#225-检测蒸馏模型finetune)
 
 <a name="1"></a>
+
 ## 1. 简介
+
 <a name="11"></a>
+
 ### 1.1 知识蒸馏介绍
 
 近年来，深度神经网络在计算机视觉、自然语言处理等领域被验证是一种极其有效的解决问题的方法。通过构建合适的神经网络，加以训练，最终网络模型的性能指标基本上都会超过传统算法。
 
 在数据量足够大的情况下，通过合理构建网络模型的方式增加其参数量，可以显著改善模型性能，但是这又带来了模型复杂度急剧提升的问题。大模型在实际场景中使用的成本较高。
 
-深度神经网络一般有较多的参数冗余，目前有几种主要的方法对模型进行压缩，减小其参数量。如裁剪、量化、知识蒸馏等，其中知识蒸馏是指使用教师模型(teacher model)去指导学生模型(student model)学习特定任务，保证小模型在参数量不变的情况下，得到比较大的性能提升。
+深度神经网络一般有较多的参数冗余，目前有几种主要的方法对模型进行压缩，减小其参数量。如裁剪、量化、知识蒸馏等，其中知识蒸馏是指使用教师模型(
+teacher model)去指导学生模型(student model)学习特定任务，保证小模型在参数量不变的情况下，得到比较大的性能提升。
 
-此外，在知识蒸馏任务中，也衍生出了互学习的模型训练方法，论文[Deep Mutual Learning](https://arxiv.org/abs/1706.00384)中指出，使用两个完全相同的模型在训练的过程中互相监督，可以达到比单个模型训练更好的效果。
+此外，在知识蒸馏任务中，也衍生出了互学习的模型训练方法，论文[Deep Mutual Learning](https://arxiv.org/abs/1706.00384)
+中指出，使用两个完全相同的模型在训练的过程中互相监督，可以达到比单个模型训练更好的效果。
 
 <a name="12"></a>
+
 ### 1.2 PaddleOCR知识蒸馏简介
 
-无论是大模型蒸馏小模型，还是小模型之间互相学习，更新参数，他们本质上是都是不同模型之间输出或者特征图(feature map)之间的相互监督，区别仅在于 (1) 模型是否需要固定参数。(2) 模型是否需要加载预训练模型。
+无论是大模型蒸馏小模型，还是小模型之间互相学习，更新参数，他们本质上是都是不同模型之间输出或者特征图(feature map)
+之间的相互监督，区别仅在于 (1) 模型是否需要固定参数。(2) 模型是否需要加载预训练模型。
 
 对于大模型蒸馏小模型的情况，大模型一般需要加载预训练模型并固定参数；对于小模型之间互相蒸馏的情况，小模型一般都不加载预训练模型，参数也都是可学习的状态。
 
 在知识蒸馏任务中，不只有2个模型之间进行蒸馏的情况，多个模型之间互相学习的情况也非常普遍。因此在知识蒸馏代码框架中，也有必要支持该种类别的蒸馏方法。
 
 PaddleOCR中集成了知识蒸馏的算法，具体地，有以下几个主要的特点：
+
 - 支持任意网络的互相学习，不要求子网络结构完全一致或者具有预训练模型；同时子网络数量也没有任何限制，只需要在配置文件中添加即可。
 - 支持loss函数通过配置文件任意配置，不仅可以使用某种loss，也可以使用多种loss的组合
 - 支持知识蒸馏训练、预测、评估与导出等所有模型相关的环境，方便使用与部署。
 
-
 通过知识蒸馏，在中英文通用文字识别任务中，不增加任何预测耗时的情况下，可以给模型带来3%以上的精度提升，结合学习率调整策略以及模型结构微调策略，最终提升提升超过5%。
 
-
 <a name="2"></a>
+
 ## 2. 配置文件解析
 
 在知识蒸馏训练的过程中，数据预处理、优化器、学习率、全局的一些属性没有任何变化。模型结构、损失函数、后处理、指标计算等模块的配置文件需要进行微调。
@@ -58,11 +66,13 @@ PaddleOCR中集成了知识蒸馏的算法，具体地，有以下几个主要�
 下面以识别与检测的知识蒸馏配置文件为例，对知识蒸馏的训练与配置进行解析。
 
 <a name="21"></a>
+
 ### 2.1 识别配置文件解析
 
 配置文件在[ch_PP-OCRv3_rec_distillation.yml](../../configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml)。
 
 <a name="211"></a>
+
 #### 2.1.1 模型结构
 
 知识蒸馏任务中，模型结构配置如下所示。
@@ -129,7 +139,8 @@ Architecture:
               max_text_length: *max_text_length
 ```
 
-当然，这里如果希望添加更多的子网络进行训练，也可以按照`Student`与`Teacher`的添加方式，在配置文件中添加相应的字段。比如说如果希望有3个模型互相监督，共同训练，那么`Architecture`可以写为如下格式。
+当然，这里如果希望添加更多的子网络进行训练，也可以按照`Student`与`Teacher`
+的添加方式，在配置文件中添加相应的字段。比如说如果希望有3个模型互相监督，共同训练，那么`Architecture`可以写为如下格式。
 
 ```yaml
 Architecture:
@@ -222,11 +233,15 @@ Architecture:
 
 最终该模型训练时，包含3个子网络：`Teacher`, `Student`, `Student2`。
 
-蒸馏模型`DistillationModel`类的具体实现代码可以参考[distillation_model.py](../../ppocr/modeling/architectures/distillation_model.py)。
+蒸馏模型`DistillationModel`
+类的具体实现代码可以参考[distillation_model.py](../../ppocr/modeling/architectures/distillation_model.py)。
 
-最终模型`forward`输出为一个字典，key为所有的子网络名称，例如这里为`Student`与`Teacher`，value为对应子网络的输出，可以为`Tensor`（只返回该网络的最后一层）和`dict`（也返回了中间的特征信息）。
+最终模型`forward`输出为一个字典，key为所有的子网络名称，例如这里为`Student`与`Teacher`
+，value为对应子网络的输出，可以为`Tensor`（只返回该网络的最后一层）和`dict`（也返回了中间的特征信息）。
 
-在识别任务中，为了添加更多损失函数，保证蒸馏方法的可扩展性，将每个子网络的输出保存为`dict`，其中包含子模块输出。以该识别模型为例，每个子网络的输出结果均为`dict`，key包含`backbone_out`,`neck_out`, `head_out`，`value`为对应模块的tensor，最终对于上述配置文件，`DistillationModel`的输出格式如下。
+在识别任务中，为了添加更多损失函数，保证蒸馏方法的可扩展性，将每个子网络的输出保存为`dict`
+，其中包含子模块输出。以该识别模型为例，每个子网络的输出结果均为`dict`，key包含`backbone_out`,`neck_out`, `head_out`，`value`
+为对应模块的tensor，最终对于上述配置文件，`DistillationModel`的输出格式如下。
 
 ```json
 {
@@ -244,6 +259,7 @@ Architecture:
 ```
 
 <a name="212"></a>
+
 #### 2.1.2 损失函数
 
 知识蒸馏任务中，损失函数配置如下所示。
@@ -289,7 +305,8 @@ Loss:
       multi_head: True                         # 是否为多头结构，为true时，取出其中的SAR分支计算损失函数
 ```
 
-上述损失函数中，所有的蒸馏损失函数均继承自标准的损失函数类，主要功能为: 对蒸馏模型的输出进行解析，找到用于计算损失的中间节点(tensor)，再使用标准的损失函数类去计算。
+上述损失函数中，所有的蒸馏损失函数均继承自标准的损失函数类，主要功能为:
+对蒸馏模型的输出进行解析，找到用于计算损失的中间节点(tensor)，再使用标准的损失函数类去计算。
 
 以上述配置为例，最终蒸馏训练的损失函数包含下面5个部分。
 
@@ -299,10 +316,12 @@ Loss:
 - `Student`和`Teacher`最终输出(`head_out`)的SAR分支之间的DML loss，权重为0.5。
 - `Student`和`Teacher`的骨干网络输出(`backbone_out`)之间的l2 loss，权重为1。
 
-
-关于`CombinedLoss`更加具体的实现可以参考: [combined_loss.py](../../ppocr/losses/combined_loss.py#L23)。关于`DistillationCTCLoss`等蒸馏损失函数更加具体的实现可以参考[distillation_loss.py](../../ppocr/losses/distillation_loss.py)。
+关于`CombinedLoss`更加具体的实现可以参考: [combined_loss.py](../../ppocr/losses/combined_loss.py#L23)
+。关于`DistillationCTCLoss`
+等蒸馏损失函数更加具体的实现可以参考[distillation_loss.py](../../ppocr/losses/distillation_loss.py)。
 
 <a name="213"></a>
+
 #### 2.1.3 后处理
 
 知识蒸馏任务中，后处理配置如下所示。
@@ -315,11 +334,14 @@ PostProcess:
   multi_head: True                       # 多头结构时，会取出其中的CTC分支进行计算
 ```
 
-以上述配置为例，最终会同时计算`Student`和`Teahcer` 2个子网络的CTC解码输出，返回一个`dict`，`key`为用于处理的子网络名称，`value`为用于处理的子网络列表。
+以上述配置为例，最终会同时计算`Student`和`Teahcer` 2个子网络的CTC解码输出，返回一个`dict`，`key`
+为用于处理的子网络名称，`value`为用于处理的子网络列表。
 
-关于`DistillationCTCLabelDecode`更加具体的实现可以参考: [rec_postprocess.py](../../ppocr/postprocess/rec_postprocess.py#L128)
+关于`DistillationCTCLabelDecode`
+更加具体的实现可以参考: [rec_postprocess.py](../../ppocr/postprocess/rec_postprocess.py#L128)
 
 <a name="214"></a>
+
 #### 2.1.4 指标计算
 
 知识蒸馏任务中，指标计算配置如下所示。
@@ -335,18 +357,22 @@ Metric:
 
 以上述配置为例，最终会使用`Student`子网络的acc指标作为保存best model的判断指标，同时，日志中也会打印出所有子网络的acc指标。
 
-关于`DistillationMetric`更加具体的实现可以参考: [distillation_metric.py](../../ppocr/metrics/distillation_metric.py#L24)。
+关于`DistillationMetric`
+更加具体的实现可以参考: [distillation_metric.py](../../ppocr/metrics/distillation_metric.py#L24)。
 
 <a name="215"></a>
+
 #### 2.1.5 蒸馏模型微调
 
 对蒸馏得到的识别蒸馏进行微调有2种方式。
 
-（1）基于知识蒸馏的微调：这种情况比较简单，下载预训练模型，在[ch_PP-OCRv3_rec_distillation.yml](../../configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml)中配置好预训练模型路径以及自己的数据路径，即可进行模型微调训练。
+（1）基于知识蒸馏的微调：这种情况比较简单，下载预训练模型，在[ch_PP-OCRv3_rec_distillation.yml](../../configs/rec/PP-OCRv3/ch_PP-OCRv3_rec_distillation.yml)
+中配置好预训练模型路径以及自己的数据路径，即可进行模型微调训练。
 
 （2）微调时不使用知识蒸馏：这种情况，需要首先将预训练模型中的学生模型参数提取出来，具体步骤如下。
 
 * 首先下载预训练模型并解压。
+
 ```shell
 # 下面预训练模型并解压
 wget https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_train.tar
@@ -369,16 +395,20 @@ print(s_params.keys())
 paddle.save(s_params, "ch_PP-OCRv3_rec_train/student.pdparams")
 ```
 
-转化完成之后，使用[ch_PP-OCRv3_rec.yml](../../configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml)，修改预训练模型的路径（为导出的`student.pdparams`模型路径）以及自己的数据路径，即可进行模型微调。
+转化完成之后，使用[ch_PP-OCRv3_rec.yml](../../configs/rec/PP-OCRv3/ch_PP-OCRv3_rec.yml)
+，修改预训练模型的路径（为导出的`student.pdparams`模型路径）以及自己的数据路径，即可进行模型微调。
 
 <a name="22"></a>
+
 ### 2.2 检测配置文件解析
 
 检测模型蒸馏的配置文件在PaddleOCR/configs/det/ch_PP-OCRv3/目录下，包含两个个蒸馏配置文件：
+
 - ch_PP-OCRv3_det_cml.yml，采用cml蒸馏，采用一个大模型蒸馏两个小模型，且两个小模型互相学习的方法
 - ch_PP-OCRv3_det_dml.yml，采用DML的蒸馏，两个Student模型互蒸馏的方法
 
 <a name="221"></a>
+
 #### 2.2.1 模型结构
 
 知识蒸馏任务中，模型结构配置如下所示：
@@ -492,12 +522,14 @@ Architecture:
 
 ```
 
+蒸馏模型`DistillationModel`
+类的具体实现代码可以参考[distillation_model.py](../../ppocr/modeling/architectures/distillation_model.py)。
 
-蒸馏模型`DistillationModel`类的具体实现代码可以参考[distillation_model.py](../../ppocr/modeling/architectures/distillation_model.py)。
+最终模型`forward`输出为一个字典，key为所有的子网络名称，例如这里为`Student`与`Teacher`
+，value为对应子网络的输出，可以为`Tensor`（只返回该网络的最后一层）和`dict`（也返回了中间的特征信息）。
 
-最终模型`forward`输出为一个字典，key为所有的子网络名称，例如这里为`Student`与`Teacher`，value为对应子网络的输出，可以为`Tensor`（只返回该网络的最后一层）和`dict`（也返回了中间的特征信息）。
-
-在蒸馏任务中，为了方便添加蒸馏损失函数，每个网络的输出保存为`dict`，其中包含子模块输出。每个子网络的输出结果均为`dict`，key包含`backbone_out`,`neck_out`, `head_out`，`value`为对应模块的tensor，最终对于上述配置文件，`DistillationModel`的输出格式如下。
+在蒸馏任务中，为了方便添加蒸馏损失函数，每个网络的输出保存为`dict`，其中包含子模块输出。每个子网络的输出结果均为`dict`
+，key包含`backbone_out`,`neck_out`, `head_out`，`value`为对应模块的tensor，最终对于上述配置文件，`DistillationModel`的输出格式如下。
 
 ```json
 {
@@ -515,9 +547,11 @@ Architecture:
 ```
 
 <a name="222"></a>
+
 #### 2.2.2 损失函数
 
 检测ch_PP-OCRv3_det_cml.yml蒸馏损失函数配置如下所示。
+
 ```yaml
 Loss:
   name: CombinedLoss
@@ -551,9 +585,13 @@ Loss:
 
 ```
 
-关于`DistillationDilaDBLoss`更加具体的实现可以参考: [distillation_loss.py](https://github.com/PaddlePaddle/PaddleOCR/blob/release%2F2.4/ppocr/losses/distillation_loss.py#L185)。关于`DistillationDBLoss`等蒸馏损失函数更加具体的实现可以参考[distillation_loss.py](https://github.com/PaddlePaddle/PaddleOCR/blob/04c44974b13163450dfb6bd2c327863f8a194b3c/ppocr/losses/distillation_loss.py?_pjax=%23js-repo-pjax-container%2C%20div%5Bitemtype%3D%22http%3A%2F%2Fschema.org%2FSoftwareSourceCode%22%5D%20main%2C%20%5Bdata-pjax-container%5D#L148)。
+关于`DistillationDilaDBLoss`
+更加具体的实现可以参考: [distillation_loss.py](https://github.com/PaddlePaddle/PaddleOCR/blob/release%2F2.4/ppocr/losses/distillation_loss.py#L185)
+。关于`DistillationDBLoss`
+等蒸馏损失函数更加具体的实现可以参考[distillation_loss.py](https://github.com/PaddlePaddle/PaddleOCR/blob/04c44974b13163450dfb6bd2c327863f8a194b3c/ppocr/losses/distillation_loss.py?_pjax=%23js-repo-pjax-container%2C%20div%5Bitemtype%3D%22http%3A%2F%2Fschema.org%2FSoftwareSourceCode%22%5D%20main%2C%20%5Bdata-pjax-container%5D#L148)。
 
 <a name="223"></a>
+
 #### 2.2.3 后处理
 
 知识蒸馏任务中，检测蒸馏后处理配置如下所示。
@@ -570,9 +608,11 @@ PostProcess:
 
 以上述配置为例，最终会同时计算`Student`，`Student2`和`Teacher` 3个子网络的输出做后处理计算。同时，由于有多个输入，后处理返回的输出也有多个，
 
-关于`DistillationDBPostProcess`更加具体的实现可以参考: [db_postprocess.py](../../ppocr/postprocess/db_postprocess.py#L195)
+关于`DistillationDBPostProcess`
+更加具体的实现可以参考: [db_postprocess.py](../../ppocr/postprocess/db_postprocess.py#L195)
 
 <a name="224"></a>
+
 #### 2.2.4 蒸馏指标计算
 
 知识蒸馏任务中，检测蒸馏指标计算配置如下所示。
@@ -585,12 +625,15 @@ Metric:
   key: "Student"
 ```
 
-由于蒸馏需要包含多个网络，甚至多个Student网络，在计算指标的时候只需要计算一个Student网络的指标即可，`key`字段设置为`Student`则表示只计算`Student`网络的精度。
+由于蒸馏需要包含多个网络，甚至多个Student网络，在计算指标的时候只需要计算一个Student网络的指标即可，`key`
+字段设置为`Student`则表示只计算`Student`网络的精度。
 
 <a name="225"></a>
+
 #### 2.2.5 检测蒸馏模型finetune
 
 PP-OCRv3检测蒸馏有两种方式：
+
 - 采用ch_PP-OCRv3_det_cml.yml，采用cml蒸馏，同样Teacher模型设置为PaddleOCR提供的模型或者您训练好的大模型
 - 采用ch_PP-OCRv3_det_dml.yml，采用DML的蒸馏，两个Student模型互蒸馏的方法，在PaddleOCR采用的数据集上相比单独训练Student模型有1%-2%的提升。
 
@@ -598,8 +641,8 @@ PP-OCRv3检测蒸馏有两种方式：
 
 在精度提升方面，cml的精度>dml的精度蒸馏方法的精度。当数据量不足或者Teacher模型精度与Student精度相差不大的时候，这个结论或许会改变。
 
-
 另外，由于PaddleOCR提供的蒸馏预训练模型包含了多个模型的参数，如果您希望提取Student模型的参数，可以参考如下代码：
+
 ```
 # 下载蒸馏训练模型的参数
 wget https://paddleocr.bj.bcebos.com/PP-OCRv2/chinese/ch_PP-OCRv3_det_distill_train.tar

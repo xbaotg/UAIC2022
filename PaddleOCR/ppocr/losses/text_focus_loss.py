@@ -16,10 +16,11 @@ This code is refer from:
 https://github.com/FudanVI/FudanOCR/blob/main/scene-text-telescope/loss/text_focus_loss.py
 """
 
-import paddle.nn as nn
-import paddle
-import numpy as np
 import pickle as pkl
+
+import numpy as np
+import paddle
+import paddle.nn as nn
 
 standard_alphebet = '-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 standard_dict = {}

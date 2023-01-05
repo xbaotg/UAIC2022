@@ -12,10 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import json
+import Polygon as plg
 import numpy as np
 import scipy.io as io
-import Polygon as plg
 from ppocr.utils.e2e_metric.polygon_fast import iod, area_of_intersection, area
 
 
@@ -44,9 +43,9 @@ def get_socre_A(gt_dir, pred_dict):
             xx = [
                 np.array(
                     ['x:'], dtype='<U2'), 0, np.array(
-                        ['y:'], dtype='<U2'), 0, np.array(
-                            ['#'], dtype='<U1'), np.array(
-                                ['#'], dtype='<U1')
+                    ['y:'], dtype='<U2'), 0, np.array(
+                    ['#'], dtype='<U1'), np.array(
+                    ['#'], dtype='<U1')
             ]
             t_x, t_y = [], []
             for j in range(h):
@@ -351,7 +350,7 @@ def get_score_C(gt_label, text, pred_bboxes):
         detections, groundtruths)  # filters detections overlapping with DC area
 
     for idx in range(len(groundtruths) - 1, -1, -1):
-        #NOTE: source code use 'orin' to indicate '#', here we use 'anno',
+        # NOTE: source code use 'orin' to indicate '#', here we use 'anno',
         # which may cause slight drop in fscore, about 0.12
         if groundtruths[idx]['transcription'] == '###':
             groundtruths.pop(idx)
@@ -451,7 +450,7 @@ def combine_results(all_data, rec_flag=True):
                 if rec_flag:
                     gt_str_cur = global_gt_str[idy][gt_id]
                     pred_str_cur = global_pred_str[idy][matched_det_id[0]
-                                                        .tolist()[0]]
+                    .tolist()[0]]
                     if pred_str_cur == gt_str_cur:
                         hit_str_num += 1
                     else:
@@ -477,15 +476,15 @@ def combine_results(all_data, rec_flag=True):
             if num_non_zero_in_sigma >= k:
                 ####search for all detections that overlaps with this groundtruth
                 qualified_tau_candidates = np.where((local_tau_table[
-                    gt_id, :] >= tp) & (det_flag[0, :] == 0))
+                                                     gt_id, :] >= tp) & (det_flag[0, :] == 0))
                 num_qualified_tau_candidates = qualified_tau_candidates[
                     0].shape[0]
 
                 if num_qualified_tau_candidates == 1:
                     if ((local_tau_table[gt_id, qualified_tau_candidates] >= tp)
                             and
-                        (local_sigma_table[gt_id, qualified_tau_candidates] >=
-                         tr)):
+                            (local_sigma_table[gt_id, qualified_tau_candidates] >=
+                             tr)):
                         # became an one-to-one case
                         global_accumulative_recall = global_accumulative_recall + 1.0
                         global_accumulative_precision = global_accumulative_precision + 1.0
@@ -545,15 +544,16 @@ def combine_results(all_data, rec_flag=True):
             if num_non_zero_in_tau >= k:
                 ####search for all detections that overlaps with this groundtruth
                 qualified_sigma_candidates = np.where((
-                    local_sigma_table[:, det_id] >= tp) & (gt_flag[0, :] == 0))
+                                                              local_sigma_table[:, det_id] >= tp) & (
+                                                                  gt_flag[0, :] == 0))
                 num_qualified_sigma_candidates = qualified_sigma_candidates[
                     0].shape[0]
 
                 if num_qualified_sigma_candidates == 1:
                     if ((local_tau_table[qualified_sigma_candidates, det_id] >=
                          tp) and
-                        (local_sigma_table[qualified_sigma_candidates, det_id]
-                         >= tr)):
+                            (local_sigma_table[qualified_sigma_candidates, det_id]
+                             >= tr)):
                         # became an one-to-one case
                         global_accumulative_recall = global_accumulative_recall + 1.0
                         global_accumulative_precision = global_accumulative_precision + 1.0
@@ -582,7 +582,7 @@ def combine_results(all_data, rec_flag=True):
                                     break
                         # recg end
                 elif (np.sum(local_tau_table[qualified_sigma_candidates,
-                                             det_id]) >= tp):
+                det_id]) >= tp):
                     det_flag[0, det_id] = 1
                     gt_flag[0, qualified_sigma_candidates] = 1
                     # recg start
@@ -628,25 +628,25 @@ def combine_results(all_data, rec_flag=True):
 
         #######first check for one-to-one case##########
         local_accumulative_recall, local_accumulative_precision, global_accumulative_recall, global_accumulative_precision, \
-        gt_flag, det_flag, hit_str_num = one_to_one(local_sigma_table, local_tau_table,
-                                                    local_accumulative_recall, local_accumulative_precision,
-                                                    global_accumulative_recall, global_accumulative_precision,
-                                                    gt_flag, det_flag, idx, rec_flag)
+            gt_flag, det_flag, hit_str_num = one_to_one(local_sigma_table, local_tau_table,
+                                                        local_accumulative_recall, local_accumulative_precision,
+                                                        global_accumulative_recall, global_accumulative_precision,
+                                                        gt_flag, det_flag, idx, rec_flag)
 
         hit_str_count += hit_str_num
         #######then check for one-to-many case##########
         local_accumulative_recall, local_accumulative_precision, global_accumulative_recall, global_accumulative_precision, \
-        gt_flag, det_flag, hit_str_num = one_to_many(local_sigma_table, local_tau_table,
-                                                     local_accumulative_recall, local_accumulative_precision,
-                                                     global_accumulative_recall, global_accumulative_precision,
-                                                     gt_flag, det_flag, idx, rec_flag)
+            gt_flag, det_flag, hit_str_num = one_to_many(local_sigma_table, local_tau_table,
+                                                         local_accumulative_recall, local_accumulative_precision,
+                                                         global_accumulative_recall, global_accumulative_precision,
+                                                         gt_flag, det_flag, idx, rec_flag)
         hit_str_count += hit_str_num
         #######then check for many-to-one case##########
         local_accumulative_recall, local_accumulative_precision, global_accumulative_recall, global_accumulative_precision, \
-        gt_flag, det_flag, hit_str_num = many_to_one(local_sigma_table, local_tau_table,
-                                                     local_accumulative_recall, local_accumulative_precision,
-                                                     global_accumulative_recall, global_accumulative_precision,
-                                                     gt_flag, det_flag, idx, rec_flag)
+            gt_flag, det_flag, hit_str_num = many_to_one(local_sigma_table, local_tau_table,
+                                                         local_accumulative_recall, local_accumulative_precision,
+                                                         global_accumulative_recall, global_accumulative_precision,
+                                                         gt_flag, det_flag, idx, rec_flag)
         hit_str_count += hit_str_num
 
     try:
@@ -681,7 +681,7 @@ def combine_results(all_data, rec_flag=True):
 
     try:
         f_score_e2e = 2 * precision_e2e * recall_e2e / (
-            precision_e2e + recall_e2e)
+                precision_e2e + recall_e2e)
     except ZeroDivisionError:
         f_score_e2e = 0
 

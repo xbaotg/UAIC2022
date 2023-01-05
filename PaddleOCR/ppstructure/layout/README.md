@@ -5,32 +5,40 @@ English | [简体中文](README_ch.md)
 - [1. Introduction](#1-Introduction)
 - [2. Quick start](#2-Quick-start)
 - [3. Install](#3-Install)
-  - [3.1 Install PaddlePaddle](#31-Install-paddlepaddle)
-  - [3.2 Install PaddleDetection](#32-Install-paddledetection)
+    - [3.1 Install PaddlePaddle](#31-Install-paddlepaddle)
+    - [3.2 Install PaddleDetection](#32-Install-paddledetection)
 - [4. Data preparation](#4-Data-preparation)
-  - [4.1 English data set](#41-English-data-set)
-  - [4.2 More datasets](#42-More-datasets)
+    - [4.1 English data set](#41-English-data-set)
+    - [4.2 More datasets](#42-More-datasets)
 - [5. Start training](#5-Start-training)
-  - [5.1 Train](#51-Train)
-  - [5.2 FGD Distillation training](#52-Fgd-distillation-training)
+    - [5.1 Train](#51-Train)
+    - [5.2 FGD Distillation training](#52-Fgd-distillation-training)
 - [6. Model evaluation and prediction](#6-Model-evaluation-and-prediction)
-  - [6.1 Indicator evaluation](#61-Indicator-evaluation)
-  - [6.2 Test layout analysis results](#62-Test-layout-analysis-results)
+    - [6.1 Indicator evaluation](#61-Indicator-evaluation)
+    - [6.2 Test layout analysis results](#62-Test-layout-analysis-results)
 - [7. Model export and inference](#7-Model-export-and-inference)
-  - [7.1 Model export](#71-Model-export)
-  - [7.2 Model inference](#72-Model-inference)
-
+    - [7.1 Model export](#71-Model-export)
+    - [7.2 Model inference](#72-Model-inference)
 
 ## 1. Introduction
 
-Layout analysis refers to the regional division of documents in the form of pictures and the positioning of key areas, such as text, title, table, picture, etc. The layout analysis algorithm is based on the lightweight model PP-picodet of [PaddleDetection]( https://github.com/PaddlePaddle/PaddleDetection ), including English layout analysis, Chinese layout analysis and table layout analysis models.  English layout analysis models can detect document layout elements such as text, title, table, figure, list. Chinese layout analysis models can detect document layout elements such as text, figure, figure caption, table, table caption, header, footer, reference, and equation. Table layout analysis models can detect table regions.
+Layout analysis refers to the regional division of documents in the form of pictures and the positioning of key areas,
+such as text, title, table, picture, etc. The layout analysis algorithm is based on the lightweight model PP-picodet
+of [PaddleDetection]( https://github.com/PaddlePaddle/PaddleDetection ), including English layout analysis, Chinese
+layout analysis and table layout analysis models. English layout analysis models can detect document layout elements
+such as text, title, table, figure, list. Chinese layout analysis models can detect document layout elements such as
+text, figure, figure caption, table, table caption, header, footer, reference, and equation. Table layout analysis
+models can detect table regions.
 
 <div align="center">
     <img src="../docs/layout/layout.png" width="800">
 </div>
 
 ## 2. Quick start
-PP-Structure currently provides layout analysis models in Chinese, English and table documents. For the model link, see [models_list](../docs/models_list_en.md). The whl package is also provided for quick use, see [quickstart](../docs/quickstart_en.md) for details.
+
+PP-Structure currently provides layout analysis models in Chinese, English and table documents. For the model link,
+see [models_list](../docs/models_list_en.md). The whl package is also provided for quick use,
+see [quickstart](../docs/quickstart_en.md) for details.
 
 ## 3. Install
 
@@ -47,7 +55,9 @@ python3 -m pip install "paddlepaddle-gpu>=2.3" -i https://mirror.baidu.com/pypi/
 # CPU Install
 python3 -m pip install "paddlepaddle>=2.3" -i https://mirror.baidu.com/pypi/simple
 ```
-For more requirements, please refer to the instructions in the [Install file](https://www.paddlepaddle.org.cn/install/quick)。
+
+For more requirements, please refer to the instructions in
+the [Install file](https://www.paddlepaddle.org.cn/install/quick)。
 
 ### 3.2. Install PaddleDetection
 
@@ -66,11 +76,13 @@ python3 -m pip install -r requirements.txt
 
 ## 4. Data preparation
 
-If you want to experience the prediction process directly, you can skip data preparation and download the pre-training model.
+If you want to experience the prediction process directly, you can skip data preparation and download the pre-training
+model.
 
 ### 4.1. English data set
 
-Download document analysis data set [PubLayNet](https://developer.ibm.com/exchanges/data/all/publaynet/)（Dataset 96G），contains 5 classes：`{0: "Text", 1: "Title", 2: "List", 3:"Table", 4:"Figure"}`
+Download document analysis data set [PubLayNet](https://developer.ibm.com/exchanges/data/all/publaynet/)（Dataset
+96G），contains 5 classes：`{0: "Text", 1: "Title", 2: "List", 3:"Table", 4:"Figure"}`
 
 ```
 # Download data
@@ -101,23 +113,25 @@ Uncompressed **directory structure：**
 
 **data distribution：**
 
-| File or Folder | Description    | num     |
-| :------------- | :------------- | ------- |
-| `train/`       | Training set pictures     | 335,703 |
-| `val/`         | Verification set pictures     | 11,245  |
-| `test/`        | Test set pictures     | 11,405  |
-| `train.json`   | Training set annotation files | -       |
+| File or Folder | Description                    | num     |
+|:---------------|:-------------------------------|---------|
+| `train/`       | Training set pictures          | 335,703 |
+| `val/`         | Verification set pictures      | 11,245  |
+| `test/`        | Test set pictures              | 11,405  |
+| `train.json`   | Training set annotation files  | -       |
 | `val.json`     | Validation set dimension files | -       |
 
 **Data Annotation**
 
-The JSON file contains the annotations of all images, and the data is stored in a dictionary nested manner.Contains the following keys：
+The JSON file contains the annotations of all images, and the data is stored in a dictionary nested manner.Contains the
+following keys：
 
 - info，represents the dimension file info。
 
 - licenses，represents the dimension file licenses。
 
-- images，represents the list of image information in the annotation file，each element is the information of an image。The information of one of the images is as follows:
+- images，represents the list of image information in the annotation file，each element is the information of an image。The
+  information of one of the images is as follows:
 
   ```
   {
@@ -128,7 +142,9 @@ The JSON file contains the annotations of all images, and the data is stored in 
   }
   ```
 
-- annotations， represents the list of annotation information of the target object in the annotation file，each element is the annotation information of a target object。The following is the annotation information of one of the target objects:
+- annotations， represents the list of annotation information of the target object in the annotation file，each element is
+  the annotation information of a target object。The following is the annotation information of one of the target
+  objects:
 
   ```
   {
@@ -145,22 +161,24 @@ The JSON file contains the annotations of all images, and the data is stored in 
 
 ### 4.2. More datasets
 
-We provide CDLA(Chinese layout analysis), TableBank(Table layout analysis)etc. data set download links，process to the JSON format of the above annotation file，that is, the training can be conducted in the same way。
+We provide CDLA(Chinese layout analysis), TableBank(Table layout analysis)etc. data set download links，process to the
+JSON format of the above annotation file，that is, the training can be conducted in the same way。
 
-| dataset                                                      | 简介                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| [cTDaR2019_cTDaR](https://cndplab-founder.github.io/cTDaR2019/) | For form detection (TRACKA) and form identification (TRACKB).Image types include historical data sets (beginning with cTDaR_t0, such as CTDAR_T00872.jpg) and modern data sets (beginning with cTDaR_t1, CTDAR_T10482.jpg). |
-| [IIIT-AR-13K](http://cvit.iiit.ac.in/usodi/iiitar13k.php)    | Data sets constructed by manually annotating figures or pages from publicly available annual reports, containing 5 categories:table, figure, natural image, logo, and signature. |
-| [TableBank](https://github.com/doc-analysis/TableBank)       | For table detection and recognition of large datasets, including Word and Latex document formats |
-| [CDLA](https://github.com/buptlihang/CDLA)                   | Chinese document layout analysis data set, for Chinese literature (paper) scenarios, including 10 categories:Text, Title, Figure, Figure caption, Table, Table caption, Header, Footer, Reference, Equation |
-| [DocBank](https://github.com/doc-analysis/DocBank)           | Large-scale dataset (500K document pages) constructed using weakly supervised methods for document layout analysis, containing 12 categories:Author, Caption, Date, Equation, Figure, Footer, List, Paragraph, Reference, Section, Table, Title |
-
+| dataset                                                         | 简介                                                                                                                                                                                                                                              |
+|-----------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [cTDaR2019_cTDaR](https://cndplab-founder.github.io/cTDaR2019/) | For form detection (TRACKA) and form identification (TRACKB).Image types include historical data sets (beginning with cTDaR_t0, such as CTDAR_T00872.jpg) and modern data sets (beginning with cTDaR_t1, CTDAR_T10482.jpg).                     |
+| [IIIT-AR-13K](http://cvit.iiit.ac.in/usodi/iiitar13k.php)       | Data sets constructed by manually annotating figures or pages from publicly available annual reports, containing 5 categories:table, figure, natural image, logo, and signature.                                                                |
+| [TableBank](https://github.com/doc-analysis/TableBank)          | For table detection and recognition of large datasets, including Word and Latex document formats                                                                                                                                                |
+| [CDLA](https://github.com/buptlihang/CDLA)                      | Chinese document layout analysis data set, for Chinese literature (paper) scenarios, including 10 categories:Text, Title, Figure, Figure caption, Table, Table caption, Header, Footer, Reference, Equation                                     |
+| [DocBank](https://github.com/doc-analysis/DocBank)              | Large-scale dataset (500K document pages) constructed using weakly supervised methods for document layout analysis, containing 12 categories:Author, Caption, Date, Equation, Figure, Footer, List, Paragraph, Reference, Section, Table, Title |
 
 ## 5. Start training
 
-Training scripts, evaluation scripts, and prediction scripts are provided, and the PubLayNet pre-training model is used as an example in this section.
+Training scripts, evaluation scripts, and prediction scripts are provided, and the PubLayNet pre-training model is used
+as an example in this section.
 
-If you do not want training and directly experience the following process of model evaluation, prediction, motion to static, and inference, you can download the provided pre-trained model (PubLayNet dataset) and skip this part.
+If you do not want training and directly experience the following process of model evaluation, prediction, motion to
+static, and inference, you can download the provided pre-trained model (PubLayNet dataset) and skip this part.
 
 ```
 mkdir pretrained_model
@@ -171,18 +189,26 @@ wget https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_
 wget https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_0_fgd_layout_infer.tar
 ```
 
-If the test image is Chinese, the pre-trained model of Chinese CDLA dataset can be downloaded to identify 10 types of document regions：Table, Figure, Figure caption, Table, Table caption, Header, Footer, Reference, Equation，Download the training model and inference model of Model 'picodet_lcnet_x1_0_fgd_layout_cdla' in [layout analysis model](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/ppstructure/docs/models_list.md)。If only the table area in the image is detected, you can download the pre-trained model of the table dataset, and download the training model and inference model of the 'picodet_LCnet_x1_0_FGd_layout_table' model in [Layout Analysis model](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/ppstructure/docs/models_list.md)
+If the test image is Chinese, the pre-trained model of Chinese CDLA dataset can be downloaded to identify 10 types of
+document regions：Table, Figure, Figure caption, Table, Table caption, Header, Footer, Reference, Equation，Download the
+training model and inference model of Model 'picodet_lcnet_x1_0_fgd_layout_cdla'
+in [layout analysis model](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/ppstructure/docs/models_list.md)。If
+only the table area in the image is detected, you can download the pre-trained model of the table dataset, and download
+the training model and inference model of the 'picodet_LCnet_x1_0_FGd_layout_table' model
+in [Layout Analysis model](https://github.com/PaddlePaddle/PaddleOCR/blob/dygraph/ppstructure/docs/models_list.md)
 
 ### 5.1. Train
 
-Start training with the PaddleDetection [layout analysis profile](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.5/configs/picodet/legacy_model/application/layout_analysis)
+Start training with the
+PaddleDetection [layout analysis profile](https://github.com/PaddlePaddle/PaddleDetection/tree/release/2.5/configs/picodet/legacy_model/application/layout_analysis)
 
 * Modify Profile
 
-If you want to train your own data set, you need to modify the data configuration and the number of categories in the configuration file.
+If you want to train your own data set, you need to modify the data configuration and the number of categories in the
+configuration file.
 
-
-Using 'configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml' as an example, the change is as follows:
+Using 'configs/picodet/legacy_model/application/layout_analysis/picodet_lcnet_x1_0_layout.yml' as an example, the change
+is as follows:
 
 ```yaml
 metric: COCO
@@ -214,7 +240,8 @@ TestDataset:
     anno_path: /root/publaynet/val.json
 ```
 
-* Start training. During training, PP picodet pre training model will be downloaded by default. There is no need to download in advance.
+* Start training. During training, PP picodet pre training model will be downloaded by default. There is no need to
+  download in advance.
 
 ```bash
 # GPU training supports single-card and multi-card training
@@ -233,7 +260,9 @@ python3 -m paddle.distributed.launch --gpus '0,1,2,3'  tools/train.py \
     --eval
 ```
 
-**Attention：**If the video memory is out during training, adjust Batch_size in TrainReader and base_LR in LearningRate. The published config is obtained by 8-card training. If the number of GPU cards is changed to 1, then the base_LR needs to be reduced by 8 times.
+**Attention：**If the video memory is out during training, adjust Batch_size in TrainReader and base_LR in LearningRate.
+The published config is obtained by 8-card training. If the number of GPU cards is changed to 1, then the base_LR needs
+to be reduced by 8 times.
 
 After starting training normally, you will see the following log output:
 
@@ -245,15 +274,23 @@ After starting training normally, you will see the following log output:
 [08/15 04:04:12] ppdet.engine INFO: Epoch: [0] [  60/1929] learning_rate: 0.112000 loss_vfl: 0.630989 loss_bbox: 0.859183 loss_dfl: 0.384702 loss: 1.883143 eta: 1 day, 19:01:29 batch_cost: 1.2177 data_cost: 0.0006 ips: 19.7087 images/s
 ```
 
-- `--eval` indicates that the best model is saved as `output/picodet_lcnet_x1_0_layout/best_accuracy`  by default during the evaluation process 。
+- `--eval` indicates that the best model is saved as `output/picodet_lcnet_x1_0_layout/best_accuracy`  by default during
+  the evaluation process 。
 
 **Note that the configuration file for prediction / evaluation must be consistent with the training.**
 
 ### 5.2. FGD Distillation Training
 
-PaddleDetection supports FGD-based [Focal and Global Knowledge Distillation for Detectors]( https://arxiv.org/abs/2111.11837v1)  The training process of the target detection model of distillation, FGD distillation is divided into two parts `Focal` and `Global`.     `Focal` Distillation separates the foreground and background of the image, allowing the student model to focus on the key pixels of the foreground and background features of the teacher model respectively;`  Global`Distillation section reconstructs the relationships between different pixels and transfers them from the teacher to the student to compensate for the global information lost in `Focal`Distillation.
+PaddleDetection supports
+FGD-based [Focal and Global Knowledge Distillation for Detectors]( https://arxiv.org/abs/2111.11837v1)  The training
+process of the target detection model of distillation, FGD distillation is divided into two parts `Focal`
+and `Global`.     `Focal` Distillation separates the foreground and background of the image, allowing the student model
+to focus on the key pixels of the foreground and background features of the teacher model respectively;`  Global`
+Distillation section reconstructs the relationships between different pixels and transfers them from the teacher to the
+student to compensate for the global information lost in `Focal`Distillation.
 
-Change the dataset and modify the data configuration and number of categories in the [TODO] configuration, referring to 4.1. Start training:
+Change the dataset and modify the data configuration and number of categories in the [TODO] configuration, referring to
+4.1. Start training:
 
 ```bash
 # Single Card Training
@@ -271,7 +308,10 @@ python3 tools/train.py \
 
 ### 6.1. Indicator evaluation
 
- Model parameters in training are saved by default in `output/picodet_ Lcnet_ X1_ 0_ Under the layout` directory. When evaluating indicators, you need to set `weights` to point to the saved parameter file.Assessment datasets can be accessed via `configs/picodet/legacy_ Model/application/layout_ Analysis/picodet_ Lcnet_ X1_ 0_ Layout. Yml` . Modify `EvalDataset`  : `img_dir`,`anno_ Path`and`dataset_dir` setting.
+Model parameters in training are saved by default in `output/picodet_ Lcnet_ X1_ 0_ Under the layout` directory. When
+evaluating indicators, you need to set `weights` to point to the saved parameter file.Assessment datasets can be
+accessed via `configs/picodet/legacy_ Model/application/layout_ Analysis/picodet_ Lcnet_ X1_ 0_ Layout. Yml` .
+Modify `EvalDataset`  : `img_dir`,`anno_ Path`and`dataset_dir` setting.
 
 ```bash
 # GPU evaluation, weights as weights to be measured
@@ -299,7 +339,8 @@ The following information will be printed out, such as mAP, AP0.5, etc.
 [08/15 07:07:09] ppdet.engine INFO: Best test bbox ap is 0.935.
 ```
 
-If you use the provided pre-training model for evaluation or the FGD distillation training model, replace the `weights` model path and execute the following command for evaluation:
+If you use the provided pre-training model for evaluation or the FGD distillation training model, replace the `weights`
+model path and execute the following command for evaluation:
 
 ```
 python3 tools/eval.py \
@@ -314,10 +355,11 @@ python3 tools/eval.py \
 
 ### 6.2. Test Layout Analysis Results
 
+The profile predicted to be used must be consistent with the training, for example, if you
+pass `python3 tools/train'. Py-c configs/picodet/legacy_ Model/application/layout_ Analysis/picodet_ Lcnet_ X1_ 0_ Layout. Yml`
+completed the training process for the model.
 
-The profile predicted to be used must be consistent with the training, for example, if you pass `python3 tools/train'. Py-c configs/picodet/legacy_ Model/application/layout_ Analysis/picodet_ Lcnet_ X1_ 0_ Layout. Yml` completed the training process for the model.
-
-With  trained PaddleDetection model, you can use the following commands to make model predictions.
+With trained PaddleDetection model, you can use the following commands to make model predictions.
 
 ```bash
 python3 tools/infer.py \
@@ -332,7 +374,8 @@ python3 tools/infer.py \
 - `--output_dir`:  Specify the path to save the visualization results.
 - `--draw_threshold`:Specify the NMS threshold for drawing the result box.
 
-If you use the provided pre-training model for prediction or the FGD distillation training model, change the `weights` model path and execute the following command to make the prediction:
+If you use the provided pre-training model for prediction or the FGD distillation training model, change the `weights`
+model path and execute the following command to make the prediction:
 
 ```
 python3 tools/infer.py \
@@ -344,17 +387,19 @@ python3 tools/infer.py \
     --draw_threshold=0.5
 ```
 
-
 ## 7. Model Export and Inference
-
 
 ### 7.1 Model Export
 
-The inference model (the model saved by `paddle.jit.save`) is generally a solidified model saved after the model training is completed, and is mostly used to give prediction in deployment.
+The inference model (the model saved by `paddle.jit.save`) is generally a solidified model saved after the model
+training is completed, and is mostly used to give prediction in deployment.
 
-The model saved during the training process is the checkpoints model, which saves the parameters of the model and is mostly used to resume training.
+The model saved during the training process is the checkpoints model, which saves the parameters of the model and is
+mostly used to resume training.
 
-Compared with the checkpoints model, the inference model will additionally save the structural information of the model. Therefore, it is easier to deploy because the model structure and model parameters are already solidified in the inference model file, and is suitable for integration with actual systems.
+Compared with the checkpoints model, the inference model will additionally save the structural information of the model.
+Therefore, it is easier to deploy because the model structure and model parameters are already solidified in the
+inference model file, and is suitable for integration with actual systems.
 
 Layout analysis model to inference model steps are as follows：
 
@@ -377,7 +422,8 @@ output_inference/picodet_lcnet_x1_0_layout/
     └── model.pdmodel           # inference Model Structure File for Model
 ```
 
-If you change the `weights` model path using the provided pre-training model to the Inference model, or using the FGD distillation training model, the model to inference model steps are as follows:
+If you change the `weights` model path using the provided pre-training model to the Inference model, or using the FGD
+distillation training model, the model to inference model steps are as follows:
 
 ```bash
 python3 tools/export_model.py \
@@ -389,7 +435,8 @@ python3 tools/export_model.py \
 
 ### 7.2 Model inference
 
-Replace model_with the provided inference training model for inference or the FGD distillation training `model_dir`Inference model path, execute the following commands for inference:
+Replace model_with the provided inference training model for inference or the FGD distillation training `model_dir`
+Inference model path, execute the following commands for inference:
 
 ```bash
 python3 deploy/python/infer.py \
@@ -431,17 +478,17 @@ preprocess_time(ms): 2172.50, inference_time(ms): 11.90, postprocess_time(ms): 1
 
 - Model：model structure
 - Transform Order：Preprocessing operation
-- class_id, confidence, left_top, right_bottom：Indicates category id, confidence level, upper left coordinate, lower right coordinate, respectively
+- class_id, confidence, left_top, right_bottom：Indicates category id, confidence level, upper left coordinate, lower
+  right coordinate, respectively
 - save result to：Save path of visual layout analysis results, default save to ./output folder
-- inference time info：Inference time, where preprocess_time represents the preprocessing time, Inference_time represents the model prediction time, and postprocess_time represents the post-processing time
+- inference time info：Inference time, where preprocess_time represents the preprocessing time, Inference_time represents
+  the model prediction time, and postprocess_time represents the post-processing time
 
 The result of visualization layout is shown in the following figure
 
 <div align="center">
     <img src="../docs/layout/layout_res.jpg" width="800">
 </div>
-
-
 
 ## Citations
 

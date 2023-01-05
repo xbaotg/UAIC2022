@@ -21,8 +21,8 @@ from __future__ import division
 from __future__ import print_function
 
 import paddle
-from paddle import nn
 import paddle.nn.functional as F
+from paddle import nn
 
 
 class PoolAggregate(nn.Layer):

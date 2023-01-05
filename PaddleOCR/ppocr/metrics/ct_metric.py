@@ -16,10 +16,6 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import os
-from scipy import io
-import numpy as np
-
 from ppocr.utils.e2e_metric.Deteval import combine_results, get_score_C
 
 

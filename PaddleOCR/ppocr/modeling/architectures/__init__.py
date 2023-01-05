@@ -57,10 +57,10 @@ def apply_to_static(model, config, logger):
             InputSpec(
                 [None, config["Global"]["max_text_length"]],
                 dtype='int64'), InputSpec(
-                    [None, config["Global"]["max_text_length"]], dtype='int64'),
+                [None, config["Global"]["max_text_length"]], dtype='int64'),
             InputSpec(
                 [None], dtype='int64'), InputSpec(
-                    [None], dtype='float64')
+                [None], dtype='float64')
         ])
 
     model = to_static(model, input_spec=specs)

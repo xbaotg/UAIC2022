@@ -11,14 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import numpy as np
-import cv2
 import math
-import paddle
 
+import cv2
+import numpy as np
+import paddle
 from arch import style_text_rec
-from utils.sys_funcs import check_gpu
 from utils.logging import get_logger
+from utils.sys_funcs import check_gpu
 
 
 class StyleTextRecPredictor(object):

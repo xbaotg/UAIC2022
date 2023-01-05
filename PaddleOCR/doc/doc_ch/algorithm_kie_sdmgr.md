@@ -1,25 +1,22 @@
-
 # 关键信息抽取算法-SDMGR
 
 - [1. 算法简介](#1-算法简介)
 - [2. 环境配置](#2-环境配置)
 - [3. 模型训练、评估、预测](#3-模型训练评估预测)
-  - [3.1 模型训练](#31-模型训练)
-  - [3.2 模型评估](#32-模型评估)
-  - [3.3 模型预测](#33-模型预测)
+    - [3.1 模型训练](#31-模型训练)
+    - [3.2 模型评估](#32-模型评估)
+    - [3.3 模型预测](#33-模型预测)
 - [4. 推理部署](#4-推理部署)
-  - [4.1 Python推理](#41-python推理)
-  - [4.2 C++推理部署](#42-c推理部署)
-  - [4.3 Serving服务化部署](#43-serving服务化部署)
-  - [4.4 更多推理部署](#44-更多推理部署)
+    - [4.1 Python推理](#41-python推理)
+    - [4.2 C++推理部署](#42-c推理部署)
+    - [4.3 Serving服务化部署](#43-serving服务化部署)
+    - [4.4 更多推理部署](#44-更多推理部署)
 - [5. FAQ](#5-faq)
 - [引用](#引用)
-
 
 <a name="1"></a>
 
 ## 1. 算法简介
-
 
 论文信息：
 
@@ -31,16 +28,15 @@
 
 在wildreceipt发票公开数据集上，算法复现效果如下：
 
-|模型|骨干网络|配置文件|hmean|下载链接|
-| --- | --- | --- | --- | --- |
-|SDMGR|VGG6|[configs/kie/sdmgr/kie_unet_sdmgr.yml](../../configs/kie/sdmgr/kie_unet_sdmgr.yml)|86.70%|[训练模型]( https://paddleocr.bj.bcebos.com/dygraph_v2.1/kie/kie_vgg16.tar)/[推理模型(coming soon)]()|
-
+| 模型    | 骨干网络 | 配置文件                                                                               | hmean  | 下载链接                                                                                          |
+|-------|------|------------------------------------------------------------------------------------|--------|-----------------------------------------------------------------------------------------------|
+| SDMGR | VGG6 | [configs/kie/sdmgr/kie_unet_sdmgr.yml](../../configs/kie/sdmgr/kie_unet_sdmgr.yml) | 86.70% | [训练模型]( https://paddleocr.bj.bcebos.com/dygraph_v2.1/kie/kie_vgg16.tar)/[推理模型(coming soon)]() |
 
 <a name="2"></a>
 
 ## 2. 环境配置
-请先参考[《运行环境准备》](./environment.md)配置PaddleOCR运行环境，参考[《项目克隆》](./clone.md)克隆项目代码。
 
+请先参考[《运行环境准备》](./environment.md)配置PaddleOCR运行环境，参考[《项目克隆》](./clone.md)克隆项目代码。
 
 <a name="3"></a>
 
@@ -55,16 +51,17 @@ wget https://paddleocr.bj.bcebos.com/ppstructure/dataset/wildreceipt.tar && tar 
 ```
 
 创建数据集软链到PaddleOCR/train_data目录下：
+
 ```
 cd PaddleOCR/ && mkdir train_data && cd train_data
 
 ln -s ../../wildreceipt ./
 ```
 
-
 ### 3.1 模型训练
 
-训练采用的配置文件是`configs/kie/sdmgr/kie_unet_sdmgr.yml`，配置文件中默认训练数据路径是`train_data/wildreceipt`，准备好数据后，可以通过如下指令执行训练：
+训练采用的配置文件是`configs/kie/sdmgr/kie_unet_sdmgr.yml`，配置文件中默认训练数据路径是`train_data/wildreceipt`
+，准备好数据后，可以通过如下指令执行训练：
 
 ```
 python3 tools/train.py -c configs/kie/sdmgr/kie_unet_sdmgr.yml -o Global.save_model_dir=./output/kie/
@@ -81,9 +78,13 @@ python3 tools/eval.py -c configs/kie/sdmgr/kie_unet_sdmgr.yml -o Global.checkpoi
 输出信息示例如下所示。
 
 ```py
-[2022/08/10 05:22:23] ppocr INFO: metric eval ***************
-[2022/08/10 05:22:23] ppocr INFO: hmean:0.8670120239257812
-[2022/08/10 05:22:23] ppocr INFO: fps:10.18816520530961
+[2022 / 08 / 10 05: 22:23] ppocr
+INFO: metric
+eval ** ** ** ** ** ** ** *
+[2022 / 08 / 10 05: 22:23] ppocr
+INFO: hmean:0.8670120239257812
+[2022 / 08 / 10 05: 22:23] ppocr
+INFO: fps:10.18816520530961
 ```
 
 ### 3.3 模型预测
@@ -103,24 +104,29 @@ python3 tools/infer_kie.py -c configs/kie/kie_unet_sdmgr.yml -o Global.checkpoin
 </div>
 
 <a name="4"></a>
+
 ## 4. 推理部署
 
 <a name="4-1"></a>
+
 ### 4.1 Python推理
 
 暂不支持
 
 <a name="4-2"></a>
+
 ### 4.2 C++推理部署
 
 暂不支持
 
 <a name="4-3"></a>
+
 ### 4.3 Serving服务化部署
 
 暂不支持
 
 <a name="4-4"></a>
+
 ### 4.4 更多推理部署
 
 暂不支持
@@ -130,7 +136,6 @@ python3 tools/infer_kie.py -c configs/kie/kie_unet_sdmgr.yml -o Global.checkpoin
 ## 5. FAQ
 
 ## 引用
-
 
 ```bibtex
 @misc{sun2021spatial,

@@ -17,13 +17,12 @@ from __future__ import division
 from __future__ import print_function
 
 import paddle
-from paddle import ParamAttr
 import paddle.nn as nn
 import paddle.nn.functional as F
-
-from paddle.vision.ops import DeformConv2D
+from paddle import ParamAttr
+from paddle.nn.initializer import Constant
 from paddle.regularizer import L2Decay
-from paddle.nn.initializer import Normal, Constant, XavierUniform
+from paddle.vision.ops import DeformConv2D
 
 __all__ = ["ResNet_vd", "ConvBNLayer", "DeformableConvV2"]
 
@@ -45,8 +44,8 @@ class DeformableConvV2(nn.Layer):
                  dcn_bias_regularizer=L2Decay(0.),
                  dcn_bias_lr_scale=2.):
         super(DeformableConvV2, self).__init__()
-        self.offset_channel = 2 * kernel_size**2 * groups
-        self.mask_channel = kernel_size**2 * groups
+        self.offset_channel = 2 * kernel_size ** 2 * groups
+        self.mask_channel = kernel_size ** 2 * groups
 
         if bias_attr:
             # in FCOS-DCN head, specifically need learning_rate and regularizer
@@ -77,7 +76,7 @@ class DeformableConvV2(nn.Layer):
                 regularizer=regularizer)
         self.conv_offset = nn.Conv2D(
             in_channels,
-            groups * 3 * kernel_size**2,
+            groups * 3 * kernel_size ** 2,
             kernel_size,
             stride=stride,
             padding=(kernel_size - 1) // 2,
@@ -129,7 +128,7 @@ class ConvBNLayer(nn.Layer):
                 kernel_size=kernel_size,
                 stride=stride,
                 padding=(kernel_size - 1) // 2,
-                groups=dcn_groups,  #groups,
+                groups=dcn_groups,  # groups,
                 bias_attr=False)
         self._batch_norm = nn.BatchNorm(out_channels, act=act)
 

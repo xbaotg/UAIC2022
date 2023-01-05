@@ -18,7 +18,6 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
-import paddle
 
 __all__ = ['KIEMetric']
 
@@ -45,7 +44,7 @@ class KIEMetric(object):
         classes = np.array(sorted(set(range(C)) - set(ignores)))
         hist = np.bincount(
             (gts * C).astype('int64') + preds.argmax(1), minlength=C
-            **2).reshape([C, C]).astype('float32')
+                                                                   ** 2).reshape([C, C]).astype('float32')
         diag = np.diag(hist)
         recalls = diag / hist.sum(1).clip(min=1)
         precisions = diag / hist.sum(0).clip(min=1)
@@ -60,7 +59,6 @@ class KIEMetric(object):
         return data
 
     def get_metric(self):
-
         metrics = self.combine_results(self.results)
         self.reset()
         return metrics

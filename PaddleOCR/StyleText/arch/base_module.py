@@ -204,7 +204,6 @@ class MiddleNet(nn.Layer):
             use_bias=use_bias)
 
     def forward(self, x):
-
         sn_conv1 = self._sn_conv1.forward(x)
         pad_2d = self._pad2d.forward(sn_conv1)
         sn_conv2 = self._sn_conv2.forward(pad_2d)

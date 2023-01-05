@@ -6,7 +6,7 @@ import sys
 sys.path.append("../../")
 import mutils
 
-from cv2 import cv2
+import cv2
 from tqdm import tqdm
 from pathlib import Path
 

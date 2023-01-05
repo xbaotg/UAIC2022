@@ -3,23 +3,25 @@
 Linux GPU/CPU KL离线量化训练推理测试的主程序为`test_ptq_inference_python.sh`，可以测试基于Python的模型训练、评估、推理等基本功能。
 
 ## 1. 测试结论汇总
+
 - 训练相关：
 
-| 算法名称 | 模型名称 | 单机单卡 |
-|  :----: |   :----:  |    :----:  |  
-|    | model_name | KL离线量化训练 |
+| 算法名称 |    模型名称    |   单机单卡   |
+|:----:|:----------:|:--------:|  
+|      | model_name | KL离线量化训练 |
 
 - 推理相关：
 
-| 算法名称 | 模型名称 | device_CPU | device_GPU | batchsize |
-|  :----:   |  :----: |   :----:   |  :----:  |   :----:   |
-|     |  model_name |  支持 | 支持 | 1 |
+| 算法名称 |    模型名称    | device_CPU | device_GPU | batchsize |
+|:----:|:----------:|:----------:|:----------:|:---------:|
+|      | model_name |     支持     |     支持     |     1     |
 
 ## 2. 测试流程
 
 ### 2.1 准备数据和模型
 
-先运行`prepare.sh`准备数据和模型，然后运行`test_ptq_inference_python.sh`进行测试，最终在```test_tipc/output/{model_name}/whole_infer```目录下生成`python_infer_*.log`后缀的日志文件。
+先运行`prepare.sh`准备数据和模型，然后运行`test_ptq_inference_python.sh`
+进行测试，最终在```test_tipc/output/{model_name}/whole_infer```目录下生成`python_infer_*.log`后缀的日志文件。
 
 ```shell
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2_det/train_ptq_infer_python.txt "whole_infer"

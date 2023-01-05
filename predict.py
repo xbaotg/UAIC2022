@@ -2,10 +2,11 @@ import ast
 import os
 import shutil
 import time
+import sys
 from pathlib import Path
 
+import cv2
 import torch
-from cv2 import cv2
 from tqdm import tqdm
 
 import model
@@ -122,6 +123,10 @@ def predict_text(threshold=0.95):
 
 
 if __name__ == "__main__":
+    if len(os.listdir("models/rec/inference")) < 3:
+        print("Must export model OCR at ./tools/export_ocr_inference.sh")
+        sys.exit(0)
+
     generate_det_images()
 
     # sleep 5s to release gpu memory

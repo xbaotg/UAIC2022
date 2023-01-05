@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from rapidfuzz.distance import Levenshtein
+import string
 from difflib import SequenceMatcher
 
 import numpy as np
-import string
+from rapidfuzz.distance import Levenshtein
 
 
 class RecMetric(object):
@@ -148,8 +148,8 @@ class CANMetric(object):
         for i in range(batch_size):
             if word_scores[i] == 1:
                 line_right += 1
-        self.word_rate = np.mean(word_scores)  #float
-        self.exp_rate = line_right / batch_size  #float
+        self.word_rate = np.mean(word_scores)  # float
+        self.exp_rate = line_right / batch_size  # float
         exp_length, word_length = word_label.shape[:2]
         self.word_right.append(self.word_rate * word_length)
         self.exp_right.append(self.exp_rate * exp_length)

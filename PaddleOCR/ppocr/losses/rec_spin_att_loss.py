@@ -24,6 +24,7 @@ from paddle import nn
 https://github.com/hikopensource/DAVAR-Lab-OCR
 '''
 
+
 class SPINAttentionLoss(nn.Layer):
     def __init__(self, reduction='mean', ignore_index=-100, **kwargs):
         super(SPINAttentionLoss, self).__init__()
@@ -31,7 +32,7 @@ class SPINAttentionLoss(nn.Layer):
 
     def forward(self, predicts, batch):
         targets = batch[1].astype("int64")
-        targets = targets[:, 1:] # remove [eos] in label
+        targets = targets[:, 1:]  # remove [eos] in label
 
         label_lengths = batch[2].astype('int64')
         batch_size, num_steps, num_classes = predicts.shape[0], predicts.shape[

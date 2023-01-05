@@ -1,6 +1,6 @@
 # 云上飞桨部署工具
 
-[云上飞桨（PaddleCloud）](https://github.com/PaddlePaddle/PaddleCloud) 是面向飞桨框架及其模型套件的部署工具， 
+[云上飞桨（PaddleCloud）](https://github.com/PaddlePaddle/PaddleCloud) 是面向飞桨框架及其模型套件的部署工具，
 为用户提供了模型套件Docker化部署和Kubernetes集群部署两种方式，可以满足不同场景与环境的部署需求。
 本章节我们将使用PaddleCloud提供的OCR标准镜像以及云原生组件来训练和部署PP-OCRv3识别模型。
 
@@ -26,21 +26,24 @@
 
   除了部署便捷与自运维的优势，PaddleCloud还针对飞桨框架进行了正对性优化，如通过缓存样本数据来加速云上飞桨分布式训练作业、基于飞桨框架和调度器的协同设计来优化集群GPU利用率等。
 
-
 ## 1. PP-OCRv3 Docker化部署
 
 PaddleCloud基于 [Tekton](https://github.com/tektoncd/pipeline) 为OCR模型套件提供了镜像持续构建的能力，并支持CPU、GPU以及常见CUDA版本的镜像。
 您可以查看 [PaddleOCR 镜像仓库](https://hub.docker.com/repository/docker/paddlecloud/paddleocr) 来获取所有的镜像列表。
-同时我们也将PP-OCRv3识别模型的训练与推理实战案例放置到了AI Studio平台上，您可以点击 [PP-OCRv3识别训推一体项目实战](https://aistudio.baidu.com/aistudio/projectdetail/3916206?channelType=0&channel=0) 在平台上快速体验。
+同时我们也将PP-OCRv3识别模型的训练与推理实战案例放置到了AI
+Studio平台上，您可以点击 [PP-OCRv3识别训推一体项目实战](https://aistudio.baidu.com/aistudio/projectdetail/3916206?channelType=0&channel=0)
+在平台上快速体验。
 
 > **适用场景**：本地测试开发环境、单机部署环境。
 
 ### 1.1 安装Docker
 
 如果您所使用的机器上还没有安装 Docker，您可以参考 [Docker 官方文档](https://docs.docker.com/get-docker/) 来进行安装。
-如果您需要使用支持 GPU 版本的镜像，则还需安装好NVIDIA相关驱动和 [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker) 。
+如果您需要使用支持 GPU
+版本的镜像，则还需安装好NVIDIA相关驱动和 [nvidia-docker](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker) 。
 
-**注意**：如果您使用的是Windows系统，需要开启 [WSL2（Linux子系统功能）功能](https://docs.microsoft.com/en-us/windows/wsl/install)。
+**注意**
+：如果您使用的是Windows系统，需要开启 [WSL2（Linux子系统功能）功能](https://docs.microsoft.com/en-us/windows/wsl/install)。
 
 ### 1.2 启动容器
 
@@ -317,7 +320,8 @@ spec:
               medium: Memory
 ```
 
-本案例采用GPU进行训练，如果您只有CPU机器，则可以将镜像替换成CPU版本 `paddlecloud/paddleocr:2.5-cpu-efbb0a`，并在args中加上参数`Global.use_gpu=false`。
+本案例采用GPU进行训练，如果您只有CPU机器，则可以将镜像替换成CPU版本 `paddlecloud/paddleocr:2.5-cpu-efbb0a`
+，并在args中加上参数`Global.use_gpu=false`。
 
 ```bash
 # 创建PaddleJob训练模型
@@ -335,5 +339,7 @@ $ kubectl logs -f ppocrv3-worker-0 -n paddlecloud
 
 ## 更多资源
 
-欢迎关注[云上飞桨项目PaddleCloud](https://github.com/PaddlePaddle/PaddleCloud)，我们为您提供了飞桨模型套件标准镜像以及全栈的云原生模型套件部署组件，如您有任何关于飞桨模型套件的部署问题，请联系我们。
-如果你发现任何PaddleCloud存在的问题或者是建议, 欢迎通过[GitHub Issues](https://github.com/PaddlePaddle/PaddleCloud/issues)给我们提issues。
+欢迎关注[云上飞桨项目PaddleCloud](https://github.com/PaddlePaddle/PaddleCloud)
+，我们为您提供了飞桨模型套件标准镜像以及全栈的云原生模型套件部署组件，如您有任何关于飞桨模型套件的部署问题，请联系我们。
+如果你发现任何PaddleCloud存在的问题或者是建议,
+欢迎通过[GitHub Issues](https://github.com/PaddlePaddle/PaddleCloud/issues)给我们提issues。

@@ -20,12 +20,12 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+import numpy as np
 import paddle
-from paddle import ParamAttr
 import paddle.nn as nn
 import paddle.nn.functional as F
+from paddle import ParamAttr
 from paddle.nn.initializer import Normal, XavierNormal
-import numpy as np
 
 
 class PositionalEncoding(nn.Layer):
@@ -222,7 +222,6 @@ class Transformer_Encoder(nn.Layer):
 
 class PP_layer(nn.Layer):
     def __init__(self, n_dim=512, N_max_character=25, n_position=256):
-
         super(PP_layer, self).__init__()
         self.character_len = N_max_character
         self.f0_embedding = nn.Embedding(N_max_character, n_dim)
@@ -367,7 +366,7 @@ class MLM_VRM(nn.Layer):
             n_dim=n_dim,
             n_position=n_position,
             N_max_character=max_text_length +
-            1,  # N_max_character = 1 eos + 25 characters
+                            1,  # N_max_character = 1 eos + 25 characters
             n_class=nclass)
         self.nclass = nclass
         self.max_text_length = max_text_length

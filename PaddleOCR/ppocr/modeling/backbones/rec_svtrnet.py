@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from paddle import ParamAttr
-from paddle.nn.initializer import KaimingNormal
 import numpy as np
 import paddle
 import paddle.nn as nn
+from paddle import ParamAttr
+from paddle.nn.initializer import KaimingNormal
 from paddle.nn.initializer import TruncatedNormal, Constant, Normal
 
 trunc_normal_ = TruncatedNormal(std=.02)
@@ -33,7 +33,7 @@ def drop_path(x, drop_prob=0., training=False):
     if drop_prob == 0. or not training:
         return x
     keep_prob = paddle.to_tensor(1 - drop_prob)
-    shape = (paddle.shape(x)[0], ) + (1, ) * (x.ndim - 1)
+    shape = (paddle.shape(x)[0],) + (1,) * (x.ndim - 1)
     random_tensor = keep_prob + paddle.rand(shape, dtype=x.dtype)
     random_tensor = paddle.floor(random_tensor)  # binarize
     output = x.divide(keep_prob) * random_tensor
@@ -156,7 +156,7 @@ class Attention(nn.Layer):
         super().__init__()
         self.num_heads = num_heads
         head_dim = dim // num_heads
-        self.scale = qk_scale or head_dim**-0.5
+        self.scale = qk_scale or head_dim ** -0.5
 
         self.qkv = nn.Linear(dim, dim * 3, bias_attr=qkv_bias)
         self.attn_drop = nn.Dropout(attn_drop)
@@ -176,7 +176,7 @@ class Attention(nn.Layer):
                 for w in range(0, W):
                     mask[h * W + w, h:h + hk, w:w + wk] = 0.
             mask_paddle = mask[:, hk // 2:H + hk // 2, wk // 2:W + wk //
-                               2].flatten(1)
+                                                               2].flatten(1)
             mask_inf = paddle.full([H * W, H * W], '-inf', dtype='float32')
             mask = paddle.where(mask_paddle < 1, mask_paddle, mask_inf)
             self.mask = mask.unsqueeze([0, 1])
@@ -399,7 +399,7 @@ class SVTRNet(nn.Layer):
             depth=[3, 6, 3],
             num_heads=[2, 4, 8],
             mixer=['Local'] * 6 + ['Global'] *
-            6,  # Local atten, Global atten, Conv
+                  6,  # Local atten, Global atten, Conv
             local_mixer=[[7, 11], [7, 11], [7, 11]],
             patch_merging='Conv',  # Conv, Pool, None
             mlp_ratio=4,
@@ -433,7 +433,7 @@ class SVTRNet(nn.Layer):
             embed_dim=embed_dim[0],
             sub_num=sub_num)
         num_patches = self.patch_embed.num_patches
-        self.HW = [img_size[0] // (2**sub_num), img_size[1] // (2**sub_num)]
+        self.HW = [img_size[0] // (2 ** sub_num), img_size[1] // (2 ** sub_num)]
         self.pos_embed = self.create_parameter(
             shape=[1, num_patches, embed_dim[0]], default_initializer=zeros_)
         self.add_parameter("pos_embed", self.pos_embed)

@@ -24,9 +24,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import paddle.nn as nn
-import paddle
 import math
+
+import paddle
+import paddle.nn as nn
+
 '''
 Counting Module
 '''
@@ -115,8 +117,8 @@ class PositionEmbeddingSine(nn.Layer):
             x_embed = x_embed / (x_embed[:, :, -1:] + eps) * self.scale
         dim_t = paddle.arange(self.num_pos_feats, dtype='float32')
         dim_d = paddle.expand(paddle.to_tensor(2), dim_t.shape)
-        dim_t = self.temperature**(2 * (dim_t / dim_d).astype('int64') /
-                                   self.num_pos_feats)
+        dim_t = self.temperature ** (2 * (dim_t / dim_d).astype('int64') /
+                                     self.num_pos_feats)
 
         pos_x = paddle.unsqueeze(x_embed, [3]) / dim_t
         pos_y = paddle.unsqueeze(y_embed, [3]) / dim_t
@@ -240,7 +242,7 @@ class AttDecoder(nn.Layer):
     def init_hidden(self, features, feature_mask):
         average = paddle.sum(paddle.sum(features * feature_mask, axis=-1),
                              axis=-1) / paddle.sum(
-                                 (paddle.sum(feature_mask, axis=-1)), axis=-1)
+            (paddle.sum(feature_mask, axis=-1)), axis=-1)
         average = self.init_weight(average)
         return paddle.tanh(average)
 

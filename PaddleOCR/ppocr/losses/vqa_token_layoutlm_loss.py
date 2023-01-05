@@ -17,7 +17,6 @@ from __future__ import division
 from __future__ import print_function
 
 from paddle import nn
-from ppocr.losses.basic_loss import DMLLoss
 
 
 class VQASerTokenLayoutLMLoss(nn.Layer):

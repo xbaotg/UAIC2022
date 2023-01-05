@@ -22,8 +22,6 @@ from __future__ import print_function
 import paddle
 from paddle import nn
 
-from .basic_loss import CELoss, DistanceLoss
-
 
 class RFLLoss(nn.Layer):
     def __init__(self, ignore_index=-100, **kwargs):

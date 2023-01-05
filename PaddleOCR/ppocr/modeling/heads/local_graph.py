@@ -22,7 +22,6 @@ from __future__ import print_function
 
 import numpy as np
 import paddle
-import paddle.nn as nn
 from ppocr.ext_op import RoIAlignRotated
 
 
@@ -173,7 +172,7 @@ class LocalGraphs:
             for neighbor_ind in knn:
                 local_graph_neighbors.update(
                     set(sorted_dist_inds[neighbor_ind, 1:self.k_at_hops[1] +
-                                         1]))
+                                                         1]))
 
             local_graph_neighbors.discard(pivot_ind)
             pivot_local_graph = list(local_graph_neighbors)
@@ -272,14 +271,13 @@ class LocalGraphs:
                     (num_nodes, num_nodes), dtype=np.float32)
                 for node in pivot_local_graph:
                     neighbors = sorted_dist_inds[node, 1:
-                                                 self.num_adjacent_linkages + 1]
+                                                       self.num_adjacent_linkages + 1]
                     for neighbor in neighbors:
                         if neighbor in pivot_local_graph:
-
                             adjacent_matrix[node2ind_map[node], node2ind_map[
                                 neighbor]] = 1
                             adjacent_matrix[node2ind_map[neighbor],
-                                            node2ind_map[node]] = 1
+                            node2ind_map[node]] = 1
 
                 adjacent_matrix = normalize_adjacent_matrix(adjacent_matrix)
                 pad_adjacent_matrix = paddle.zeros(
@@ -290,8 +288,8 @@ class LocalGraphs:
                 pad_normalized_feats = paddle.concat(
                     [
                         normalized_feats, paddle.zeros(
-                            (num_max_nodes - num_nodes,
-                             normalized_feats.shape[1]))
+                        (num_max_nodes - num_nodes,
+                         normalized_feats.shape[1]))
                     ],
                     axis=0)
                 local_graph_labels = node_labels[pivot_local_graph]

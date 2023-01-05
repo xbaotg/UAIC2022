@@ -12,14 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from setuptools import setup
 from io import open
+
+from setuptools import setup
+
 from paddleocr import VERSION
+
 
 def load_requirements(file_list=None):
     if file_list is None:
         file_list = ['requirements.txt']
-    if isinstance(file_list,str):
+    if isinstance(file_list, str):
         file_list = [file_list]
     requirements = []
     for file in file_list:

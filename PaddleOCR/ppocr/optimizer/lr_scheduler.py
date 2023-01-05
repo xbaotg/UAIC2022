@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import math
+
 from paddle.optimizer.lr import LRScheduler
 
 
@@ -45,7 +46,7 @@ class CyclicalCosineDecay(LRScheduler):
             return self.base_lr
         reletive_epoch = self.last_epoch % self.cycle
         lr = self.eta_min + 0.5 * (self.base_lr - self.eta_min) * \
-                (1 + math.cos(math.pi * reletive_epoch / self.cycle))
+             (1 + math.cos(math.pi * reletive_epoch / self.cycle))
         return lr
 
 
@@ -199,18 +200,18 @@ class TwoStepCosineDecay(LRScheduler):
                 return self.base_lr
             elif (self.last_epoch - 1 - self.T_max1) % (2 * self.T_max1) == 0:
                 return self.last_lr + (self.base_lr - self.eta_min) * (
-                    1 - math.cos(math.pi / self.T_max1)) / 2
+                        1 - math.cos(math.pi / self.T_max1)) / 2
 
             return (1 + math.cos(math.pi * self.last_epoch / self.T_max1)) / (
-                1 + math.cos(math.pi * (self.last_epoch - 1) / self.T_max1)) * (
+                    1 + math.cos(math.pi * (self.last_epoch - 1) / self.T_max1)) * (
                     self.last_lr - self.eta_min) + self.eta_min
         else:
             if (self.last_epoch - 1 - self.T_max2) % (2 * self.T_max2) == 0:
                 return self.last_lr + (self.base_lr - self.eta_min) * (
-                    1 - math.cos(math.pi / self.T_max2)) / 2
+                        1 - math.cos(math.pi / self.T_max2)) / 2
 
             return (1 + math.cos(math.pi * self.last_epoch / self.T_max2)) / (
-                1 + math.cos(math.pi * (self.last_epoch - 1) / self.T_max2)) * (
+                    1 + math.cos(math.pi * (self.last_epoch - 1) / self.T_max2)) * (
                     self.last_lr - self.eta_min) + self.eta_min
 
     def _get_closed_form_lr(self):

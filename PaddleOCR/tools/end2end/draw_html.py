@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 import argparse
+import os
 
 
 def str2bool(v):
@@ -34,7 +34,6 @@ def parse_args():
 
 
 def draw_debug_img(args):
-
     html_path = args.save_html_path
 
     err_cnt = 0
@@ -67,7 +66,6 @@ def draw_debug_img(args):
 
 
 if __name__ == "__main__":
-
     args = parse_args()
 
     draw_debug_img(args)

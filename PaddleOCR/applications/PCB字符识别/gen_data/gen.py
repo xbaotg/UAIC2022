@@ -15,11 +15,12 @@
 This code is refer from:
 https://github.com/zcswdt/Color_OCR_image_generator
 """
+import argparse
+import json
 import os
 import random
+
 from PIL import Image, ImageDraw, ImageFont
-import json
-import argparse
 
 
 def get_char_lines(txt_root_path):
@@ -134,11 +135,12 @@ def get_fonts(fonts_path):
     desc: get all fonts
     """
     font_files = os.listdir(fonts_path)
-    fonts_list=[]
+    fonts_list = []
     for font_file in font_files:
-        font_path=os.path.join(fonts_path, font_file)
+        font_path = os.path.join(fonts_path, font_file)
         fonts_list.append(font_path)
     return fonts_list
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -156,7 +158,6 @@ if __name__ == '__main__':
                         help='The corpus used to generate the text picture')
     parser.add_argument('--output_dir', type=str, default='./output/', help='Images save dir')
 
-
     cf = parser.parse_args()
     # save path
     if not os.path.exists(cf.output_dir):
@@ -172,8 +173,8 @@ if __name__ == '__main__':
 
     # rec bg
     img_root_path = cf.bg_path
-    imnames=os.listdir(img_root_path)
-    
+    imnames = os.listdir(img_root_path)
+
     # det bg
     det_bg_path = cf.det_bg_path
     bg_pics = os.listdir(det_bg_path)
@@ -199,7 +200,6 @@ if __name__ == '__main__':
     rec_val_save_dir = 'rec_imgs_val/'
     if not os.path.exists(cf.output_dir + rec_val_save_dir):
         os.mkdir(cf.output_dir + rec_val_save_dir)
-
 
     val_ratio = cf.num_img * 0.2  # val dataset ratio
 
@@ -232,7 +232,7 @@ if __name__ == '__main__':
             save_dir = os.path.join(rec_save_dir, save_img_name)
             line = save_dir + '\t' + char_lines[i] + '\n'
             rec_train_file.write(line)
-        gen_img.save(cf.output_dir + save_dir, quality = 95, subsampling=0)
+        gen_img.save(cf.output_dir + save_dir, quality=95, subsampling=0)
 
         # det img
         # random choice bg
@@ -249,13 +249,13 @@ if __name__ == '__main__':
         det_img.paste(gen_img, (x1, y1))
         # text pos
         chars_pos = [[x1, y1], [x1 + ori_w, y1], [x1 + ori_w, y1 + ori_h], [x1, y1 + ori_h]]
-        label = [{"transcription":char_lines[i], "points":chars_pos}]
+        label = [{"transcription": char_lines[i], "points": chars_pos}]
         if i < val_ratio:
             save_dir = os.path.join(det_val_save_dir, save_img_name)
             det_val_file.write(save_dir + '\t' + json.dumps(
-                    label, ensure_ascii=False) + '\n')
+                label, ensure_ascii=False) + '\n')
         else:
             save_dir = os.path.join(det_save_dir, save_img_name)
             det_train_file.write(save_dir + '\t' + json.dumps(
-                    label, ensure_ascii=False) + '\n')
-        det_img.save(cf.output_dir + save_dir, quality = 95, subsampling=0)
+                label, ensure_ascii=False) + '\n')
+        det_img.save(cf.output_dir + save_dir, quality=95, subsampling=0)

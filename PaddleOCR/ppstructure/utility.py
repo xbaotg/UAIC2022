@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import random
-import ast
-from PIL import Image, ImageDraw, ImageFont
+
 import numpy as np
+from PIL import Image, ImageDraw, ImageFont
 from tools.infer.utility import draw_ocr_box_txt, str2bool, init_args as infer_args
 
 

@@ -12,8 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from setuptools import setup
 from io import open
+
+from setuptools import setup
 
 with open('requirements.txt', encoding="utf-8-sig") as f:
     requirements = f.readlines()
@@ -29,7 +30,7 @@ def readme():
 setup(
     name='PPOCRLabel',
     packages=['PPOCRLabel'],
-    package_data = {'PPOCRLabel': ['libs/*','resources/strings/*','resources/icons/*']},
+    package_data={'PPOCRLabel': ['libs/*', 'resources/strings/*', 'resources/icons/*']},
     package_dir={'PPOCRLabel': ''},
     include_package_data=True,
     entry_points={"console_scripts": ["PPOCRLabel= PPOCRLabel.PPOCRLabel:main"]},

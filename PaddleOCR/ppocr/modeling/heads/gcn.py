@@ -90,7 +90,6 @@ class GCN(nn.Layer):
             nn.Linear(64, 32), nn.PReLU(32), nn.Linear(32, 2))
 
     def forward(self, x, A, knn_inds):
-
         num_local_graphs, num_max_nodes, feat_len = x.shape
 
         x = x.reshape([-1, feat_len])
@@ -106,7 +105,7 @@ class GCN(nn.Layer):
         edge_feat = paddle.zeros([num_local_graphs, k, mid_feat_len])
         for graph_ind in range(num_local_graphs):
             edge_feat[graph_ind, :, :] = x[graph_ind][paddle.to_tensor(knn_inds[
-                graph_ind])]
+                                                                           graph_ind])]
         edge_feat = edge_feat.reshape([-1, mid_feat_len])
         pred = self.classifier(edge_feat)
 

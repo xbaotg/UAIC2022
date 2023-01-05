@@ -1,14 +1,8 @@
-import numpy as np
 import os
-import sys
-import platform
-import yaml
-import time
-import shutil
-import paddle
-import paddle.distributed as dist
-from tqdm import tqdm
 from argparse import ArgumentParser, RawDescriptionHelpFormatter
+
+import yaml
+
 from utils import get_logger, print_dict
 
 
@@ -93,7 +87,7 @@ def merge_config(config):
         else:
             sub_keys = key.split('.')
             assert (
-                sub_keys[0] in global_config
+                    sub_keys[0] in global_config
             ), "the sub_keys can only be one of global_config: {}, but get: {}, please check your running command".format(
                 global_config.keys(), sub_keys[0])
             cur = global_config[sub_keys[0]]

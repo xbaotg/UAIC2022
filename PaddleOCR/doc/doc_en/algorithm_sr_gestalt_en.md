@@ -13,8 +13,8 @@
     - [4.4 More](#4-4)
 - [5. FAQ](#5)
 
-
 <a name="1"></a>
+
 ## 1. Introduction
 
 Paper:
@@ -24,22 +24,27 @@ Paper:
 
 > AAAI, 2022
 
-Referring to the [FudanOCR](https://github.com/FudanVI/FudanOCR/tree/main/text-gestalt) data download instructions, the effect of the super-score algorithm on the TextZoom test set is as follows:
+Referring to the [FudanOCR](https://github.com/FudanVI/FudanOCR/tree/main/text-gestalt) data download instructions, the
+effect of the super-score algorithm on the TextZoom test set is as follows:
 
 |Model|Backbone|config|Acc|Download link|
 |---|---|---|---|---|---|
-|Text Gestalt|tsrn|19.28|0.6560| [configs/sr/sr_tsrn_transformer_strock.yml](../../configs/sr/sr_tsrn_transformer_strock.yml)|[train model](https://paddleocr.bj.bcebos.com/sr_tsrn_transformer_strock_train.tar)|
-
+|Text
+Gestalt|tsrn|19.28|0.6560| [configs/sr/sr_tsrn_transformer_strock.yml](../../configs/sr/sr_tsrn_transformer_strock.yml)|[train model](https://paddleocr.bj.bcebos.com/sr_tsrn_transformer_strock_train.tar)|
 
 <a name="2"></a>
-## 2. Environment
-Please refer to ["Environment Preparation"](./environment_en.md) to configure the PaddleOCR environment, and refer to ["Project Clone"](./clone_en.md) to clone the project code.
 
+## 2. Environment
+
+Please refer to ["Environment Preparation"](./environment_en.md) to configure the PaddleOCR environment, and refer
+to ["Project Clone"](./clone_en.md) to clone the project code.
 
 <a name="3"></a>
+
 ## 3. Model Training / Evaluation / Prediction
 
-Please refer to [Text Recognition Tutorial](./recognition_en.md). PaddleOCR modularizes the code, and training different models only requires **changing the configuration file**.
+Please refer to [Text Recognition Tutorial](./recognition_en.md). PaddleOCR modularizes the code, and training different
+models only requires **changing the configuration file**.
 
 Training:
 
@@ -55,7 +60,6 @@ python3 tools/train.py -c configs/sr/sr_tsrn_transformer_strock.yml
 python3 -m paddle.distributed.launch --gpus '0,1,2,3'  tools/train.py -c configs/sr/sr_tsrn_transformer_strock.yml
 
 ```
-
 
 Evaluation:
 
@@ -79,12 +83,16 @@ After executing the command, the super-resolution result of the above image is a
 ![](../imgs_results/sr_word_52.png)
 
 <a name="4"></a>
+
 ## 4. Inference and Deployment
 
 <a name="4-1"></a>
+
 ### 4.1 Python Inference
 
-First, the model saved during the training process is converted into an inference model. ( [Model download link](https://paddleocr.bj.bcebos.com/sr_tsrn_transformer_strock_train.tar) ), you can use the following command to convert:
+First, the model saved during the training process is converted into an inference
+model. ( [Model download link](https://paddleocr.bj.bcebos.com/sr_tsrn_transformer_strock_train.tar) ), you can use the
+following command to convert:
 
 ```shell
 python3 tools/export_model.py -c configs/sr/sr_tsrn_transformer_strock.yml -o Global.pretrained_model={path/to/weights}/best_accuracy Global.save_inference_dir=./inference/sr_out
@@ -101,25 +109,27 @@ After executing the command, the super-resolution result of the above image is a
 
 ![](../imgs_results/sr_word_52.png)
 
-
 <a name="4-2"></a>
+
 ### 4.2 C++ Inference
 
 Not supported
 
 <a name="4-3"></a>
+
 ### 4.3 Serving
 
 Not supported
 
 <a name="4-4"></a>
+
 ### 4.4 More
 
 Not supported
 
 <a name="5"></a>
-## 5. FAQ
 
+## 5. FAQ
 
 ## Citation
 

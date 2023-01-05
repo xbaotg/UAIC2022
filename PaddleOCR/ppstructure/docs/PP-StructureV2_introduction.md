@@ -1,14 +1,14 @@
 # PP-StructureV2
 
-##  目录
+## 目录
 
 - [1. 背景](#1-背景)
 - [2. 简介](#3-简介)
 - [3. 整图方向矫正](#3-整图方向矫正)
 - [4. 版面信息结构化](#4-版面信息结构化)
-  - [4.1 版面分析](#41-版面分析)
-  - [4.2 表格识别](#42-表格识别)
-  - [4.3 版面恢复](#43-版面恢复)
+    - [4.1 版面分析](#41-版面分析)
+    - [4.2 表格识别](#42-表格识别)
+    - [4.3 版面恢复](#43-版面恢复)
 - [5. 关键信息抽取](#5-关键信息抽取)
 - [6. Reference](#6-Reference)
 
@@ -22,12 +22,12 @@
 
 PP-StructureV2在PP-StructureV1的基础上进一步改进，主要有以下3个方面升级：
 
- * **系统功能升级** ：新增图像矫正和版面复原模块，图像转word/pdf、关键信息抽取能力全覆盖！
- * **系统性能优化** ：
-	 * 版面分析：发布轻量级版面分析模型，速度提升**11倍**，平均CPU耗时仅需**41ms**！
-	 * 表格识别：设计3大优化策略，预测耗时不变情况下，模型精度提升**6%**。
-	 * 关键信息抽取：设计视觉无关模型结构，语义实体识别精度提升**2.8%**，关系抽取精度提升**9.1%**。
- * **中文场景适配** ：完成对版面分析与表格识别的中文场景适配，开源**开箱即用**的中文场景版面结构化模型！
+* **系统功能升级** ：新增图像矫正和版面复原模块，图像转word/pdf、关键信息抽取能力全覆盖！
+* **系统性能优化** ：
+    * 版面分析：发布轻量级版面分析模型，速度提升**11倍**，平均CPU耗时仅需**41ms**！
+    * 表格识别：设计3大优化策略，预测耗时不变情况下，模型精度提升**6%**。
+    * 关键信息抽取：设计视觉无关模型结构，语义实体识别精度提升**2.8%**，关系抽取精度提升**9.1%**。
+* **中文场景适配** ：完成对版面分析与表格识别的中文场景适配，开源**开箱即用**的中文场景版面结构化模型！
 
 PP-StructureV2系统流程图如下所示，文档图像首先经过图像矫正模块，判断整图方向并完成转正，随后可以完成版面信息分析与关键信息抽取2类任务。版面分析任务中，图像首先经过版面分析模型，将图像划分为文本、表格、图像等不同区域，随后对这些区域分别进行识别，如，将表格区域送入表格识别模块进行结构化识别，将文本区域送入OCR引擎进行文字识别，最后使用版面恢复模块将其恢复为与原始图像布局一致的word或者pdf格式的文件；关键信息抽取任务中，首先使用OCR引擎提取文本内容，然后由语义实体识别模块获取图像中的语义实体，最后经关系抽取模块获取语义实体之间的对应关系，从而提取需要的关键信息。
 
@@ -39,18 +39,18 @@ PP-StructureV2系统流程图如下所示，文档图像首先经过图像矫正
 从算法改进思路来看，对系统中的3个关键子模块，共进行了8个方面的改进。
 
 * 版面分析
-	* PP-PicoDet：轻量级版面分析模型
-	* FGD：兼顾全局与局部特征的模型蒸馏算法
+    * PP-PicoDet：轻量级版面分析模型
+    * FGD：兼顾全局与局部特征的模型蒸馏算法
 
 * 表格识别
-	* PP-LCNet:  CPU友好型轻量级骨干网络
-	* CSP-PAN：轻量级高低层特征融合模块
-	* SLAHead：结构与位置信息对齐的特征解码模块
+    * PP-LCNet:  CPU友好型轻量级骨干网络
+    * CSP-PAN：轻量级高低层特征融合模块
+    * SLAHead：结构与位置信息对齐的特征解码模块
 
 * 关键信息抽取
-	* VI-LayoutXLM：视觉特征无关的多模态预训练模型结构
-	* TB-YX：考虑阅读顺序的文本行排序逻辑
-	* UDML：联合互学习知识蒸馏策略
+    * VI-LayoutXLM：视觉特征无关的多模态预训练模型结构
+    * TB-YX：考虑阅读顺序的文本行排序逻辑
+    * UDML：联合互学习知识蒸馏策略
 
 最终，与PP-StructureV1相比：
 
@@ -64,7 +64,8 @@ PP-StructureV2系统流程图如下所示，文档图像首先经过图像矫正
 
 由于训练集一般以正方向图像为主，旋转过的文档图像直接输入模型会增加识别难度，影响识别效果。PP-StructureV2引入了整图方向矫正模块来判断含文字图像的方向，并将其进行方向调整。
 
-我们直接调用PaddleClas中提供的文字图像方向分类模型-[PULC_text_image_orientation](https://github.com/PaddlePaddle/PaddleClas/blob/develop/docs/zh_CN/PULC/PULC_text_image_orientation.md)，该模型部分数据集图像如下所示。不同于文本行方向分类器，文字图像方向分类模型针对整图进行方向判别。文字图像方向分类模型在验证集上精度高达99%，单张图像CPU预测耗时仅为`2.16ms`。
+我们直接调用PaddleClas中提供的文字图像方向分类模型-[PULC_text_image_orientation](https://github.com/PaddlePaddle/PaddleClas/blob/develop/docs/zh_CN/PULC/PULC_text_image_orientation.md)
+，该模型部分数据集图像如下所示。不同于文本行方向分类器，文字图像方向分类模型针对整图进行方向判别。文字图像方向分类模型在验证集上精度高达99%，单张图像CPU预测耗时仅为`2.16ms`。
 
 <div align="center">
     <img src="https://user-images.githubusercontent.com/14270174/185939683-f6465473-3303-4a0c-95be-51f04fb9f387.png" width="600">
@@ -76,49 +77,55 @@ PP-StructureV2系统流程图如下所示，文档图像首先经过图像矫正
 
 版面分析指的是对图片形式的文档进行区域划分，定位其中的关键区域，如文字、标题、表格、图片等，PP-StructureV1使用了PaddleDetection中开源的高效检测算法PP-YOLOv2完成版面分析的任务。
 
-在PP-StructureV2中，我们发布基于PP-PicoDet的轻量级版面分析模型，并针对版面分析场景定制图像尺度，同时使用FGD知识蒸馏算法，进一步提升模型精度。最终CPU上`41ms`即可完成版面分析过程(仅包含模型推理时间，数据预处理耗时大约50ms左右)。在公开数据集PubLayNet 上，消融实验如下：
+在PP-StructureV2中，我们发布基于PP-PicoDet的轻量级版面分析模型，并针对版面分析场景定制图像尺度，同时使用FGD知识蒸馏算法，进一步提升模型精度。最终CPU上`41ms`
+即可完成版面分析过程(仅包含模型推理时间，数据预处理耗时大约50ms左右)。在公开数据集PubLayNet 上，消融实验如下：
 
-| 实验序号 | 策略                          | 模型存储(M) | mAP     | CPU预测耗时(ms) |
-|:------:|:------:|:------:|:------:|:------:|
-| 1    |  PP-YOLOv2(640*640)  |  221.0  | 93.60% |  512.00  |
-| 2    | PP-PicoDet-LCNet2.5x(640*640) |  29.7 | 92.50% |53.20|
-| 3    | PP-PicoDet-LCNet2.5x(800*608) |   29.7  | 94.20% |83.10 |
-| 4    | PP-PicoDet-LCNet1.0x(800*608) |    9.7  | 93.50% | 41.20|
-| 5    | PP-PicoDet-LCNet1.0x(800*608) + FGD |  9.7  | 94.00% |41.20|
+| 实验序号 |                 策略                  | 模型存储(M) |  mAP   | CPU预测耗时(ms) |
+|:----:|:-----------------------------------:|:-------:|:------:|:-----------:|
+|  1   |         PP-YOLOv2(640*640)          |  221.0  | 93.60% |   512.00    |
+|  2   |    PP-PicoDet-LCNet2.5x(640*640)    |  29.7   | 92.50% |    53.20    |
+|  3   |    PP-PicoDet-LCNet2.5x(800*608)    |  29.7   | 94.20% |    83.10    |
+|  4   |    PP-PicoDet-LCNet1.0x(800*608)    |   9.7   | 93.50% |    41.20    |
+|  5   | PP-PicoDet-LCNet1.0x(800*608) + FGD |   9.7   | 94.00% |    41.20    |
 
 * 测试条件
-	* paddle版本：2.3.0
-	* CPU：Intel(R) Xeon(R) Gold 6148 CPU @ 2.40GHz，开启mkldnn，线程数为10
+    * paddle版本：2.3.0
+    * CPU：Intel(R) Xeon(R) Gold 6148 CPU @ 2.40GHz，开启mkldnn，线程数为10
 
 在PubLayNet数据集上，与其他方法的性能对比如下表所示。可以看到，和基于Detectron2的版面分析工具layoutparser相比，我们的模型精度高出大约5%，预测速度快约69倍。
 
-| 模型                | mAP | CPU预测耗时   |
-|-------------------|-----------|------------|
-| layoutparser (Detectron2)   | 88.98%    | 2.90s    |
-| PP-StructureV2 (PP-PicoDet) | **94.00%**    |   41.20ms   |
+| 模型                          | mAP        | CPU预测耗时 |
+|-----------------------------|------------|---------|
+| layoutparser (Detectron2)   | 88.98%     | 2.90s   |
+| PP-StructureV2 (PP-PicoDet) | **94.00%** | 41.20ms |
 
-[PubLayNet](https://github.com/ibm-aur-nlp/PubLayNet)数据集是一个大型的文档图像数据集，包含Text、Title、Tale、Figure、List，共5个类别。数据集中包含335,703张训练集、11,245张验证集和11,405张测试集。训练数据与标注示例图如下所示：
+[PubLayNet](https://github.com/ibm-aur-nlp/PubLayNet)
+数据集是一个大型的文档图像数据集，包含Text、Title、Tale、Figure、List，共5个类别。数据集中包含335,703张训练集、11,245张验证集和11,405张测试集。训练数据与标注示例图如下所示：
 
 <div align="center">
     <img src="https://user-images.githubusercontent.com/14270174/185940305-2cd3633b-4c43-4f84-8a6f-5ce6a24e88ce.png" width="600">
 </div>
 
-
 #### 4.1.1 优化策略
 
 **（1）轻量级版面分析模型PP-PicoDet**
 
-`PP-PicoDet`是PaddleDetection中提出的轻量级目标检测模型，通过使用PP-LCNet骨干网络、CSP-PAN特征融合模块、SimOTA标签分配方法等优化策略，最终在CPU与移动端具有卓越的性能。我们将PP-StructureV1中采用的PP-YOLOv2模型替换为`PP-PicoDet`，同时针对版面分析场景优化预测尺度，从针对目标检测设计的`640*640`调整为更适配文档图像的`800*608`，在`1.0x`配置下，模型精度与PP-YOLOv2相当，CPU平均预测速度可提升11倍。
+`PP-PicoDet`
+是PaddleDetection中提出的轻量级目标检测模型，通过使用PP-LCNet骨干网络、CSP-PAN特征融合模块、SimOTA标签分配方法等优化策略，最终在CPU与移动端具有卓越的性能。我们将PP-StructureV1中采用的PP-YOLOv2模型替换为`PP-PicoDet`
+，同时针对版面分析场景优化预测尺度，从针对目标检测设计的`640*640`调整为更适配文档图像的`800*608`，在`1.0x`
+配置下，模型精度与PP-YOLOv2相当，CPU平均预测速度可提升11倍。
 
 **（1）FGD知识蒸馏**
 
-FGD（Focal and Global Knowledge Distillation for Detectors），是一种兼顾局部全局特征信息的模型蒸馏方法，分为Focal蒸馏和Global蒸馏2个部分。Focal蒸馏分离图像的前景和背景，让学生模型分别关注教师模型的前景和背景部分特征的关键像素；Global蒸馏部分重建不同像素之间的关系并将其从教师转移到学生，以补偿Focal蒸馏中丢失的全局信息。我们基于FGD蒸馏策略，使用教师模型PP-PicoDet-LCNet2.5x（mAP=94.2%）蒸馏学生模型PP-PicoDet-LCNet1.0x（mAP=93.5%），可将学生模型精度提升0.5%，和教师模型仅差0.2%，而预测速度比教师模型快1倍。
+FGD（Focal and Global Knowledge Distillation for
+Detectors），是一种兼顾局部全局特征信息的模型蒸馏方法，分为Focal蒸馏和Global蒸馏2个部分。Focal蒸馏分离图像的前景和背景，让学生模型分别关注教师模型的前景和背景部分特征的关键像素；Global蒸馏部分重建不同像素之间的关系并将其从教师转移到学生，以补偿Focal蒸馏中丢失的全局信息。我们基于FGD蒸馏策略，使用教师模型PP-PicoDet-LCNet2.5x（mAP=94.2%）蒸馏学生模型PP-PicoDet-LCNet1.0x（mAP=93.5%），可将学生模型精度提升0.5%，和教师模型仅差0.2%，而预测速度比教师模型快1倍。
 
 #### 4.1.2 场景适配
 
 **（1）中文版面分析**
 
-除了英文公开数据集PubLayNet，我们也在中文场景进行了场景适配与方法验证。[CDLA](https://github.com/buptlihang/CDLA)是一个中文文档版面分析数据集，面向中文文献类（论文）场景，包含正文、标题等10个label。数据集中包含5,000张训练集和1,000张验证集。训练数据与标注示例图如下所示：
+除了英文公开数据集PubLayNet，我们也在中文场景进行了场景适配与方法验证。[CDLA](https://github.com/buptlihang/CDLA)
+是一个中文文档版面分析数据集，面向中文文献类（论文）场景，包含正文、标题等10个label。数据集中包含5,000张训练集和1,000张验证集。训练数据与标注示例图如下所示：
 
 
 <div align="center">
@@ -128,13 +135,12 @@ FGD（Focal and Global Knowledge Distillation for Detectors），是一种兼顾
 
 在CDLA 数据集上，消融实验如下：
 
-| 实验序号 | 策略             |  mAP     |
-|:------:|:------:|:------:|
-| 1    |  PP-YOLOv2 |  84.70% |
-| 2    |  PP-PicoDet-LCNet2.5x(800*608) |  87.80% |
-| 3    |  PP-PicoDet-LCNet1.0x(800*608) | 84.50% |
-| 4    |  PP-PicoDet-LCNet1.0x(800*608) + FGD |  86.80% |
-
+| 实验序号 |                 策略                  |  mAP   |
+|:----:|:-----------------------------------:|:------:|
+|  1   |              PP-YOLOv2              | 84.70% |
+|  2   |    PP-PicoDet-LCNet2.5x(800*608)    | 87.80% |
+|  3   |    PP-PicoDet-LCNet1.0x(800*608)    | 84.50% |
+|  4   | PP-PicoDet-LCNet1.0x(800*608) + FGD | 86.80% |
 
 **（2）表格版面分析**
 
@@ -142,12 +148,12 @@ FGD（Focal and Global Knowledge Distillation for Detectors），是一种兼顾
 
 在表格数据集上，消融实验如下：
 
-| 实验序号 | 策略            |  mAP     |
-|:------:|:------:|:------:|
-| 1    |  PP-YOLOv2  |91.30% |
-| 2    |  PP-PicoDet-LCNet2.5x(800*608) |  95.90% |
-| 3    |  PP-PicoDet-LCNet1.0x(800*608) |   95.20% |
-| 4    |  PP-PicoDet-LCNet1.0x(800*608) + FGD |  95.70% |
+| 实验序号 |                 策略                  |  mAP   |
+|:----:|:-----------------------------------:|:------:|
+|  1   |              PP-YOLOv2              | 91.30% |
+|  2   |    PP-PicoDet-LCNet2.5x(800*608)    | 95.90% |
+|  3   |    PP-PicoDet-LCNet1.0x(800*608)    | 95.20% |
+|  4   | PP-PicoDet-LCNet1.0x(800*608) + FGD | 95.70% |
 
 表格检测效果示意图如下：
 
@@ -157,7 +163,8 @@ FGD（Focal and Global Knowledge Distillation for Detectors），是一种兼顾
 
 ### 4.2 表格识别
 
-基于深度学习的表格识别算法种类丰富，PP-StructureV1中，我们基于文本识别算法RARE研发了端到端表格识别算法TableRec-RARE，模型输出为表格结构的HTML表示，进而可以方便地转化为Excel文件。PP-StructureV2中，我们对模型结构和损失函数等5个方面进行升级，提出了 SLANet (Structure Location Alignment Network) ，模型结构如下图所示：
+基于深度学习的表格识别算法种类丰富，PP-StructureV1中，我们基于文本识别算法RARE研发了端到端表格识别算法TableRec-RARE，模型输出为表格结构的HTML表示，进而可以方便地转化为Excel文件。PP-StructureV2中，我们对模型结构和损失函数等5个方面进行升级，提出了
+SLANet (Structure Location Alignment Network) ，模型结构如下图所示：
 
 <div align="center">
     <img src="https://user-images.githubusercontent.com/14270174/185940811-089c9265-4be9-4776-b365-6d1125606b4b.png" width="1200">
@@ -165,13 +172,13 @@ FGD（Focal and Global Knowledge Distillation for Detectors），是一种兼顾
 
 在PubTabNet英文表格识别数据集上的消融实验如下：
 
-|策略|Acc|TEDS|推理速度(CPU+MKLDNN)|模型大小|
-|---|---|---|---|---|
-|TableRec-RARE|	71.73% | 93.88% |779ms	|6.8M|
-|+PP-LCNet|	74.71% |94.37%	|778ms|	8.7M|
-|+CSP-PAN|	75.68%| 94.72%	|708ms|	9.3M|
-|+SLAHead|	77.70%|94.85%|	766ms|	9.2M|
-|+MergeToken|	76.31%|	95.89%|766ms|	9.2M|
+| 策略            | Acc     | TEDS    | 推理速度(CPU+MKLDNN) | 模型大小  |
+|---------------|---------|---------|------------------|-------|
+| TableRec-RARE | 	71.73% | 93.88%  | 779ms	           | 6.8M  |
+| +PP-LCNet     | 	74.71% | 94.37%	 | 778ms            | 	8.7M |
+| +CSP-PAN      | 	75.68% | 94.72%	 | 708ms            | 	9.3M |
+| +SLAHead      | 	77.70% | 94.85%  | 	766ms           | 	9.2M |
+| +MergeToken   | 	76.31% | 	95.89% | 766ms            | 	9.2M |
 
 * 测试环境
     * paddle版本：2.3.1
@@ -179,11 +186,11 @@ FGD（Focal and Global Knowledge Distillation for Detectors），是一种兼顾
 
 在PubtabNet英文表格识别数据集上，和其他方法对比如下：
 
-|策略|Acc|TEDS|推理速度(CPU+MKLDNN)|模型大小|
-|---|---|---|---|---|
-|TableMaster|77.90%|96.12%|2144ms|253.0M|
-|TableRec-RARE|	71.73% | 93.88% |779ms	|6.8M|
-|SLANet|76.31%|	95.89%|766ms|9.2M|
+| 策略            | Acc     | TEDS    | 推理速度(CPU+MKLDNN) | 模型大小   |
+|---------------|---------|---------|------------------|--------|
+| TableMaster   | 77.90%  | 96.12%  | 2144ms           | 253.0M |
+| TableRec-RARE | 	71.73% | 93.88%  | 779ms	           | 6.8M   |
+| SLANet        | 76.31%  | 	95.89% | 766ms            | 9.2M   |
 
 #### 4.2.1 优化策略
 
@@ -193,13 +200,18 @@ PP-LCNet是结合Intel-CPU端侧推理特性而设计的轻量高性能骨干网
 
 **（2）轻量级高低层特征融合模块CSP-PAN**
 
-对骨干网络提取的特征进行融合，可以有效解决尺度变化较大等复杂场景中的模型预测问题。早期，FPN模块被提出并用于特征融合，但是它的特征融合过程仅包含单向（高->低），融合不够充分。CSP-PAN基于PAN进行改进，在保证特征融合更为充分的同时，使用CSP block、深度可分离卷积等策略减小了计算量。在表格识别场景中，我们进一步将CSP-PAN的通道数从128降低至96以降低模型大小。最终表格识别模型精度提升0.97%至75.68%，预测速度提升10%。
+对骨干网络提取的特征进行融合，可以有效解决尺度变化较大等复杂场景中的模型预测问题。早期，FPN模块被提出并用于特征融合，但是它的特征融合过程仅包含单向（高->
+低），融合不够充分。CSP-PAN基于PAN进行改进，在保证特征融合更为充分的同时，使用CSP
+block、深度可分离卷积等策略减小了计算量。在表格识别场景中，我们进一步将CSP-PAN的通道数从128降低至96以降低模型大小。最终表格识别模型精度提升0.97%至75.68%，预测速度提升10%。
 
 **（3）结构与位置信息对齐的特征解码模块SLAHead**
 
-TableRec-RARE的TableAttentionHead如下图a所示，TableAttentionHead在执行完全部step的计算后拿到最终隐藏层状态表征(hiddens)，随后hiddens经由SDM(Structure Decode Module)和CLDM(Cell Location Decode Module)模块生成全部的表格结构token和单元格坐标。但是这种设计忽略了单元格token和坐标之间一一对应的关系。
+TableRec-RARE的TableAttentionHead如下图a所示，TableAttentionHead在执行完全部step的计算后拿到最终隐藏层状态表征(hiddens)
+，随后hiddens经由SDM(Structure Decode Module)和CLDM(Cell Location Decode Module)
+模块生成全部的表格结构token和单元格坐标。但是这种设计忽略了单元格token和坐标之间一一对应的关系。
 
-PP-StructureV2中，我们设计SLAHead模块，对单元格token和坐标之间做了对齐操作，如下图b所示。在SLAHead中，每一个step的隐藏层状态表征会分别送入SDM和CLDM来得到当前step的token和坐标，每个step的token和坐标输出分别进行concat得到表格的html表达和全部单元格的坐标。此外，考虑到表格识别模型的单元格准确率依赖于表格结构的识别准确，我们将损失函数中表格结构分支与单元格定位分支的权重比从1:1提升到8:1，并使用收敛更稳定的Smoothl1 Loss替换定位分支中的MSE Loss。最终模型精度从75.68%提高至77.7%。
+PP-StructureV2中，我们设计SLAHead模块，对单元格token和坐标之间做了对齐操作，如下图b所示。在SLAHead中，每一个step的隐藏层状态表征会分别送入SDM和CLDM来得到当前step的token和坐标，每个step的token和坐标输出分别进行concat得到表格的html表达和全部单元格的坐标。此外，考虑到表格识别模型的单元格准确率依赖于表格结构的识别准确，我们将损失函数中表格结构分支与单元格定位分支的权重比从1:
+1提升到8:1，并使用收敛更稳定的Smoothl1 Loss替换定位分支中的MSE Loss。最终模型精度从75.68%提高至77.7%。
 
 
 <div align="center">
@@ -211,11 +223,13 @@ PP-StructureV2中，我们设计SLAHead模块，对单元格token和坐标之间
 
 TableRec-RARE算法中，我们使用`<td>`和`</td>`两个单独的token来表示一个非跨行列单元格，这种表示方式限制了网络对于单元格数量较多表格的处理能力。
 
-PP-StructureV2中，我们参考TableMaster中的token处理方法，将`<td>`和`</td>`合并为一个token-`<td></td>`。合并token后，验证集中token长度大于500的图片也参与模型评估，最终模型精度降低为76.31%，但是端到端TEDS提升1.04%。
+PP-StructureV2中，我们参考TableMaster中的token处理方法，将`<td>`和`</td>`合并为一个token-`<td></td>`
+。合并token后，验证集中token长度大于500的图片也参与模型评估，最终模型精度降低为76.31%，但是端到端TEDS提升1.04%。
 
 #### 4.2.2 中文场景适配
 
-除了上述模型策略的升级外，本次升级还开源了中文表格识别模型。在实际应用场景中，表格图像存在着各种各样的倾斜角度（PubTabNet数据集不存在该问题），因此在中文模型中，我们将单元格坐标回归的点数从2个（左上，右下）增加到4个(左上，右上，右下，左下)。在内部测试集上，模型升级前后指标如下：
+除了上述模型策略的升级外，本次升级还开源了中文表格识别模型。在实际应用场景中，表格图像存在着各种各样的倾斜角度（PubTabNet数据集不存在该问题），因此在中文模型中，我们将单元格坐标回归的点数从2个（左上，右下）增加到4个(
+左上，右上，右下，左下)。在内部测试集上，模型升级前后指标如下：
 |模型|acc|
 |---|---|
 |TableRec-RARE|44.30%|
@@ -244,9 +258,6 @@ PP-StructureV2中，我们参考TableMaster中的token处理方法，将`<td>`�
     <img src="https://user-images.githubusercontent.com/14270174/185941324-8036e959-abdc-4dc5-a9f2-730b07b4e3d3.png" width="800">
 </div>
 
-
-
-
 ### 4.3 版面恢复
 
 版面恢复指的是文档图像经过OCR识别、版面分析、表格识别等方法处理后的内容可以与原始文档保持相同的排版方式，并输出到word等文档中。PP-StructureV2中，我们版面恢复系统，包含版面分析、表格识别、OCR文本检测与识别等子模块。
@@ -258,7 +269,10 @@ PP-StructureV2中，我们参考TableMaster中的token处理方法，将`<td>`�
 
 ## 5. 关键信息抽取
 
-关键信息抽取指的是针对文档图像的文字内容，提取出用户关注的关键信息，如身份证中的姓名、住址等字段。PP-Structure中支持了基于多模态LayoutLM系列模型的语义实体识别 (Semantic Entity Recognition, SER) 以及关系抽取 (Relation Extraction, RE) 任务。PP-StructureV2中，我们对模型结构以及下游任务训练方法进行升级，提出了VI-LayoutXLM（Visual-feature Independent LayoutXLM），具体流程图如下所示。
+关键信息抽取指的是针对文档图像的文字内容，提取出用户关注的关键信息，如身份证中的姓名、住址等字段。PP-Structure中支持了基于多模态LayoutLM系列模型的语义实体识别 (
+Semantic Entity Recognition, SER) 以及关系抽取 (Relation Extraction, RE)
+任务。PP-StructureV2中，我们对模型结构以及下游任务训练方法进行升级，提出了VI-LayoutXLM（Visual-feature Independent
+LayoutXLM），具体流程图如下所示。
 
 
 <div align="center">
@@ -274,41 +288,43 @@ PP-StructureV2中，我们参考TableMaster中的token处理方法，将`<td>`�
 
 XFUND-zh数据集上，SER任务的消融实验如下所示。
 
-| 实验序号 | 策略                          | 模型大小(G) | 精度     | GPU预测耗时(ms) | CPU预测耗时(ms) |
-|:------:|:------:|:------:|:------:|:------:|:------:|
-| 1    | LayoutXLM          | 1.4     | 89.50% | 59.35       | 766.16      |
-| 2    | VI-LayoutXLM | 1.1     | 90.46% | 23.71       | 675.58      |
-| 3    | 实验2 + TB-YX文本行排序              | 1.1     | 92.50% | 23.71       | 675.58      |
-| 4    | 实验3 + UDML蒸馏                | 1.1     | 93.19% | 23.71       | 675.58      |
-| 5    | 实验3 + UDML蒸馏                | 1.1     | **93.19%** | **15.49**       | **675.58**      |
+| 实验序号 |        策略        | 模型大小(G) |     精度     | GPU预测耗时(ms) | CPU预测耗时(ms) |
+|:----:|:----------------:|:-------:|:----------:|:-----------:|:-----------:|
+|  1   |    LayoutXLM     |   1.4   |   89.50%   |    59.35    |   766.16    |
+|  2   |   VI-LayoutXLM   |   1.1   |   90.46%   |    23.71    |   675.58    |
+|  3   | 实验2 + TB-YX文本行排序 |   1.1   |   92.50%   |    23.71    |   675.58    |
+|  4   |   实验3 + UDML蒸馏   |   1.1   |   93.19%   |    23.71    |   675.58    |
+|  5   |   实验3 + UDML蒸馏   |   1.1   | **93.19%** |  **15.49**  | **675.58**  |
 
 * 测试条件
-	* paddle版本：2.3.0
-	* GPU：V100，实验5的GPU预测耗时使用`trt+fp16`测试得到，环境为cuda10.2+ cudnn8.1.1 + trt7.2.3.4，其他实验的预测耗时统计中没有使用TRT。
-	* CPU：Intel(R) Xeon(R) Gold 6148 CPU @ 2.40GHz，开启mkldnn，线程数为10
+    * paddle版本：2.3.0
+    * GPU：V100，实验5的GPU预测耗时使用`trt+fp16`测试得到，环境为cuda10.2+ cudnn8.1.1 + trt7.2.3.4，其他实验的预测耗时统计中没有使用TRT。
+    * CPU：Intel(R) Xeon(R) Gold 6148 CPU @ 2.40GHz，开启mkldnn，线程数为10
 
 在XFUND数据集上，与其他方法的效果对比如下所示。
 
-| 模型                | SER Hmean | RE Hmean   |
-|-------------------|-----------|------------|
-| LayoutLMv2-base   | 85.44%    | 67.77%     |
-| LayoutXLM-base    | 89.24%    | 70.73%     |
-| StrucTexT-large   | 92.29%    | **86.81%** |
-| VI-LayoutXLM-base (ours) | **93.19%**    | 83.92%     |
-
+| 模型                       | SER Hmean  | RE Hmean   |
+|--------------------------|------------|------------|
+| LayoutLMv2-base          | 85.44%     | 67.77%     |
+| LayoutXLM-base           | 89.24%     | 70.73%     |
+| StrucTexT-large          | 92.29%     | **86.81%** |
+| VI-LayoutXLM-base (ours) | **93.19%** | 83.92%     |
 
 ### 5.1 优化策略
 
 **(1) VI-LayoutXLM（Visual-feature Independent LayoutXLM）**
 
-LayoutLMv2以及LayoutXLM中引入视觉骨干网络，用于提取视觉特征，并与后续的text embedding进行联合，作为多模态的输入embedding。但是该模块为基于`ResNet_x101_64x4d`的特征提取网络，特征抽取阶段耗时严重，因此我们将其去除，同时仍然保留文本、位置以及布局等信息，最终发现针对LayoutXLM进行改进，下游SER任务精度无损，针对LayoutLMv2进行改进，下游SER任务精度仅降低`2.1%`，而模型大小减小了约`340M`。具体消融实验如下所示。
+LayoutLMv2以及LayoutXLM中引入视觉骨干网络，用于提取视觉特征，并与后续的text
+embedding进行联合，作为多模态的输入embedding。但是该模块为基于`ResNet_x101_64x4d`
+的特征提取网络，特征抽取阶段耗时严重，因此我们将其去除，同时仍然保留文本、位置以及布局等信息，最终发现针对LayoutXLM进行改进，下游SER任务精度无损，针对LayoutLMv2进行改进，下游SER任务精度仅降低`2.1%`
+，而模型大小减小了约`340M`。具体消融实验如下所示。
 
-| 模型              | 模型大小 (G) | F-score | 精度收益   |
-|-----------------|----------|---------|--------|
-| LayoutLMv2      | 0.76     | 84.20%  | -      |
+| 模型            | 模型大小 (G) | F-score | 精度收益   |
+|---------------|----------|---------|--------|
+| LayoutLMv2    | 0.76     | 84.20%  | -      |
 | VI-LayoutLMv2 | 0.42     | 82.10%  | -2.10% |
-| LayoutXLM       | 1.40     | 89.50%  | -      |
-| VI-LayouXLM   | 1.10      | 90.46%  | +0.96%  |
+| LayoutXLM     | 1.40     | 89.50%  | -      |
+| VI-LayouXLM   | 1.10     | 90.46%  | +0.96% |
 
 同时，基于XFUND数据集，VI-LayoutXLM在RE任务上的精度也进一步提升了`1.06%`。
 
@@ -347,7 +363,10 @@ def order_by_tbyx(ocr_info, th=20):
 
 **(3) 互学习蒸馏策略**
 
-UDML（Unified-Deep Mutual Learning）联合互学习是PP-OCRv2与PP-OCRv3中采用的对于文本识别非常有效的提升模型效果的策略。在训练时，引入2个完全相同的模型进行互学习，计算2个模型之间的互蒸馏损失函数(DML loss)，同时对transformer中间层的输出结果计算距离损失函数(L2 loss)。使用该策略，最终XFUND数据集上，SER任务F1指标提升`0.6%`，RE任务F1指标提升`5.01%`。
+UDML（Unified-Deep Mutual
+Learning）联合互学习是PP-OCRv2与PP-OCRv3中采用的对于文本识别非常有效的提升模型效果的策略。在训练时，引入2个完全相同的模型进行互学习，计算2个模型之间的互蒸馏损失函数(
+DML loss)，同时对transformer中间层的输出结果计算距离损失函数(L2 loss)
+。使用该策略，最终XFUND数据集上，SER任务F1指标提升`0.6%`，RE任务F1指标提升`5.01%`。
 
 最终优化后模型基于SER任务的可视化结果如下所示。
 
@@ -379,48 +398,62 @@ RE任务的可视化结果如下所示。
 
 **RE任务结果**
 
-| 实验序号 | 策略                          | 模型大小(G) | F1-score |
-|:------:|:------------:|:---------:|:----------:|
-| 1    | LayoutXLM          | 1.4     | 70.81%   |
-| 2    | VI-LayoutXLM | 1.1     | 71.87%   |
-| 3    | 实验2 + PP-OCR排序              | 1.1     | 78.91%   |
-| 4    | 实验3 + UDML蒸馏                | 1.1     | **83.92%**   |
-
+| 实验序号 |       策略       | 模型大小(G) |  F1-score  |
+|:----:|:--------------:|:-------:|:----------:|
+|  1   |   LayoutXLM    |   1.4   |   70.81%   |
+|  2   |  VI-LayoutXLM  |   1.1   |   71.87%   |
+|  3   | 实验2 + PP-OCR排序 |   1.1   |   78.91%   |
+|  4   |  实验3 + UDML蒸馏  |   1.1   | **83.92%** |
 
 #### 5.2.2 FUNSD数据集
 
 **SER任务结果**
 
-| 实验序号 | 策略                  | F1-score |
-|:------:|:------:|:------:|
-| 1    | LayoutXLM  | 82.28%   |
-| 2    | PP-StructureV2 SER       | **87.79%**   |
-
+| 实验序号 |         策略         |  F1-score  |
+|:----:|:------------------:|:----------:|
+|  1   |     LayoutXLM      |   82.28%   |
+|  2   | PP-StructureV2 SER | **87.79%** |
 
 **RE任务结果**
 
-| 实验序号 | 策略                 | F1-score |
-|:------:|:------:|:------:|
-| 1    | LayoutXLM    |  53.13%  |
-| 2    | PP-StructureV2 SER    | **74.87%**   |
-
+| 实验序号 |         策略         |  F1-score  |
+|:----:|:------------------:|:----------:|
+|  1   |     LayoutXLM      |   53.13%   |
+|  2   | PP-StructureV2 SER | **74.87%** |
 
 ## 6. Reference
-* [1] Zhong X, ShafieiBavani E, Jimeno Yepes A. Image-based table recognition: data, model, and evaluation[C]//European Conference on Computer Vision. Springer, Cham, 2020: 564-580.
-* [2] Cui C, Gao T, Wei S. Yuning Du, Ruoyu Guo, Shuilong Dong, Bin Lu, Ying Zhou, Xueying Lv, Qiwen Liu, Xiaoguang Hu, Dianhai Yu, and Yanjun Ma* [J]. Pplcnet: A lightweight cpu convolutional neural network, 2021, 3.
-* [3] Lin T Y, Dollár P, Girshick R, et al. Feature pyramid networks for object detection[C]//Proceedings of the IEEE conference on computer vision and pattern recognition. 2017: 2117-2125.
-* [4] Yu G, Chang Q, Lv W, et al. PP-PicoDet: A Better Real-Time Object Detector on Mobile Devices[J]. arXiv preprint arXiv:2111.00902, 2021.
-* [5] Bochkovskiy A, Wang C Y, Liao H Y M. Yolov4: Optimal speed and accuracy of object detection[J]. arXiv preprint arXiv:2004.10934, 2020.
-* [6] Ye J, Qi X, He Y, et al. PingAn-VCGroup's Solution for ICDAR 2021 Competition on Scientific Literature Parsing Task B: Table Recognition to HTML[J]. arXiv preprint arXiv:2105.01848, 2021.
-* [7] Zhong X, Tang J, Yepes A J. Publaynet: largest dataset ever for document layout analysis[C]//2019 International Conference on Document Analysis and Recognition (ICDAR). IEEE, 2019: 1015-1022.
+
+* [1] Zhong X, ShafieiBavani E, Jimeno Yepes A. Image-based table recognition: data, model, and evaluation[C]//European
+  Conference on Computer Vision. Springer, Cham, 2020: 564-580.
+* [2] Cui C, Gao T, Wei S. Yuning Du, Ruoyu Guo, Shuilong Dong, Bin Lu, Ying Zhou, Xueying Lv, Qiwen Liu, Xiaoguang Hu,
+  Dianhai Yu, and Yanjun Ma* [J]. Pplcnet: A lightweight cpu convolutional neural network, 2021, 3.
+* [3] Lin T Y, Dollár P, Girshick R, et al. Feature pyramid networks for object detection[C]//Proceedings of the IEEE
+  conference on computer vision and pattern recognition. 2017: 2117-2125.
+* [4] Yu G, Chang Q, Lv W, et al. PP-PicoDet: A Better Real-Time Object Detector on Mobile Devices[J]. arXiv preprint
+  arXiv:2111.00902, 2021.
+* [5] Bochkovskiy A, Wang C Y, Liao H Y M. Yolov4: Optimal speed and accuracy of object detection[J]. arXiv preprint
+  arXiv:2004.10934, 2020.
+* [6] Ye J, Qi X, He Y, et al. PingAn-VCGroup's Solution for ICDAR 2021 Competition on Scientific Literature Parsing
+  Task B: Table Recognition to HTML[J]. arXiv preprint arXiv:2105.01848, 2021.
+* [7] Zhong X, Tang J, Yepes A J. Publaynet: largest dataset ever for document layout analysis[C]//2019 International
+  Conference on Document Analysis and Recognition (ICDAR). IEEE, 2019: 1015-1022.
 * [8] CDLA：https://github.com/buptlihang/CDLA
-* [9]Gao L, Huang Y, Déjean H, et al. ICDAR 2019 competition on table detection and recognition (cTDaR)[C]//2019 International Conference on Document Analysis and Recognition (ICDAR). IEEE, 2019: 1510-1515.
-* [10] Mondal A, Lipps P, Jawahar C V. IIIT-AR-13K: a new dataset for graphical object detection in documents[C]//International Workshop on Document Analysis Systems. Springer, Cham, 2020: 216-230.
+* [9]Gao L, Huang Y, Déjean H, et al. ICDAR 2019 competition on table detection and recognition (cTDaR)[C]//2019
+  International Conference on Document Analysis and Recognition (ICDAR). IEEE, 2019: 1510-1515.
+* [10] Mondal A, Lipps P, Jawahar C V. IIIT-AR-13K: a new dataset for graphical object detection in documents[C]
+  //International Workshop on Document Analysis Systems. Springer, Cham, 2020: 216-230.
 * [11] Tal ocr_tabel：https://ai.100tal.com/dataset
-* [12] Li M, Cui L, Huang S, et al. Tablebank: A benchmark dataset for table detection and recognition[J]. arXiv preprint arXiv:1903.01949, 2019.
-* [13]Li M, Xu Y, Cui L, et al. DocBank: A benchmark dataset for document layout analysis[J]. arXiv preprint arXiv:2006.01038, 2020.
-* [14] Xu Y, Li M, Cui L, et al. Layoutlm: Pre-training of text and layout for document image understanding[C]//Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2020: 1192-1200.
-* [15] Xu Y, Xu Y, Lv T, et al. LayoutLMv2: Multi-modal pre-training for visually-rich document understanding[J]. arXiv preprint arXiv:2012.14740, 2020.
-* [16] Xu Y, Lv T, Cui L, et al. Layoutxlm: Multimodal pre-training for multilingual visually-rich document understanding[J]. arXiv preprint arXiv:2104.08836, 2021.
-* [17] Xu Y, Lv T, Cui L, et al. XFUND: A Benchmark Dataset for Multilingual Visually Rich Form Understanding[C]//Findings of the Association for Computational Linguistics: ACL 2022. 2022: 3214-3224.
-* [18] Jaume G, Ekenel H K, Thiran J P. Funsd: A dataset for form understanding in noisy scanned documents[C]//2019 International Conference on Document Analysis and Recognition Workshops (ICDARW). IEEE, 2019, 2: 1-6.
+* [12] Li M, Cui L, Huang S, et al. Tablebank: A benchmark dataset for table detection and recognition[J]. arXiv
+  preprint arXiv:1903.01949, 2019.
+* [13]Li M, Xu Y, Cui L, et al. DocBank: A benchmark dataset for document layout analysis[J]. arXiv preprint arXiv:
+  2006.01038, 2020.
+* [14] Xu Y, Li M, Cui L, et al. Layoutlm: Pre-training of text and layout for document image understanding[C]
+  //Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2020: 1192-1200.
+* [15] Xu Y, Xu Y, Lv T, et al. LayoutLMv2: Multi-modal pre-training for visually-rich document understanding[J]. arXiv
+  preprint arXiv:2012.14740, 2020.
+* [16] Xu Y, Lv T, Cui L, et al. Layoutxlm: Multimodal pre-training for multilingual visually-rich document
+  understanding[J]. arXiv preprint arXiv:2104.08836, 2021.
+* [17] Xu Y, Lv T, Cui L, et al. XFUND: A Benchmark Dataset for Multilingual Visually Rich Form Understanding[C]
+  //Findings of the Association for Computational Linguistics: ACL 2022. 2022: 3214-3224.
+* [18] Jaume G, Ekenel H K, Thiran J P. Funsd: A dataset for form understanding in noisy scanned documents[C]//2019
+  International Conference on Document Analysis and Recognition Workshops (ICDARW). IEEE, 2019, 2: 1-6.

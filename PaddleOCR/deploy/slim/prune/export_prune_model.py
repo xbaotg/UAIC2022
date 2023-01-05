@@ -35,7 +35,6 @@ import tools.program as program
 
 
 def main(config, device, logger, vdl_writer):
-
     global_config = config['Global']
 
     # build dataloader
@@ -116,8 +115,8 @@ def main(config, device, logger, vdl_writer):
         infer_shape = [3, 32, -1]  # for rec model, H must be 32
 
         if 'Transform' in config['Architecture'] and config['Architecture'][
-                'Transform'] is not None and config['Architecture'][
-                    'Transform']['name'] == 'TPS':
+            'Transform'] is not None and config['Architecture'][
+            'Transform']['name'] == 'TPS':
             logger.info(
                 'When there is tps in the network, variable length input is not supported, and the input size needs to be the same as during training'
             )

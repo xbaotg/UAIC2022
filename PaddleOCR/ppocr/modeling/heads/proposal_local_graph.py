@@ -23,11 +23,10 @@ from __future__ import print_function
 import cv2
 import numpy as np
 import paddle
-import paddle.nn as nn
 import paddle.nn.functional as F
 from lanms import merge_quadrangle_n9 as la_nms
-
 from ppocr.ext_op import RoIAlignRotated
+
 from .local_graph import (euclidean_distance_matrix, feature_embedding,
                           normalize_adjacent_matrix)
 
@@ -163,9 +162,9 @@ class ProposalLocalGraphs:
                 cos_map.shape)
         text_mask = text_region_map > self.text_region_thr
         center_region_mask = (
-            center_region_map > self.center_region_thr) * text_mask
+                                     center_region_map > self.center_region_thr) * text_mask
 
-        scale = np.sqrt(1.0 / (sin_map**2 + cos_map**2 + 1e-8))
+        scale = np.sqrt(1.0 / (sin_map ** 2 + cos_map ** 2 + 1e-8))
         sin_map, cos_map = sin_map * scale, cos_map * scale
 
         center_region_mask = fill_hole(center_region_mask)
@@ -220,7 +219,7 @@ class ProposalLocalGraphs:
             temp_comp_mask = np.zeros((box_sz[1], box_sz[0]), dtype=np.uint8)
             cv2.fillPoly(temp_comp_mask, [text_comp_box.astype(np.int32)], 1)
             temp_region_patch = text_region_map[min_coord[1]:(max_coord[1] + 1),
-                                                min_coord[0]:(max_coord[0] + 1)]
+                                min_coord[0]:(max_coord[0] + 1)]
             score = cv2.mean(temp_region_patch, temp_comp_mask)[0]
             scores.append(score)
         scores = np.array(scores).reshape((-1, 1))
@@ -271,7 +270,7 @@ class ProposalLocalGraphs:
             for neighbor_ind in knn:
                 local_graph_neighbors.update(
                     set(sorted_dist_inds[neighbor_ind, 1:self.k_at_hops[1] +
-                                         1]))
+                                                         1]))
 
             local_graph_neighbors.discard(pivot_ind)
             pivot_local_graph = list(local_graph_neighbors)
@@ -321,8 +320,8 @@ class ProposalLocalGraphs:
             pad_normalized_feats = paddle.concat(
                 [
                     normalized_feats, paddle.zeros(
-                        (num_max_nodes - num_nodes, normalized_feats.shape[1]),
-                    )
+                    (num_max_nodes - num_nodes, normalized_feats.shape[1]),
+                )
                 ],
                 axis=0)
 
@@ -330,7 +329,7 @@ class ProposalLocalGraphs:
             local_graph_nodes = paddle.concat(
                 [
                     local_graph_nodes, paddle.zeros(
-                        [num_max_nodes - num_nodes], dtype='int64')
+                    [num_max_nodes - num_nodes], dtype='int64')
                 ],
                 axis=-1)
 

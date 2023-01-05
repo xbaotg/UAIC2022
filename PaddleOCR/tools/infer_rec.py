@@ -16,11 +16,11 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy as np
-
+import json
 import os
 import sys
-import json
+
+import numpy as np
 
 __dir__ = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(__dir__)
@@ -52,10 +52,10 @@ def main():
                                                    ]:  # distillation model
             for key in config['Architecture']["Models"]:
                 if config['Architecture']['Models'][key]['Head'][
-                        'name'] == 'MultiHead':  # for multi head
+                    'name'] == 'MultiHead':  # for multi head
                     out_channels_list = {}
                     if config['PostProcess'][
-                            'name'] == 'DistillationSARLabelDecode':
+                        'name'] == 'DistillationSARLabelDecode':
                         char_num = char_num - 2
                     out_channels_list['CTCLabelDecode'] = char_num
                     out_channels_list['SARLabelDecode'] = char_num + 2
@@ -65,7 +65,7 @@ def main():
                     config['Architecture']["Models"][key]["Head"][
                         'out_channels'] = char_num
         elif config['Architecture']['Head'][
-                'name'] == 'MultiHead':  # for multi head loss
+            'name'] == 'MultiHead':  # for multi head loss
             out_channels_list = {}
             if config['PostProcess']['name'] == 'SARLabelDecode':
                 char_num = char_num - 2

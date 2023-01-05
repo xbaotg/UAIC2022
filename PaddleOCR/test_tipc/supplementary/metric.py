@@ -1,6 +1,7 @@
+from collections import OrderedDict
+
 import paddle
 import paddle.nn.functional as F
-from collections import OrderedDict
 
 
 def create_metric(out,

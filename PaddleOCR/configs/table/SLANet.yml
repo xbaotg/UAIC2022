@@ -6,7 +6,7 @@ Global:
   save_model_dir: ./output/SLANet
   save_epoch_step: 400
   # evaluation is run every 1000 iterations after the 0th iteration
-  eval_batch_step: [0, 1000]
+  eval_batch_step: [ 0, 1000 ]
   cal_metric_during_train: True
   pretrained_model:
   checkpoints:
@@ -30,8 +30,8 @@ Optimizer:
   lr:
     name: Piecewise
     learning_rate: 0.001
-    decay_epochs : [40, 50]
-    values : [0.001, 0.0001, 0.00005]
+    decay_epochs: [ 40, 50 ]
+    values: [ 0.001, 0.0001, 0.00005 ]
   regularizer:
     name: 'L2'
     factor: 0.00000
@@ -74,7 +74,7 @@ Train:
   dataset:
     name: PubTabDataSet
     data_dir: train_data/table/pubtabnet/train/
-    label_file_list: [train_data/table/pubtabnet/PubTabNet_2.0.0_train.jsonl]
+    label_file_list: [ train_data/table/pubtabnet/PubTabNet_2.0.0_train.jsonl ]
     transforms:
       - DecodeImage: # load image
           img_mode: BGR
@@ -92,11 +92,11 @@ Train:
           max_len: 488
       - NormalizeImage:
           scale: 1./255.
-          mean: [0.485, 0.456, 0.406]
-          std: [0.229, 0.224, 0.225]
+          mean: [ 0.485, 0.456, 0.406 ]
+          std: [ 0.229, 0.224, 0.225 ]
           order: 'hwc'
       - PaddingTableImage:
-          size: [488, 488]
+          size: [ 488, 488 ]
       - ToCHWImage:
       - KeepKeys:
           keep_keys: [ 'image', 'structure', 'bboxes', 'bbox_masks', 'shape' ]
@@ -110,7 +110,7 @@ Eval:
   dataset:
     name: PubTabDataSet
     data_dir: train_data/table/pubtabnet/val/
-    label_file_list: [train_data/table/pubtabnet/PubTabNet_2.0.0_val.jsonl]
+    label_file_list: [ train_data/table/pubtabnet/PubTabNet_2.0.0_val.jsonl ]
     transforms:
       - DecodeImage: # load image
           img_mode: BGR
@@ -128,11 +128,11 @@ Eval:
           max_len: 488
       - NormalizeImage:
           scale: 1./255.
-          mean: [0.485, 0.456, 0.406]
-          std: [0.229, 0.224, 0.225]
+          mean: [ 0.485, 0.456, 0.406 ]
+          std: [ 0.229, 0.224, 0.225 ]
           order: 'hwc'
       - PaddingTableImage:
-          size: [488, 488]
+          size: [ 488, 488 ]
       - ToCHWImage:
       - KeepKeys:
           keep_keys: [ 'image', 'structure', 'bboxes', 'bbox_masks', 'shape' ]

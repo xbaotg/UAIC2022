@@ -5,10 +5,10 @@ Global:
   print_batch_step: 100
   save_model_dir: ./output/table_master/
   save_epoch_step: 17
-  eval_batch_step: [0,  6259]
+  eval_batch_step: [ 0,  6259 ]
   cal_metric_during_train: true
   pretrained_model: null
-  checkpoints: 
+  checkpoints:
   save_inference_dir: output/table_master/infer
   use_visualdl: false
   infer_img: ppstructure/docs/table/table.jpg
@@ -25,7 +25,7 @@ Optimizer:
   lr:
     name: MultiStepDecay
     learning_rate: 0.001
-    milestones: [12, 15]
+    milestones: [ 12, 15 ]
     gamma: 0.1
     warmup_epoch: 0.02
   regularizer:
@@ -42,8 +42,8 @@ Architecture:
       headers: 1
       att_scale: False
       fusion_type: channel_add
-      layers: [False, True, True, True]
-    layers: [1,2,5,3]
+      layers: [ False, True, True, True ]
+    layers: [ 1,2,5,3 ]
   Head:
     name: TableMasterHead
     hidden_size: 512
@@ -69,7 +69,7 @@ Train:
   dataset:
     name: PubTabDataSet
     data_dir: ./train_data/pubtabnet/train
-    label_file_list: [./train_data/pubtabnet/train.jsonl]
+    label_file_list: [ ./train_data/pubtabnet/train.jsonl ]
     transforms:
       - DecodeImage:
           img_mode: BGR
@@ -82,17 +82,17 @@ Train:
           max_len: 480
           resize_bboxes: True
       - PaddingTableImage:
-          size: [480, 480]
+          size: [ 480, 480 ]
       - TableBoxEncode:
           box_format: 'xywh'
       - NormalizeImage:
           scale: 1./255.
-          mean: [0.5, 0.5, 0.5]
-          std: [0.5, 0.5, 0.5]
+          mean: [ 0.5, 0.5, 0.5 ]
+          std: [ 0.5, 0.5, 0.5 ]
           order: hwc
       - ToCHWImage: null
       - KeepKeys:
-          keep_keys: [image, structure, bboxes, bbox_masks, shape]
+          keep_keys: [ image, structure, bboxes, bbox_masks, shape ]
   loader:
     shuffle: True
     batch_size_per_card: 10
@@ -103,7 +103,7 @@ Eval:
   dataset:
     name: PubTabDataSet
     data_dir: ./train_data/pubtabnet/test/
-    label_file_list: [./train_data/pubtabnet/test.jsonl]
+    label_file_list: [ ./train_data/pubtabnet/test.jsonl ]
     transforms:
       - DecodeImage:
           img_mode: BGR
@@ -116,17 +116,17 @@ Eval:
           max_len: 480
           resize_bboxes: True
       - PaddingTableImage:
-          size: [480, 480]
+          size: [ 480, 480 ]
       - TableBoxEncode:
           box_format: 'xywh'
       - NormalizeImage:
           scale: 1./255.
-          mean: [0.5, 0.5, 0.5]
-          std: [0.5, 0.5, 0.5]
+          mean: [ 0.5, 0.5, 0.5 ]
+          std: [ 0.5, 0.5, 0.5 ]
           order: hwc
       - ToCHWImage: null
       - KeepKeys:
-          keep_keys: [image, structure, bboxes, bbox_masks, shape]
+          keep_keys: [ image, structure, bboxes, bbox_masks, shape ]
   loader:
     shuffle: False
     drop_last: False

@@ -23,7 +23,6 @@ from __future__ import print_function
 
 import paddle
 import paddle.nn as nn
-
 from ppocr.modeling.backbones.det_mobilenet_v3 import make_divisible
 
 M0_cfgs = [

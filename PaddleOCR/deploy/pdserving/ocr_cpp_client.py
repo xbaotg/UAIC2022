@@ -19,7 +19,6 @@ import numpy as np
 import base64
 import os
 import cv2
-from paddle_serving_app.reader import Sequential, URL2Image, ResizeByFactor
 from paddle_serving_app.reader import Div, Normalize, Transpose
 from ocr_reader import OCRReader
 import codecs
@@ -31,6 +30,7 @@ client.load_client_config(sys.argv[1:])
 client.connect(["127.0.0.1:8181"])
 
 import paddle
+
 test_img_dir = "../../doc/imgs/1.jpg"
 
 ocr_reader = OCRReader(char_dict_path="../../ppocr/utils/ppocr_keys_v1.txt")
@@ -38,7 +38,7 @@ ocr_reader = OCRReader(char_dict_path="../../ppocr/utils/ppocr_keys_v1.txt")
 
 def cv2_to_base64(image):
     return base64.b64encode(image).decode(
-        'utf8')  #data.tostring()).decode('utf8')
+        'utf8')  # data.tostring()).decode('utf8')
 
 
 def _check_image_file(path):

@@ -1,9 +1,10 @@
-import numpy as np
-import os
-import subprocess
-import json
 import argparse
 import glob
+import json
+import os
+import subprocess
+
+import numpy as np
 
 
 def init_args():

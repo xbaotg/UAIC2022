@@ -13,18 +13,17 @@
 # limitations under the License.
 # -*- coding: utf-8 -*-
 
-import requests
-import json
-import cv2
 import base64
-import os, sys
-import time
+import json
+import os
+
+import requests
 
 
 def cv2_to_base64(image):
-    #data = cv2.imencode('.jpg', image)[1]
+    # data = cv2.imencode('.jpg', image)[1]
     return base64.b64encode(image).decode(
-        'utf8')  #data.tostring()).decode('utf8')
+        'utf8')  # data.tostring()).decode('utf8')
 
 
 headers = {"Content-type": "application/json"}

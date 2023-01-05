@@ -17,7 +17,6 @@ from __future__ import division
 from __future__ import print_function
 
 import numpy as np
-import paddle
 
 __all__ = ['KIEMetric']
 
@@ -137,16 +136,16 @@ class VQAReTokenMetric(object):
         for rel_type in scores.keys():
             if scores[rel_type]["tp"]:
                 scores[rel_type]["p"] = scores[rel_type]["tp"] / (
-                    scores[rel_type]["fp"] + scores[rel_type]["tp"])
+                        scores[rel_type]["fp"] + scores[rel_type]["tp"])
                 scores[rel_type]["r"] = scores[rel_type]["tp"] / (
-                    scores[rel_type]["fn"] + scores[rel_type]["tp"])
+                        scores[rel_type]["fn"] + scores[rel_type]["tp"])
             else:
                 scores[rel_type]["p"], scores[rel_type]["r"] = 0, 0
 
             if not scores[rel_type]["p"] + scores[rel_type]["r"] == 0:
                 scores[rel_type]["f1"] = (
-                    2 * scores[rel_type]["p"] * scores[rel_type]["r"] /
-                    (scores[rel_type]["p"] + scores[rel_type]["r"]))
+                        2 * scores[rel_type]["p"] * scores[rel_type]["r"] /
+                        (scores[rel_type]["p"] + scores[rel_type]["r"]))
             else:
                 scores[rel_type]["f1"] = 0
 

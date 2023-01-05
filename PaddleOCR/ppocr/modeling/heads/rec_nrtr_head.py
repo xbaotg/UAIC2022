@@ -13,14 +13,14 @@
 # limitations under the License.
 
 import math
-import paddle
-from paddle import nn
-import paddle.nn.functional as F
-from paddle.nn import LayerList
-from paddle.nn import Dropout, Linear, LayerNorm
+
 import numpy as np
-from ppocr.modeling.backbones.rec_svtrnet import Mlp, zeros_, ones_
+import paddle
+import paddle.nn.functional as F
+from paddle import nn
+from paddle.nn import Dropout, LayerNorm
 from paddle.nn.initializer import XavierNormal as xavier_normal_
+from ppocr.modeling.backbones.rec_svtrnet import Mlp, zeros_
 
 
 class Transformer(nn.Layer):
@@ -94,7 +94,7 @@ class Transformer(nn.Layer):
         self.nhead = nhead
         self.tgt_word_prj = nn.Linear(
             d_model, self.out_channels, bias_attr=False)
-        w0 = np.random.normal(0.0, d_model**-0.5,
+        w0 = np.random.normal(0.0, d_model ** -0.5,
                               (d_model, self.out_channels)).astype(np.float32)
         self.tgt_word_prj.weight.set_value(w0)
         self.apply(self._init_weights)
@@ -249,7 +249,7 @@ class Transformer(nn.Layer):
                     tgt = decoder_layer(tgt, enc_output, self_mask=tgt_mask)
                 dec_output = tgt
                 dec_output = dec_output[:,
-                                        -1, :]  # Pick the last step: (bh * bm) * d_h
+                             -1, :]  # Pick the last step: (bh * bm) * d_h
                 word_prob = F.softmax(self.tgt_word_prj(dec_output), axis=1)
                 word_prob = paddle.reshape(word_prob, [n_active_inst, n_bm, -1])
                 return word_prob
@@ -259,7 +259,7 @@ class Transformer(nn.Layer):
                 active_inst_idx_list = []
                 for inst_idx, inst_position in inst_idx_to_position_map.items():
                     is_inst_complete = inst_beams[inst_idx].advance(word_prob[
-                        inst_position])
+                                                                        inst_position])
                     if not is_inst_complete:
                         active_inst_idx_list += [inst_idx]
 
@@ -286,7 +286,7 @@ class Transformer(nn.Layer):
             return all_hyp, all_scores
 
         with paddle.no_grad():
-            #-- Encode
+            # -- Encode
             if self.encoder is not None:
                 src = self.positional_encoding(images)
                 src_enc = self.encoder(src)
@@ -361,7 +361,7 @@ class MultiheadAttention(nn.Layer):
         # self.dropout = dropout
         self.head_dim = embed_dim // num_heads
         assert self.head_dim * num_heads == self.embed_dim, "embed_dim must be divisible by num_heads"
-        self.scale = self.head_dim**-0.5
+        self.scale = self.head_dim ** -0.5
         self.self_attn = self_attn
         if self_attn:
             self.qkv = nn.Linear(embed_dim, embed_dim * 3)
@@ -378,7 +378,7 @@ class MultiheadAttention(nn.Layer):
         if self.self_attn:
             qkv = self.qkv(query).reshape(
                 (0, qN, 3, self.num_heads, self.head_dim)).transpose(
-                    (2, 0, 3, 1, 4))
+                (2, 0, 3, 1, 4))
             q, k, v = qkv[0], qkv[1], qkv[2]
         else:
             kN = key.shape[1]
@@ -386,7 +386,7 @@ class MultiheadAttention(nn.Layer):
                 [0, qN, self.num_heads, self.head_dim]).transpose([0, 2, 1, 3])
             kv = self.kv(key).reshape(
                 (0, kN, 2, self.num_heads, self.head_dim)).transpose(
-                    (2, 0, 3, 1, 4))
+                (2, 0, 3, 1, 4))
             k, v = kv[0], kv[1]
 
         attn = (q.matmul(k.transpose((0, 1, 3, 2)))) * self.scale
@@ -426,7 +426,7 @@ class TransformerBlock(nn.Layer):
             self.dropout1 = Dropout(residual_dropout_rate)
         self.with_cross_attn = with_cross_attn
         if with_cross_attn:
-            self.cross_attn = MultiheadAttention(  #for self_attn of encoder or cross_attn of decoder
+            self.cross_attn = MultiheadAttention(  # for self_attn of encoder or cross_attn of decoder
                 d_model,
                 nhead,
                 dropout=attention_dropout_rate)
@@ -574,7 +574,7 @@ class Embeddings(nn.Layer):
     def __init__(self, d_model, vocab, padding_idx=None, scale_embedding=True):
         super(Embeddings, self).__init__()
         self.embedding = nn.Embedding(vocab, d_model, padding_idx=padding_idx)
-        w0 = np.random.normal(0.0, d_model**-0.5,
+        w0 = np.random.normal(0.0, d_model ** -0.5,
                               (vocab, d_model)).astype(np.float32)
         self.embedding.weight.set_value(w0)
         self.d_model = d_model
@@ -595,12 +595,12 @@ class Beam():
         self.size = size
         self._done = False
         # The score for each translation on the beam.
-        self.scores = paddle.zeros((size, ), dtype=paddle.float32)
+        self.scores = paddle.zeros((size,), dtype=paddle.float32)
         self.all_scores = []
         # The backpointers at each time-step.
         self.prev_ks = []
         # The outputs at each time-step.
-        self.next_ys = [paddle.full((size, ), 0, dtype=paddle.int64)]
+        self.next_ys = [paddle.full((size,), 0, dtype=paddle.int64)]
         self.next_ys[0][0] = 2
 
     def get_current_state(self):

@@ -16,20 +16,13 @@ from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
-import numpy as np
 import paddle
 from paddle import ParamAttr
 import paddle.nn as nn
 import paddle.nn.functional as F
-from paddle.nn import Conv2D, BatchNorm, Linear, Dropout
-from paddle.nn import AdaptiveAvgPool2D, MaxPool2D, AvgPool2D
-from paddle.nn.initializer import Uniform
+from paddle.nn import AdaptiveAvgPool2D, MaxPool2D
 
-import math
-
-from paddle.vision.ops import DeformConv2D
 from paddle.regularizer import L2Decay
-from paddle.nn.initializer import Normal, Constant, XavierUniform
 from .det_resnet_vd import DeformableConvV2, ConvBNLayer
 
 

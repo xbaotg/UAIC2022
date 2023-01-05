@@ -12,22 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import sys
-import tarfile
-import os
-import time
 import datetime
 import functools
-import cv2
+import os
 import platform
-import numpy as np
+import sys
+import tarfile
+import time
+
+import cv2
 import fitz
+import numpy as np
 from PIL import Image
 from pdf2docx.converter import Converter
-from qtpy.QtWidgets import QApplication, QWidget, QPushButton, QProgressBar, \
-                           QGridLayout, QMessageBox, QLabel, QFileDialog, QCheckBox
-from qtpy.QtCore import Signal, QThread, QObject
+from qtpy.QtCore import Signal, QThread
 from qtpy.QtGui import QImage, QPixmap, QIcon
+from qtpy.QtWidgets import QApplication, QWidget, QPushButton, QProgressBar, \
+    QGridLayout, QMessageBox, QLabel, QFileDialog
 
 file = os.path.dirname(os.path.abspath(__file__))
 root = os.path.abspath(os.path.join(file, '../../'))
@@ -35,9 +36,10 @@ sys.path.append(file)
 sys.path.insert(0, root)
 
 from ppstructure.predict_system import StructureSystem, save_structure_res
-from ppstructure.utility import parse_args, draw_structure_result
+from ppstructure.utility import parse_args
 from ppocr.utils.network import download_with_progressbar
 from ppstructure.recovery.recovery_to_doc import sorted_layout_boxes, convert_info_docx
+
 # from ScreenShotWidget import ScreenShotWidget
 
 __APPNAME__ = "pdf2word"
@@ -46,16 +48,16 @@ __VERSION__ = "0.2.2"
 URLs_EN = {
     # 下载超英文轻量级PP-OCRv3模型的检测模型并解压
     "en_PP-OCRv3_det_infer":
-    "https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_det_infer.tar",
+        "https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_det_infer.tar",
     # 下载英文轻量级PP-OCRv3模型的识别模型并解压
     "en_PP-OCRv3_rec_infer":
-    "https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_rec_infer.tar",
+        "https://paddleocr.bj.bcebos.com/PP-OCRv3/english/en_PP-OCRv3_rec_infer.tar",
     # 下载超轻量级英文表格英文模型并解压
     "en_ppstructure_mobile_v2.0_SLANet_infer":
-    "https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_infer.tar",
+        "https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_infer.tar",
     # 英文版面分析模型
     "picodet_lcnet_x1_0_fgd_layout_infer":
-    "https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_0_fgd_layout_infer.tar",
+        "https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_0_fgd_layout_infer.tar",
 }
 DICT_EN = {
     "rec_char_dict_path": "en_dict.txt",
@@ -65,16 +67,16 @@ DICT_EN = {
 URLs_CN = {
     # 下载超中文轻量级PP-OCRv3模型的检测模型并解压
     "cn_PP-OCRv3_det_infer":
-    "https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar",
+        "https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_det_infer.tar",
     # 下载中文轻量级PP-OCRv3模型的识别模型并解压
     "cn_PP-OCRv3_rec_infer":
-    "https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.tar",
+        "https://paddleocr.bj.bcebos.com/PP-OCRv3/chinese/ch_PP-OCRv3_rec_infer.tar",
     # 下载超轻量级英文表格英文模型并解压
     "cn_ppstructure_mobile_v2.0_SLANet_infer":
-    "https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_infer.tar",
+        "https://paddleocr.bj.bcebos.com/ppstructure/models/slanet/en_ppstructure_mobile_v2.0_SLANet_infer.tar",
     # 中文版面分析模型
     "picodet_lcnet_x1_0_fgd_layout_cdla_infer":
-    "https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_0_fgd_layout_cdla_infer.tar",
+        "https://paddleocr.bj.bcebos.com/ppstructure/models/layout/picodet_lcnet_x1_0_fgd_layout_cdla_infer.tar",
 }
 DICT_CN = {
     "rec_char_dict_path": "ppocr_keys_v1.txt",
@@ -126,7 +128,7 @@ class Worker(QThread):
     progressBarValue = Signal(int)
     progressBarRange = Signal(int)
     endsignal = Signal()
-    exceptedsignal = Signal(str)  #发送一个异常信号
+    exceptedsignal = Signal(str)  # 发送一个异常信号
     loopFlag = True
 
     def __init__(self, predictors, save_pdf, vis_font_path, use_pdf2docx_api):
@@ -202,7 +204,7 @@ class Worker(QThread):
                     break
                 # using use_pdf2docx_api for PDF parsing
                 if self.use_pdf2docx_api \
-                    and os.path.basename(image_file)[-3:] == 'pdf':
+                        and os.path.basename(image_file)[-3:] == 'pdf':
                     self.totalPageCnt += 1
                     self.progressBarRange.emit(self.totalPageCnt)
                     print(
@@ -484,7 +486,7 @@ class APP_Image2Doc(QWidget):
         avg_time = (time.time() - self.time_start
                     ) / i  # Use average time to prevent time fluctuations
         time_left = str(datetime.timedelta(seconds=avg_time * (
-            lenbar - i))).split(".")[0]  # Remove microseconds
+                lenbar - i))).split(".")[0]  # Remove microseconds
         self.timeEstLabel.setText(f"Time Left: {time_left}")  # show time left
 
     def handleProgressBarRangeSingal(self, max):

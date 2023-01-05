@@ -18,6 +18,7 @@ https://github.com/JiaquanYe/TableMASTER-mmocr/blob/master/mmocr/models/textreco
 
 import copy
 import math
+
 import paddle
 from paddle import nn
 from paddle.nn import functional as F

@@ -1,12 +1,13 @@
 # Paddle2ONNX model transformation and prediction
 
-This chapter describes how the PaddleOCR model is converted into an ONNX model and predicted based on the ONNXRuntime engine.
+This chapter describes how the PaddleOCR model is converted into an ONNX model and predicted based on the ONNXRuntime
+engine.
 
 ## 1. Environment preparation
 
 Need to prepare PaddleOCR, Paddle2ONNX model conversion environment, and ONNXRuntime prediction environment
 
-###  PaddleOCR
+### PaddleOCR
 
 Clone the PaddleOCR repository, use the release/2.6 branch, and install it.
 
@@ -15,18 +16,20 @@ git clone  -b release/2.6 https://github.com/PaddlePaddle/PaddleOCR.git
 cd PaddleOCR && python3.7 setup.py install
 ```
 
-###  Paddle2ONNX
+### Paddle2ONNX
 
-Paddle2ONNX supports converting the PaddlePaddle model format to the ONNX model format. The operator currently supports exporting ONNX Opset 9~11 stably, and some Paddle operators support lower ONNX Opset conversion.
+Paddle2ONNX supports converting the PaddlePaddle model format to the ONNX model format. The operator currently supports
+exporting ONNX Opset 9~11 stably, and some Paddle operators support lower ONNX Opset conversion.
 For more details, please refer to [Paddle2ONNX](https://github.com/PaddlePaddle/Paddle2ONNX/blob/develop/README_en.md)
 
-
 - install Paddle2ONNX
+
 ```
 python3.7 -m pip install paddle2onnx
 ```
 
 - install ONNXRuntime
+
 ```
 # It is recommended to install version 1.9.0, and the version number can be changed according to the environment
 python3.7 -m pip install onnxruntime==1.9.0
@@ -34,11 +37,12 @@ python3.7 -m pip install onnxruntime==1.9.0
 
 ## 2. Model conversion
 
-
 - Paddle model download
 
-There are two ways to obtain the Paddle model: Download the prediction model provided by PaddleOCR in [model_list](../../doc/doc_en/models_list_en.md);
-Refer to [Model Export Instructions](../../doc/doc_en/inference_en.md#1-convert-training-model-to-inference-model) to convert the trained weights to inference_model.
+There are two ways to obtain the Paddle model: Download the prediction model provided by PaddleOCR
+in [model_list](../../doc/doc_en/models_list_en.md);
+Refer to [Model Export Instructions](../../doc/doc_en/inference_en.md#1-convert-training-model-to-inference-model) to
+convert the trained weights to inference_model.
 
 Take the PP-OCRv3 detection, recognition, and classification model as an example:
 
@@ -82,9 +86,13 @@ paddle2onnx --model_dir ./inference/ch_ppocr_mobile_v2.0_cls_infer \
 --input_shape_dict="{'x':[-1,3,-1,-1]}" \
 --enable_onnx_checker True
 ```
-After execution, the ONNX model will be saved in `./inference/det_onnx/`, `./inference/rec_onnx/`, `./inference/cls_onnx/` paths respectively
 
-* Note: For the OCR model, the conversion process must be in the form of dynamic shape, that is, add the option --input_shape_dict="{'x': [-1, 3, -1, -1]}", otherwise the prediction result may be the same as Predicting directly with Paddle is slightly different.
+After execution, the ONNX model will be saved
+in `./inference/det_onnx/`, `./inference/rec_onnx/`, `./inference/cls_onnx/` paths respectively
+
+* Note: For the OCR model, the conversion process must be in the form of dynamic shape, that is, add the option
+  --input_shape_dict="{'x': [-1, 3, -1, -1]}", otherwise the prediction result may be the same as Predicting directly
+  with Paddle is slightly different.
   In addition, the following models do not currently support conversion to ONNX models:
   NRTR, SAR, RARE, SRN
 
@@ -112,8 +120,8 @@ python3.7 tools/infer/predict_system.py --use_gpu=False \
 --rec_char_dict_path=ppocr/utils/en_dict.txt
 ```
 
-
-After executing the command, the predicted identification information will be printed out in the terminal, and the visualization results will be saved under `./inference_results/`.
+After executing the command, the predicted identification information will be printed out in the terminal, and the
+visualization results will be saved under `./inference_results/`.
 
 ONNXRuntime result：
 
@@ -129,6 +137,7 @@ Paddle Inference result：
 
 
 Using ONNXRuntime to predict, terminal output:
+
 ```
 [2022/10/10 12:06:28] ppocr DEBUG: dt_boxes num : 11, elapse : 0.3568880558013916
 [2022/10/10 12:06:31] ppocr DEBUG: rec_res num  : 11, elapse : 2.6445000171661377

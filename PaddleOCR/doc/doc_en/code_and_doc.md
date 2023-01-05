@@ -1,6 +1,6 @@
-  - Appendix
+- Appendix
 
-    This appendix contains python, document specifications and Pull Request process. Please follow the relevant contents
+  This appendix contains python, document specifications and Pull Request process. Please follow the relevant contents
 
     - [Appendix 1：Python Code Specification](#Appendix1)
 
@@ -8,30 +8,34 @@
 
     - [Appendix 3：Pull Request Description](#Appendix3)
 
-    <a name="Appendix1"></a>
+  <a name="Appendix1"></a>
 
-    ## Appendix 1：Python Code Specification
+  ## Appendix 1：Python Code Specification
 
-    The Python code of PaddleOCR follows [PEP8 Specification]( https://www.python.org/dev/peps/pep-0008/ ), some of the key concerns include the following
+  The Python code of PaddleOCR follows [PEP8 Specification]( https://www.python.org/dev/peps/pep-0008/ ), some of the
+  key concerns include the following
 
-    - Space 
+    - Space
 
-      - Spaces should be added after commas, semicolons, colons, not before them
+        - Spaces should be added after commas, semicolons, colons, not before them
 
-        ```python
-        # true:
-        print(x, y)
-        
-        # false:
-        print(x , y)
-        ```
+          ```python
+          # true:
+          print(x, y)
+          
+          # false:
+          print(x , y)
+          ```
 
-      - When specifying a keyword parameter or default parameter value in a function, do not use spaces on both sides of it
+        - When specifying a keyword parameter or default parameter value in a function, do not use spaces on both sides
+          of it
 
-        ```python
-        # true:
-        def complex(real, imag=0.0)
-        # false:
+          ```python
+          # true:
+          def complex(real, imag=0.0)
+
+# false:
+
         def complex(real, imag = 0.0)
         ```
 
@@ -315,24 +319,29 @@
       git branch -D new_branch
   ```
 
-    <a name="Some_conventions_for_submitting_code"></a>
+  <a name="Some_conventions_for_submitting_code"></a>
 
-    #### 3.2.10 Some Conventions For Submitting Code
+  #### 3.2.10 Some Conventions For Submitting Code
 
-    In order for official maintainers to better focus on the code itself when reviewing it, please follow the following conventions each time you submit your code:
+  In order for official maintainers to better focus on the code itself when reviewing it, please follow the following
+  conventions each time you submit your code:
 
-    1）Please ensure that the unit tests in Travis-CI pass smoothly. If not, indicate that there is a problem with the submitted code, and the official maintainer generally does not review it.
-    
-    2）Before submitting a Pull Request.
-    
+  1）Please ensure that the unit tests in Travis-CI pass smoothly. If not, indicate that there is a problem with the
+  submitted code, and the official maintainer generally does not review it.
+
+  2）Before submitting a Pull Request.
+
     - Note the number of commits.
 
-      Reason: If you only modify one file and submit more than a dozen commits, each commit will only make a few modifications, which can be very confusing to the reviewer. The reviewer needs to look at each commit individually to see what changes have been made, and does not exclude the fact that changes between commits overlap each other.
-      
-      Suggestion: Keep as few commits as possible each time you submit, and supplement your last commit with git commit --amend. For multiple commits that have been Push to a remote warehouse, you can refer to [squash commits after push](https://stackoverflow.com/questions/5667884/how-to-squash-commits-in-git-after-they-have-been-pushed ).
+      Reason: If you only modify one file and submit more than a dozen commits, each commit will only make a few
+      modifications, which can be very confusing to the reviewer. The reviewer needs to look at each commit individually
+      to see what changes have been made, and does not exclude the fact that changes between commits overlap each other.
+
+      Suggestion: Keep as few commits as possible each time you submit, and supplement your last commit with git commit
+      --amend. For multiple commits that have been Push to a remote warehouse, you can refer
+      to [squash commits after push](https://stackoverflow.com/questions/5667884/how-to-squash-commits-in-git-after-they-have-been-pushed ).
 
     - Note the name of each commit: it should reflect the content of the current commit, not be too arbitrary.
-
 
     3） If you have solved a problem, add in the first comment box of the Pull Request:fix #issue_number，This will automatically close the corresponding Issue when the Pull Request is merged. Key words include:close, closes, closed, fix, fixes, fixed, resolve, resolves, resolved,please choose the right vocabulary. Detailed reference [Closing issues via commit messages](https://help.github.com/articles/closing-issues-via-commit-messages).
     

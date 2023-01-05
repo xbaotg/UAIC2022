@@ -14,9 +14,9 @@
 
 import logging
 import os
-import imghdr
-import cv2
 import random
+
+import cv2
 import numpy as np
 import paddle
 

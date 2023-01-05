@@ -3,14 +3,15 @@ English | [简体中文](README_ch.md)
 ## Style Text
 
 ### Contents
+
 - [1. Introduction](#Introduction)
 - [2. Preparation](#Preparation)
 - [3. Quick Start](#Quick_Start)
 - [4. Applications](#Applications)
 - [5. Code Structure](#Code_structure)
 
-
 <a name="Introduction"></a>
+
 ### Introduction
 
 <div align="center">
@@ -22,14 +23,17 @@ English | [简体中文](README_ch.md)
 </div>
 
 
-The Style-Text data synthesis tool is a tool based on Baidu and HUST cooperation research work, "Editing Text in the Wild" [https://arxiv.org/abs/1908.03047](https://arxiv.org/abs/1908.03047).
+The Style-Text data synthesis tool is a tool based on Baidu and HUST cooperation research work, "Editing Text in the
+Wild" [https://arxiv.org/abs/1908.03047](https://arxiv.org/abs/1908.03047).
 
 Different from the commonly used GAN-based data synthesis tools, the main framework of Style-Text includes:
+
 * (1) Text foreground style transfer module.
 * (2) Background extraction module.
 * (3) Fusion module.
 
-After these three steps, you can quickly realize the image text style transfer. The following figure is some results of the data synthesis tool.
+After these three steps, you can quickly realize the image text style transfer. The following figure is some results of
+the data synthesis tool.
 
 <div align="center">
     <img src="doc/images/10.png" width="1000">
@@ -37,9 +41,11 @@ After these three steps, you can quickly realize the image text style transfer. 
 
 
 <a name="Preparation"></a>
+
 #### Preparation
 
-1. Please refer the [QUICK INSTALLATION](../doc/doc_en/installation_en.md) to install PaddlePaddle. Python3 environment is strongly recommended.
+1. Please refer the [QUICK INSTALLATION](../doc/doc_en/installation_en.md) to install PaddlePaddle. Python3 environment
+   is strongly recommended.
 2. Download the pretrained models and unzip:
 
 ```bash
@@ -48,7 +54,8 @@ wget https://paddleocr.bj.bcebos.com/dygraph_v2.0/style_text/style_text_models.z
 unzip style_text_models.zip
 ```
 
-If you save the model in another location, please modify the address of the model file in `configs/config.yml`, and you need to modify these three configurations at the same time:
+If you save the model in another location, please modify the address of the model file in `configs/config.yml`, and you
+need to modify these three configurations at the same time:
 
 ```
 bg_generator:
@@ -62,6 +69,7 @@ fusion_generator:
 ```
 
 <a name="Quick_Start"></a>
+
 ### Quick Start
 
 #### Synthesis single image
@@ -72,12 +80,11 @@ fusion_generator:
 python3 tools/synth_image.py -c configs/config.yml --style_image examples/style_images/2.jpg --text_corpus PaddleOCR --language en
 ```
 
-* Note 1: The language options is correspond to the corpus. Currently, the tool only supports English(en), Simplified Chinese(ch) and Korean(ko).
+* Note 1: The language options is correspond to the corpus. Currently, the tool only supports English(en), Simplified
+  Chinese(ch) and Korean(ko).
 * Note 2: Synth-Text is mainly used to generate images for OCR recognition models.
   So the height of style images should be around 32 pixels. Images in other sizes may behave poorly.
 * Note 3: You can modify `use_gpu` in `configs/config.yml` to determine whether to use GPU for prediction.
-
-
 
 For example, enter the following image and corpus `PaddleOCR`.
 
@@ -105,26 +112,30 @@ What's more, the medium result `fake_bg.jpg` will also be saved, which is the ba
     <img src="doc/images/8.jpg" width="300">
 </div>
 
-
 #### Batch synthesis
 
-In actual application scenarios, it is often necessary to synthesize pictures in batches and add them to the training set. StyleText can use a batch of style pictures and corpus to synthesize data in batches. The synthesis process is as follows:
+In actual application scenarios, it is often necessary to synthesize pictures in batches and add them to the training
+set. StyleText can use a batch of style pictures and corpus to synthesize data in batches. The synthesis process is as
+follows:
 
 1. The referenced dataset can be specifed in `configs/dataset_config.yml`:
 
-   * `Global`：
-     * `output_dir:`：Output synthesis data path.
-   * `StyleSampler`：
-     * `image_home`：style images' folder.
-     * `label_file`：Style images' file list. If label is provided, then it is the label file path.
-     * `with_label`：Whether the `label_file` is label file list.
-   * `CorpusGenerator`：
-     * `method`：Method of CorpusGenerator，supports `FileCorpus` and `EnNumCorpus`. If `EnNumCorpus` is used，No other configuration is needed，otherwise you need to set `corpus_file` and `language`.
-     * `language`：Language of the corpus. Currently, the tool only supports English(en), Simplified Chinese(ch) and Korean(ko).
-     * `corpus_file`: Filepath of the corpus. Corpus file should be a text file which will be split by line-endings（'\n'）. Corpus generator samples one line each time.
-
+    * `Global`：
+        * `output_dir:`：Output synthesis data path.
+    * `StyleSampler`：
+        * `image_home`：style images' folder.
+        * `label_file`：Style images' file list. If label is provided, then it is the label file path.
+        * `with_label`：Whether the `label_file` is label file list.
+    * `CorpusGenerator`：
+        * `method`：Method of CorpusGenerator，supports `FileCorpus` and `EnNumCorpus`. If `EnNumCorpus` is used，No other
+          configuration is needed，otherwise you need to set `corpus_file` and `language`.
+        * `language`：Language of the corpus. Currently, the tool only supports English(en), Simplified Chinese(ch) and
+          Korean(ko).
+        * `corpus_file`: Filepath of the corpus. Corpus file should be a text file which will be split by
+          line-endings（'\n'）. Corpus generator samples one line each time.
 
 Example of corpus file:
+
 ```
 PaddleOCR
 飞桨文字识别
@@ -132,7 +143,9 @@ StyleText
 风格文本图像数据合成
 ```
 
-We provide a general dataset containing Chinese, English and Korean (50,000 images in all) for your trial ([download link](https://paddleocr.bj.bcebos.com/dygraph_v2.0/style_text/chkoen_5w.tar)), some examples are given below :
+We provide a general dataset containing Chinese, English and Korean (50,000 images in all) for your
+trial ([download link](https://paddleocr.bj.bcebos.com/dygraph_v2.0/style_text/chkoen_5w.tar)), some examples are given
+below :
 
 <div align="center">
      <img src="doc/images/5.png" width="800">
@@ -145,10 +158,10 @@ We provide a general dataset containing Chinese, English and Korean (50,000 imag
    ```
 
 We also provide example corpus and images in `examples` folder.
-    <div align="center">
-        <img src="examples/style_images/1.jpg" width="300">
-        <img src="examples/style_images/2.jpg" width="300">
-    </div>
+<div align="center">
+<img src="examples/style_images/1.jpg" width="300">
+<img src="examples/style_images/2.jpg" width="300">
+</div>
 If you run the code above directly, you will get example output data in `output_data` folder.
 You will get synthesis images and labels as below:
    <div align="center">
@@ -158,23 +171,28 @@ There will be some cache under the `label` folder. If the program exit unexpecte
 When the program finish normally, you will find all the labels in `label.txt` which give the final results.
 
 <a name="Applications"></a>
+
 ### Applications
-We take two scenes as examples, which are metal surface English number recognition and general Korean recognition, to illustrate practical cases of using StyleText to synthesize data to improve text recognition. The following figure shows some examples of real scene images and composite images:
+
+We take two scenes as examples, which are metal surface English number recognition and general Korean recognition, to
+illustrate practical cases of using StyleText to synthesize data to improve text recognition. The following figure shows
+some examples of real scene images and composite images:
 
 <div align="center">
     <img src="doc/images/11.png" width="800">
 </div>
 
 
-After adding the above synthetic data for training, the accuracy of the recognition model is improved, which is shown in the following table:
+After adding the above synthetic data for training, the accuracy of the recognition model is improved, which is shown in
+the following table:
 
-
-| Scenario | Characters | Raw Data | Test Data | Only Use Raw Data</br>Recognition Accuracy | New Synthetic Data | Simultaneous Use of Synthetic Data</br>Recognition Accuracy | Index Improvement |
-| -------- | ---------- | -------- | -------- | -------------------------- | ------------ | ---------------------- | -------- |
-| Metal surface | English and numbers | 2203     | 650      | 59.38%                     | 20000        | 75.46%                 | 16.08%      |
-| Random background | Korean       | 5631     | 1230     | 30.12%                     | 100000       | 50.57%                 | 20.45%      |
+| Scenario          | Characters          | Raw Data | Test Data | Only Use Raw Data</br>Recognition Accuracy | New Synthetic Data | Simultaneous Use of Synthetic Data</br>Recognition Accuracy | Index Improvement |
+|-------------------|---------------------|----------|-----------|--------------------------------------------|--------------------|-------------------------------------------------------------|-------------------|
+| Metal surface     | English and numbers | 2203     | 650       | 59.38%                                     | 20000              | 75.46%                                                      | 16.08%            |
+| Random background | Korean              | 5631     | 1230      | 30.12%                                     | 100000             | 50.57%                                                      | 20.45%            |
 
 <a name="Code_structure"></a>
+
 ### Code Structure
 
 ```

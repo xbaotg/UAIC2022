@@ -25,22 +25,14 @@ sys.path.append(os.path.abspath(os.path.join(__dir__, '..', '..', '..')))
 sys.path.append(
     os.path.abspath(os.path.join(__dir__, '..', '..', '..', 'tools')))
 
-import yaml
 import paddle
 import paddle.distributed as dist
 
 paddle.seed(2)
 
 from ppocr.data import build_dataloader
-from ppocr.modeling.architectures import build_model
-from ppocr.losses import build_loss
-from ppocr.optimizer import build_optimizer
-from ppocr.postprocess import build_post_process
-from ppocr.metrics import build_metric
-from ppocr.utils.save_load import load_model
 import tools.program as program
 import paddleslim
-from paddleslim.dygraph.quant import QAT
 import numpy as np
 
 dist.get_world_size()
@@ -97,6 +89,7 @@ def sample_generator(loader):
 
     return __reader__
 
+
 def sample_generator_layoutxlm_ser(loader):
     def __reader__():
         for indx, data in enumerate(loader):
@@ -109,6 +102,7 @@ def sample_generator_layoutxlm_ser(loader):
 
     return __reader__
 
+
 def main(config, device, logger, vdl_writer):
     # init dist environment
     if config['Global']['distributed']:
@@ -118,7 +112,8 @@ def main(config, device, logger, vdl_writer):
 
     # build dataloader
     config['Train']['loader']['num_workers'] = 0
-    is_layoutxlm_ser =  config['Architecture']['model_type'] =='kie' and config['Architecture']['Backbone']['name'] == 'LayoutXLMForSer'
+    is_layoutxlm_ser = config['Architecture']['model_type'] == 'kie' and config['Architecture']['Backbone'][
+        'name'] == 'LayoutXLMForSer'
     train_dataloader = build_dataloader(config, 'Train', device, logger)
     if config['Eval']:
         config['Eval']['loader']['num_workers'] = 0
@@ -135,12 +130,12 @@ def main(config, device, logger, vdl_writer):
         inference_model_dir = global_config['inference_model']
     else:
         inference_model_dir = os.path.dirname(global_config['pretrained_model'])
-        if  not (os.path.exists(os.path.join(inference_model_dir, "inference.pdmodel")) and \
-            os.path.exists(os.path.join(inference_model_dir, "inference.pdiparams")) ):
+        if not (os.path.exists(os.path.join(inference_model_dir, "inference.pdmodel")) and \
+                os.path.exists(os.path.join(inference_model_dir, "inference.pdiparams"))):
             raise ValueError(
                 "Please set inference model dir in Global.inference_model or Global.pretrained_model for post-quantazition"
             )
-    
+
     if is_layoutxlm_ser:
         generator = sample_generator_layoutxlm_ser(train_dataloader)
     else:

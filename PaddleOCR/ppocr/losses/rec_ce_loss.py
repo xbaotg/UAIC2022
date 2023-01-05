@@ -1,6 +1,6 @@
 import paddle
-from paddle import nn
 import paddle.nn.functional as F
+from paddle import nn
 
 
 class CELoss(nn.Layer):
@@ -54,7 +54,7 @@ class CELoss(nn.Layer):
                     n_class = pred.shape[1]
                     one_hot = F.one_hot(tgt, pred.shape[1])
                     one_hot = one_hot * (1 - eps) + (1 - one_hot) * eps / (
-                        n_class - 1)
+                            n_class - 1)
                     log_prb = F.log_softmax(pred, axis=1)
                     non_pad_mask = paddle.not_equal(
                         tgt, paddle.zeros(

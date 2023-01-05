@@ -13,7 +13,7 @@ Global:
   #    you should set load_static_weights as False.
   load_static_weights: False
   cal_metric_during_train: False
-  pretrained_model: 
+  pretrained_model:
   checkpoints:
   save_inference_dir:
   use_visualdl: False
@@ -41,8 +41,8 @@ Optimizer:
   lr:
     name: Piecewise
     learning_rate: 0.001
-    decay_epochs: [ 60, 80, 100]
-    values: [ 0.001, 0.0001, 0.00001]
+    decay_epochs: [ 60, 80, 100 ]
+    values: [ 0.001, 0.0001, 0.00001 ]
     warmup_epoch: 2
   regularizer:
     name: 'L2'
@@ -76,7 +76,7 @@ Train:
       - KieResize:
       - ToCHWImage:
       - KeepKeys:
-          keep_keys: [ 'image', 'relations', 'texts', 'points', 'labels', 'tag', 'shape'] # dataloader will return list in this order
+          keep_keys: [ 'image', 'relations', 'texts', 'points', 'labels', 'tag', 'shape' ] # dataloader will return list in this order
   loader:
     shuffle: True
     drop_last: False
@@ -103,7 +103,7 @@ Eval:
           order: 'hwc'
       - ToCHWImage:
       - KeepKeys:
-          keep_keys: [ 'image', 'relations', 'texts', 'points', 'labels', 'tag', 'ori_image', 'ori_boxes', 'shape']
+          keep_keys: [ 'image', 'relations', 'texts', 'points', 'labels', 'tag', 'ori_image', 'ori_boxes', 'shape' ]
   loader:
     shuffle: False
     drop_last: False

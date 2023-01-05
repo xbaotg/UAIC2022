@@ -17,9 +17,9 @@ from __future__ import division
 from __future__ import print_function
 
 import paddle
-from paddle import nn
 import paddle.nn.functional as F
 from paddle import ParamAttr
+from paddle import nn
 
 
 class TableFPN(nn.Layer):
@@ -37,7 +37,7 @@ class TableFPN(nn.Layer):
             in_channels=in_channels[1],
             out_channels=self.out_channels,
             kernel_size=1,
-            stride = 1,
+            stride=1,
             weight_attr=ParamAttr(initializer=weight_attr),
             bias_attr=False)
         self.in4_conv = nn.Conv2D(

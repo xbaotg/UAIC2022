@@ -17,9 +17,8 @@ from __future__ import division
 from __future__ import print_function
 
 import paddle
-from paddle import nn
-import paddle.nn.functional as F
 from paddle import ParamAttr
+from paddle import nn
 
 
 class ConvBNLayer(nn.Layer):
@@ -107,7 +106,7 @@ class EASTFPN(nn.Layer):
             self.out_channels = 64
         self.in_channels = in_channels[::-1]
         self.h1_conv = ConvBNLayer(
-            in_channels=self.out_channels+self.in_channels[1],
+            in_channels=self.out_channels + self.in_channels[1],
             out_channels=self.out_channels,
             kernel_size=3,
             stride=1,
@@ -116,7 +115,7 @@ class EASTFPN(nn.Layer):
             act='relu',
             name="unet_h_1")
         self.h2_conv = ConvBNLayer(
-            in_channels=self.out_channels+self.in_channels[2],
+            in_channels=self.out_channels + self.in_channels[2],
             out_channels=self.out_channels,
             kernel_size=3,
             stride=1,
@@ -125,7 +124,7 @@ class EASTFPN(nn.Layer):
             act='relu',
             name="unet_h_2")
         self.h3_conv = ConvBNLayer(
-            in_channels=self.out_channels+self.in_channels[3],
+            in_channels=self.out_channels + self.in_channels[3],
             out_channels=self.out_channels,
             kernel_size=3,
             stride=1,

@@ -14,31 +14,39 @@
 - [5. FAQ](#5)
 
 <a name="1"></a>
+
 ## 1. Introduction
 
 Paper:
 > [RobustScanner: Dynamically Enhancing Positional Clues for Robust Text Recognition](https://arxiv.org/pdf/2007.07542.pdf)
 > Xiaoyu Yue, Zhanghui Kuang, Chenhao Lin, Hongbin Sun, Wayne
-Zhang
+> Zhang
 > ECCV, 2020
 
-Using MJSynth and SynthText two text recognition datasets for training, and evaluating on IIIT, SVT, IC13, IC15, SVTP, CUTE datasets, the algorithm reproduction effect is as follows:
+Using MJSynth and SynthText two text recognition datasets for training, and evaluating on IIIT, SVT, IC13, IC15, SVTP,
+CUTE datasets, the algorithm reproduction effect is as follows:
 
-|Model|Backbone|config|Acc|Download link|
-| --- | --- | --- | --- | --- |
-|RobustScanner|ResNet31|[rec_r31_robustscanner.yml](../../configs/rec/rec_r31_robustscanner.yml)|87.77%|[trained model](https://paddleocr.bj.bcebos.com/contribution/rec_r31_robustscanner.tar)|
+| Model         | Backbone | config                                                                   | Acc    | Download link                                                                           |
+|---------------|----------|--------------------------------------------------------------------------|--------|-----------------------------------------------------------------------------------------|
+| RobustScanner | ResNet31 | [rec_r31_robustscanner.yml](../../configs/rec/rec_r31_robustscanner.yml) | 87.77% | [trained model](https://paddleocr.bj.bcebos.com/contribution/rec_r31_robustscanner.tar) |
 
-Note:In addition to using the two text recognition datasets MJSynth and SynthText, [SynthAdd](https://pan.baidu.com/share/init?surl=uV0LtoNmcxbO-0YA7Ch4dg) data (extraction code: 627x), and some real data are used in training, the specific data details can refer to the paper.
+Note:In addition to using the two text recognition datasets MJSynth and
+SynthText, [SynthAdd](https://pan.baidu.com/share/init?surl=uV0LtoNmcxbO-0YA7Ch4dg) data (extraction code: 627x), and
+some real data are used in training, the specific data details can refer to the paper.
 
 <a name="2"></a>
-## 2. Environment
-Please refer to ["Environment Preparation"](./environment_en.md) to configure the PaddleOCR environment, and refer to ["Project Clone"](./clone_en.md) to clone the project code.
 
+## 2. Environment
+
+Please refer to ["Environment Preparation"](./environment_en.md) to configure the PaddleOCR environment, and refer
+to ["Project Clone"](./clone_en.md) to clone the project code.
 
 <a name="3"></a>
+
 ## 3. Model Training / Evaluation / Prediction
 
-Please refer to [Text Recognition Tutorial](./recognition_en.md). PaddleOCR modularizes the code, and training different recognition models only requires **changing the configuration file**.
+Please refer to [Text Recognition Tutorial](./recognition_en.md). PaddleOCR modularizes the code, and training different
+recognition models only requires **changing the configuration file**.
 
 Training:
 
@@ -67,11 +75,15 @@ python3 tools/infer_rec.py -c configs/rec/rec_r31_robustscanner.yml -o Global.pr
 ```
 
 <a name="4"></a>
+
 ## 4. Inference and Deployment
 
 <a name="4-1"></a>
+
 ### 4.1 Python Inference
-First, the model saved during the RobustScanner text recognition training process is converted into an inference model. you can use the following command to convert:
+
+First, the model saved during the RobustScanner text recognition training process is converted into an inference model.
+you can use the following command to convert:
 
 ```
 python3 tools/export_model.py -c configs/rec/rec_r31_robustscanner.yml -o Global.pretrained_model={path/to/weights}/best_accuracy  Global.save_inference_dir=./inference/rec_r31_robustscanner
@@ -84,23 +96,26 @@ python3 tools/infer/predict_rec.py --image_dir="./doc/imgs_words/en/word_1.png" 
 ```
 
 <a name="4-2"></a>
+
 ### 4.2 C++ Inference
 
 Not supported
 
 <a name="4-3"></a>
+
 ### 4.3 Serving
 
 Not supported
 
 <a name="4-4"></a>
+
 ### 4.4 More
 
 Not supported
 
 <a name="5"></a>
-## 5. FAQ
 
+## 5. FAQ
 
 ## Citation
 

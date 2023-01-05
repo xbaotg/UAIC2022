@@ -1,21 +1,22 @@
 # 关键信息抽取
 
-本文提供了PaddleOCR关键信息抽取的全流程指南，包括语义实体识别 (Semantic Entity Recognition) 以及关系抽取 (Relation Extraction, RE) 任务的数据准备、模型训练、调优、评估、预测，各个阶段的详细说明。
+本文提供了PaddleOCR关键信息抽取的全流程指南，包括语义实体识别 (Semantic Entity Recognition) 以及关系抽取 (Relation
+Extraction, RE) 任务的数据准备、模型训练、调优、评估、预测，各个阶段的详细说明。
 
 - [1. 数据准备](#1-数据准备)
-  - [1.1. 准备数据集](#11-准备数据集)
-  - [1.2. 自定义数据集](#12-自定义数据集)
-  - [1.3. 数据下载](#13-数据下载)
+    - [1.1. 准备数据集](#11-准备数据集)
+    - [1.2. 自定义数据集](#12-自定义数据集)
+    - [1.3. 数据下载](#13-数据下载)
 - [2. 开始训练](#2-开始训练)
-  - [2.1. 启动训练](#21-启动训练)
-  - [2.2. 断点训练](#22-断点训练)
-  - [2.3. 混合精度训练](#24-混合精度训练)
-  - [2.4. 分布式训练](#25-分布式训练)
-  - [2.5. 知识蒸馏训练](#26-知识蒸馏训练)
-  - [2.6. 其他训练环境](#27-其他训练环境)
+    - [2.1. 启动训练](#21-启动训练)
+    - [2.2. 断点训练](#22-断点训练)
+    - [2.3. 混合精度训练](#24-混合精度训练)
+    - [2.4. 分布式训练](#25-分布式训练)
+    - [2.5. 知识蒸馏训练](#26-知识蒸馏训练)
+    - [2.6. 其他训练环境](#27-其他训练环境)
 - [3. 模型评估与预测](#3-模型评估与预测)
-  - [3.1. 指标评估](#31-指标评估)
-  - [3.2. 测试信息抽取效果](#32-测试识别效果)
+    - [3.1. 指标评估](#31-指标评估)
+    - [3.2. 测试信息抽取效果](#32-测试识别效果)
 - [4. 模型导出与预测](#4-模型导出与预测)
 - [5. FAQ](#5-faq)
 
@@ -24,7 +25,8 @@
 ## 1.1. 准备数据集
 
 在训练信息抽取相关模型时，PaddleOCR支持以下数据格式。
- - `通用数据` 用于训练以文本文件存储的数据集(SimpleDataSet);
+
+- `通用数据` 用于训练以文本文件存储的数据集(SimpleDataSet);
 
 训练数据的默认存储路径是 `PaddleOCR/train_data`,如果您的磁盘上已有数据集，只需创建软链接至数据集目录：
 
@@ -99,16 +101,19 @@ HEADER
 **注：**
 
 - 标注文件中的类别信息不区分大小写，如`HEADER`与`header`会被解析为相同的类别id，因此在标注的时候，不能使用小写处理后相同的字符串表示不同的类别。
-- 在整理标注文件的时候，建议将other这个类别（其他，无需关注的文本行可以标注为other）放在第一行，在解析的时候，会将`other`类别的类别id解析为0，后续不会对该类进行可视化。
+- 在整理标注文件的时候，建议将other这个类别（其他，无需关注的文本行可以标注为other）放在第一行，在解析的时候，会将`other`
+  类别的类别id解析为0，后续不会对该类进行可视化。
 
 ## 1.3. 数据下载
 
-如果你没有本地数据集，可以从[XFUND](https://github.com/doc-analysis/XFUND)或者[FUNSD](https://guillaumejaume.github.io/FUNSD/)官网下载数据，然后使用XFUND与FUNSD的处理脚本([XFUND](../../ppstructure/kie/tools/trans_xfun_data.py), [FUNSD](../../ppstructure/kie/tools/trans_funsd_label.py))，生成用于PaddleOCR训练的数据格式，并使用公开数据集快速体验关键信息抽取的流程。
+如果你没有本地数据集，可以从[XFUND](https://github.com/doc-analysis/XFUND)
+或者[FUNSD](https://guillaumejaume.github.io/FUNSD/)
+官网下载数据，然后使用XFUND与FUNSD的处理脚本([XFUND](../../ppstructure/kie/tools/trans_xfun_data.py), [FUNSD](../../ppstructure/kie/tools/trans_funsd_label.py))
+，生成用于PaddleOCR训练的数据格式，并使用公开数据集快速体验关键信息抽取的流程。
 
 更多关于公开数据集的介绍，请参考[关键信息抽取数据集说明文档](./dataset/kie_datasets.md)。
 
 PaddleOCR也支持了关键信息抽取模型的标注，具体使用方法请参考：[PPOCRLabel使用文档](../../PPOCRLabel/README_ch.md)。
-
 
 # 2. 开始训练
 
@@ -173,27 +178,27 @@ python3 tools/train.py -c configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh.yml
 
 log 中自动打印如下信息：
 
-|  字段   |   含义   |  
-| :----: | :------: |
-|  epoch | 当前迭代轮次 |
-|  iter  | 当前迭代次数 |
-|  lr    | 当前学习率 |
-|  loss  | 当前损失函数 |
-|  reader_cost | 当前 batch 数据处理耗时 |
-|  batch_cost | 当前 batch 总耗时 |
-|  samples  | 当前 batch 内的样本数 |
-|  ips  | 每秒处理图片的数量 |
+|     字段      |       含义        |  
+|:-----------:|:---------------:|
+|    epoch    |     当前迭代轮次      |
+|    iter     |     当前迭代次数      |
+|     lr      |      当前学习率      |
+|    loss     |     当前损失函数      |
+| reader_cost | 当前 batch 数据处理耗时 |
+| batch_cost  |  当前 batch 总耗时   |
+|   samples   | 当前 batch 内的样本数  |
+|     ips     |    每秒处理图片的数量    |
 
-
-PaddleOCR支持训练和评估交替进行, 可以在 `configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml` 中修改 `eval_batch_step` 设置评估频率，默认每19个iter评估一次。评估过程中默认将最佳hmean模型，保存为 `output/ser_vi_layoutxlm_xfund_zh/best_accuracy/` 。
+PaddleOCR支持训练和评估交替进行, 可以在 `configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml`
+中修改 `eval_batch_step`
+设置评估频率，默认每19个iter评估一次。评估过程中默认将最佳hmean模型，保存为 `output/ser_vi_layoutxlm_xfund_zh/best_accuracy/` 。
 
 如果验证集很大，测试将会比较耗时，建议减少评估次数，或训练完再进行评估。
 
-**提示：** 可通过 -c 参数选择 `configs/kie/` 路径下的多种模型配置进行训练，PaddleOCR支持的信息抽取算法可以参考[前沿算法列表](./algorithm_overview.md)。
-
+**提示：** 可通过 -c 参数选择 `configs/kie/`
+路径下的多种模型配置进行训练，PaddleOCR支持的信息抽取算法可以参考[前沿算法列表](./algorithm_overview.md)。
 
 如果你希望训练自己的数据集，需要修改配置文件中的数据配置、字典文件以及类别数。
-
 
 以 `configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml` 为例，修改的内容如下所示。
 
@@ -253,9 +258,13 @@ python3 tools/train.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml
 
 **注意**：
 
-- `Architecture.Backbone.checkpoints`的优先级高于`Architecture.Backbone.pretrained`，需要加载之前训练好的训练模型进行模型微调、恢复训练、模型评估时，需要使用`Architecture.Backbone.checkpoints`指定模型参数路径；如果需要使用默认提供的通用预训练模型进行训练，则需要指定`Architecture.Backbone.pretrained`为`True`，同时指定`Architecture.Backbone.checkpoints`为空（`null`）。
-- LayoutXLM系列模型均是调用了PaddleNLP中的预训练模型，模型加载与保存的逻辑与PaddleNLP基本一致，因此在这里不需要指定`Global.pretrained_model`或者`Global.checkpoints`参数；此外，LayoutXLM系列模型的蒸馏训练目前不支持断点训练。
-
+- `Architecture.Backbone.checkpoints`的优先级高于`Architecture.Backbone.pretrained`
+  ，需要加载之前训练好的训练模型进行模型微调、恢复训练、模型评估时，需要使用`Architecture.Backbone.checkpoints`
+  指定模型参数路径；如果需要使用默认提供的通用预训练模型进行训练，则需要指定`Architecture.Backbone.pretrained`为`True`
+  ，同时指定`Architecture.Backbone.checkpoints`为空（`null`）。
+-
+LayoutXLM系列模型均是调用了PaddleNLP中的预训练模型，模型加载与保存的逻辑与PaddleNLP基本一致，因此在这里不需要指定`Global.pretrained_model`
+或者`Global.checkpoints`参数；此外，LayoutXLM系列模型的蒸馏训练目前不支持断点训练。
 
 ## 2.3. 混合精度训练
 
@@ -269,34 +278,38 @@ coming soon!
 python3 -m paddle.distributed.launch --ips="xx.xx.xx.xx,xx.xx.xx.xx" --gpus '0,1,2,3' tools/train.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml
 ```
 
-**注意:** （1）采用多机多卡训练时，需要替换上面命令中的ips值为您机器的地址，机器之间需要能够相互ping通；（2）训练时需要在多个机器上分别启动命令。查看机器ip地址的命令为`ifconfig`；（3）更多关于分布式训练的性能优势等信息，请参考：[分布式训练教程](./distributed_training.md)。
+**注意:**
+（1）采用多机多卡训练时，需要替换上面命令中的ips值为您机器的地址，机器之间需要能够相互ping通；（2）训练时需要在多个机器上分别启动命令。查看机器ip地址的命令为`ifconfig`
+；（3）更多关于分布式训练的性能优势等信息，请参考：[分布式训练教程](./distributed_training.md)。
 
 ## 2.5. 知识蒸馏训练
 
-PaddleOCR支持了基于U-DML知识蒸馏的关键信息抽取模型训练过程，配置文件请参考：[ser_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml)，更多关于知识蒸馏的说明文档请参考：[知识蒸馏说明文档](./knowledge_distillation.md)。
+PaddleOCR支持了基于U-DML知识蒸馏的关键信息抽取模型训练过程，配置文件请参考：[ser_vi_layoutxlm_xfund_zh_udml.yml](../../configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh_udml.yml)
+，更多关于知识蒸馏的说明文档请参考：[知识蒸馏说明文档](./knowledge_distillation.md)。
 
-**注意**： PaddleOCR中LayoutXLM系列关键信息抽取模型的保存与加载逻辑与PaddleNLP保持一致，因此在蒸馏的过程中仅保存了学生模型的参数，如果希望使用保存的模型进行评估，需要使用学生模型的配置（上面的蒸馏文件对应的学生模型为[ser_vi_layoutxlm_xfund_zh.yml](../../configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml)）
-
+**注意**：
+PaddleOCR中LayoutXLM系列关键信息抽取模型的保存与加载逻辑与PaddleNLP保持一致，因此在蒸馏的过程中仅保存了学生模型的参数，如果希望使用保存的模型进行评估，需要使用学生模型的配置（上面的蒸馏文件对应的学生模型为[ser_vi_layoutxlm_xfund_zh.yml](../../configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml)）
 
 ## 2.6. 其他训练环境
 
 - Windows GPU/CPU
-在Windows平台上与Linux平台略有不同:
-Windows平台只支持`单卡`的训练与预测，指定GPU进行训练`set CUDA_VISIBLE_DEVICES=0`
-在Windows平台，DataLoader只支持单进程模式，因此需要设置 `num_workers` 为0;
+  在Windows平台上与Linux平台略有不同:
+  Windows平台只支持`单卡`的训练与预测，指定GPU进行训练`set CUDA_VISIBLE_DEVICES=0`
+  在Windows平台，DataLoader只支持单进程模式，因此需要设置 `num_workers` 为0;
 
 - macOS
-不支持GPU模式，需要在配置文件中设置`use_gpu`为False，其余训练评估预测命令与Linux GPU完全相同。
+  不支持GPU模式，需要在配置文件中设置`use_gpu`为False，其余训练评估预测命令与Linux GPU完全相同。
 
 - Linux DCU
-DCU设备上运行需要设置环境变量 `export HIP_VISIBLE_DEVICES=0,1,2,3`，其余训练评估预测命令与Linux GPU完全相同。
-
+  DCU设备上运行需要设置环境变量 `export HIP_VISIBLE_DEVICES=0,1,2,3`，其余训练评估预测命令与Linux GPU完全相同。
 
 # 3. 模型评估与预测
 
 ## 3.1. 指标评估
 
-训练中模型参数默认保存在`Global.save_model_dir`目录下。在评估指标时，需要设置`Architecture.Backbone.checkpoints`指向保存的参数文件。评估数据集可以通过 `configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml`  修改Eval中的 `label_file_path` 设置。
+训练中模型参数默认保存在`Global.save_model_dir`目录下。在评估指标时，需要设置`Architecture.Backbone.checkpoints`
+指向保存的参数文件。评估数据集可以通过 `configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml`
+修改Eval中的 `label_file_path` 设置。
 
 ```bash
 # GPU 评估， Global.checkpoints 为待测权重
@@ -312,7 +325,6 @@ python3 tools/eval.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml 
 [2022/08/09 07:59:28] ppocr INFO: hmean:0.7805806758686339
 [2022/08/09 07:59:28] ppocr INFO: fps:17.367364606899105
 ```
-
 
 ## 3.2. 测试信息抽取结果
 
@@ -340,11 +352,10 @@ output/ser_vi_layoutxlm_xfund_zh/
 
 其中 best_accuracy.* 是评估集上的最优模型；latest.* 是最新保存的一个模型。
 
-
-预测使用的配置文件必须与训练一致，如您通过 `python3 tools/train.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml` 完成了模型的训练过程。
+预测使用的配置文件必须与训练一致，如您通过 `python3 tools/train.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml`
+完成了模型的训练过程。
 
 您可以使用如下命令进行中文模型预测。
-
 
 ```bash
 python3 tools/infer_kie_token_ser.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o Architecture.Backbone.checkpoints=./output/ser_vi_layoutxlm_xfund_zh/best_accuracy Global.infer_img=./ppstructure/docs/kie/input/zh_val_42.jpg
@@ -356,7 +367,8 @@ python3 tools/infer_kie_token_ser.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxl
     <img src="../../ppstructure/docs/kie/result_ser/zh_val_42_ser.jpg" width="800">
 </div>
 
-预测过程中，默认会加载PP-OCRv3的检测识别模型，用于OCR的信息抽取，如果希望加载预先获取的OCR结果，可以使用下面的方式进行预测，指定`Global.infer_img`为标注文件，其中包含图片路径以及OCR信息，同时指定`Global.infer_mode`为False，表示此时不使用OCR预测引擎。
+预测过程中，默认会加载PP-OCRv3的检测识别模型，用于OCR的信息抽取，如果希望加载预先获取的OCR结果，可以使用下面的方式进行预测，指定`Global.infer_img`
+为标注文件，其中包含图片路径以及OCR信息，同时指定`Global.infer_mode`为False，表示此时不使用OCR预测引擎。
 
 ```bash
 python3 tools/infer_kie_token_ser.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o Architecture.Backbone.checkpoints=./output/ser_vi_layoutxlm_xfund_zh/best_accuracy Global.infer_img=./train_data/XFUND/zh_val/val.json Global.infer_mode=False
@@ -370,9 +382,7 @@ python3 tools/infer_kie_token_ser.py -c configs/kie/vi_layoutxlm/ser_vi_layoutxl
 
 可以看出，部分检测框信息更加准确，但是整体信息抽取识别结果基本一致。
 
-
 在RE任务模型预测时，需要先给出模型SER结果，因此需要同时加载SER的配置文件与模型权重，示例如下。
-
 
 ```bash
 python3 ./tools/infer_kie_token_ser_re.py \
@@ -391,14 +401,14 @@ python3 ./tools/infer_kie_token_ser_re.py \
 </div>
 
 
-如果希望使用标注或者预先获取的OCR信息进行关键信息抽取，同上，可以指定`Global.infer_mode`为False，指定`Global.infer_img`为标注文件。
+如果希望使用标注或者预先获取的OCR信息进行关键信息抽取，同上，可以指定`Global.infer_mode`为False，指定`Global.infer_img`
+为标注文件。
 
 ```bash
 python3 ./tools/infer_kie_token_ser_re.py -c configs/kie/vi_layoutxlm/re_vi_layoutxlm_xfund_zh.yml -o Architecture.Backbone.checkpoints=./pretrain_models/re_vi_layoutxlm_udml_xfund_zh/re_layoutxlm_xfund_zh_v4_udml/best_accuracy/ Global.infer_img=./train_data/XFUND/zh_val/val.json Global.infer_mode=False -c_ser configs/kie/vi_layoutxlm/ser_vi_layoutxlm_xfund_zh.yml -o_ser Architecture.Backbone.checkpoints=pretrain_models/ser_vi_layoutxlm_udml_xfund_zh/best_accuracy/
 ```
 
 其中`c_ser`表示SER的配置文件，`o_ser` 后面需要加上待修改的SER模型与配置文件，如预训练权重等。
-
 
 预测结果如下所示。
 
@@ -409,7 +419,6 @@ python3 ./tools/infer_kie_token_ser_re.py -c configs/kie/vi_layoutxlm/re_vi_layo
 可以看出，直接使用标注的OCR结果的RE预测结果要更加准确一些。
 
 # 4. 模型导出与预测
-
 
 ## 4.1 模型导出
 
@@ -504,4 +513,5 @@ RE可视化结果默认保存到`./output`文件夹里面，结果示例如下�
 
 Q1: 训练模型转inference 模型之后预测效果不一致？
 
-**A**：该问题多是trained model预测时候的预处理、后处理参数和inference model预测的时候的预处理、后处理参数不一致导致的。可以对比训练使用的配置文件中的预处理、后处理和预测时是否存在差异。
+**A**：该问题多是trained model预测时候的预处理、后处理参数和inference
+model预测的时候的预处理、后处理参数不一致导致的。可以对比训练使用的配置文件中的预处理、后处理和预测时是否存在差异。

@@ -18,6 +18,7 @@ from __future__ import print_function
 
 import paddle
 from paddle import nn
+
 from .det_basic_loss import DiceLoss
 
 
@@ -38,7 +39,7 @@ class EASTLoss(nn.Layer):
 
         dice_loss = self.dice_loss(f_score, l_score, l_mask)
 
-        #smoooth_l1_loss
+        # smoooth_l1_loss
         channels = 8
         l_geo_split = paddle.split(
             l_geo, num_or_sections=channels + 1, axis=1)
@@ -50,14 +51,14 @@ class EASTLoss(nn.Layer):
             smooth_l1_sign = paddle.less_than(abs_geo_diff, l_score)
             smooth_l1_sign = paddle.cast(smooth_l1_sign, dtype='float32')
             in_loss = abs_geo_diff * abs_geo_diff * smooth_l1_sign + \
-                (abs_geo_diff - 0.5) * (1.0 - smooth_l1_sign)
+                      (abs_geo_diff - 0.5) * (1.0 - smooth_l1_sign)
             out_loss = l_geo_split[-1] / channels * in_loss * l_score
             smooth_l1 += out_loss
         smooth_l1_loss = paddle.mean(smooth_l1 * l_score)
 
         dice_loss = dice_loss * 0.01
         total_loss = dice_loss + smooth_l1_loss
-        losses = {"loss":total_loss, \
-                  "dice_loss":dice_loss,\
-                  "smooth_l1_loss":smooth_l1_loss}
+        losses = {"loss": total_loss, \
+                  "dice_loss": dice_loss, \
+                  "smooth_l1_loss": smooth_l1_loss}
         return losses

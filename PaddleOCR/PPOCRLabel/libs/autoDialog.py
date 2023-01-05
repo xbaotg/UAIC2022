@@ -6,12 +6,12 @@ except ImportError:
     from PyQt4.QtGui import *
     from PyQt4.QtCore import *
 
-import time
 import datetime
 import json
+import time
+
 import cv2
 import numpy as np
-
 from libs.utils import newIcon
 
 BB = QDialogButtonBox
@@ -29,7 +29,7 @@ class Worker(QThread):
         self.mImgList = mImgList
         self.mainThread = mainThread
         self.model = model
-        self.setStackSize(1024*1024)
+        self.setStackSize(1024 * 1024)
 
     def run(self):
         try:
@@ -56,7 +56,7 @@ class Worker(QThread):
                             cond = res[1][1]
                             posi = res[0]
                             strs += "Transcription: " + chars + " Probability: " + str(cond) + \
-                                    " Location: " + json.dumps(posi) +'\n'
+                                    " Location: " + json.dumps(posi) + '\n'
                         # Sending large amounts of data repeatedly through pyqtSignal may affect the program efficiency
                         self.listValue.emit(strs)
                         self.mainThread.result_dic = self.result_dic

@@ -85,7 +85,7 @@ class Adam(object):
             if self.training_step == 'LF_2':
                 import paddle
                 if isinstance(model, paddle.fluid.dygraph.parallel.
-                              DataParallel):  # multi gpu
+                        DataParallel):  # multi gpu
                     mlm = model._layers.head.MLM_VRM.MLM.parameters()
                     pre_mlm_pp = model._layers.head.MLM_VRM.Prediction.pp_share.parameters(
                     )

@@ -15,7 +15,7 @@ class SARLoss(nn.Layer):
 
     def forward(self, predicts, batch):
         predict = predicts[:, :
-                           -1, :]  # ignore last index of outputs to be in same seq_len with targets
+                              -1, :]  # ignore last index of outputs to be in same seq_len with targets
         label = batch[1].astype(
             "int64")[:, 1:]  # ignore first index of target in loss calculation
         batch_size, num_steps, num_classes = predict.shape[0], predict.shape[

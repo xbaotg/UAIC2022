@@ -6,19 +6,22 @@ PaddleServing预测功能测试的主程序为`test_serving_infer_python.sh`和`
 
 基于训练是否使用量化，进行本测试的模型可以分为`正常模型`和`量化模型`，这两类模型对应的Serving预测功能汇总如下：
 
-| 模型类型 |device | batchsize | tensorrt | mkldnn | cpu多线程 |
-|  ----   |  ---- |   ----   |  :----:  |   :----:   |  :----:  |
-| 正常模型 | GPU | 1/6 | fp32/fp16 | - | - |
-| 正常模型 | CPU | 1/6 | - | fp32 | 支持 |
-| 量化模型 | GPU | 1/6 | int8 | - | - |
-| 量化模型 | CPU | 1/6 | - | int8 | 支持 |
+| 模型类型 | device | batchsize | tensorrt  | mkldnn | cpu多线程 |
+|------|--------|-----------|:---------:|:------:|:------:|
+| 正常模型 | GPU    | 1/6       | fp32/fp16 |   -    |   -    |
+| 正常模型 | CPU    | 1/6       |     -     |  fp32  |   支持   |
+| 量化模型 | GPU    | 1/6       |   int8    |   -    |   -    |
+| 量化模型 | CPU    | 1/6       |     -     |  int8  |   支持   |
 
 ## 2. 测试流程
+
 运行环境配置请参考[文档](./install.md)的内容配置TIPC的运行环境。
 
 ### 2.1 功能测试
+
 **python serving**
-先运行`prepare.sh`准备数据和模型，然后运行`test_serving_infer_python.sh`进行测试，最终在```test_tipc/output/{model_name}/serving_infer/python```目录下生成`python_*.log`后缀的日志文件。
+先运行`prepare.sh`准备数据和模型，然后运行`test_serving_infer_python.sh`
+进行测试，最终在```test_tipc/output/{model_name}/serving_infer/python```目录下生成`python_*.log`后缀的日志文件。
 
 ```shell
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2/model_linux_gpu_normal_normal_serving_python_linux_gpu_cpu.txt "serving_infer"
@@ -26,8 +29,10 @@ bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2/model_linux_gpu_normal
 # 用法:
 bash test_tipc/test_serving_infer_python.sh ./test_tipc/configs/ch_PP-OCRv2/model_linux_gpu_normal_normal_serving_python_linux_gpu_cpu.txt "serving_infer"
 ```  
+
 **cpp serving**
-先运行`prepare.sh`准备数据和模型，然后运行`test_serving_infer_cpp.sh`进行测试，最终在```test_tipc/output/{model_name}/serving_infer/cpp```目录下生成`cpp_*.log`后缀的日志文件。
+先运行`prepare.sh`准备数据和模型，然后运行`test_serving_infer_cpp.sh`
+进行测试，最终在```test_tipc/output/{model_name}/serving_infer/cpp```目录下生成`cpp_*.log`后缀的日志文件。
 
 ```shell
 bash test_tipc/prepare.sh ./test_tipc/configs/ch_PP-OCRv2/model_linux_gpu_normal_normal_serving_cpp_linux_gpu_cpu.txt "serving_infer"
@@ -56,7 +61,6 @@ Run failed with command - ch_PP-OCRv2_rec - nohup python3.7 web_service_rec.py -
 ```
 
 详细的预测结果会存在 test_tipc/output/{model_name}/serving_infer/python(cpp)/ 文件夹下
-
 
 ## 3. 更多教程
 

@@ -17,15 +17,11 @@ https://github.com/FudanVI/FudanOCR/blob/main/text-gestalt/model/tsrn.py
 """
 
 import math
+import warnings
+
 import paddle
 import paddle.nn.functional as F
 from paddle import nn
-from collections import OrderedDict
-import sys
-import numpy as np
-import warnings
-import math, copy
-import cv2
 
 warnings.filterwarnings("ignore")
 
@@ -174,7 +170,7 @@ class UpsampleBLock(nn.Layer):
     def __init__(self, in_channels, up_scale):
         super(UpsampleBLock, self).__init__()
         self.conv = nn.Conv2D(
-            in_channels, in_channels * up_scale**2, kernel_size=3, padding=1)
+            in_channels, in_channels * up_scale ** 2, kernel_size=3, padding=1)
 
         self.pixel_shuffle = nn.PixelShuffle(up_scale)
         self.prelu = mish()

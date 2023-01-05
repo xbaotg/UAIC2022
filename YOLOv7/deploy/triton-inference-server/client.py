@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 
 import argparse
-import numpy as np
 import sys
-import cv2
 
+import cv2
+import numpy as np
 import tritonclient.grpc as grpcclient
 from tritonclient.utils import InferenceServerException
 
+from labels import COCOLabels
 from processing import preprocess, postprocess
 from render import render_box, render_filled_box, get_text_size, render_text, RAND_COLORS
-from labels import COCOLabels
 
 INPUT_NAMES = ["images"]
 OUTPUT_NAMES = ["num_dets", "det_boxes", "det_scores", "det_classes"]
@@ -234,15 +234,19 @@ if __name__ == '__main__':
         det_boxes = results.as_numpy(OUTPUT_NAMES[1])
         det_scores = results.as_numpy(OUTPUT_NAMES[2])
         det_classes = results.as_numpy(OUTPUT_NAMES[3])
-        detected_objects = postprocess(num_dets, det_boxes, det_scores, det_classes, input_image.shape[1], input_image.shape[0], [FLAGS.width, FLAGS.height])
+        detected_objects = postprocess(num_dets, det_boxes, det_scores, det_classes, input_image.shape[1],
+                                       input_image.shape[0], [FLAGS.width, FLAGS.height])
         print(f"Detected objects: {len(detected_objects)}")
 
         for box in detected_objects:
             print(f"{COCOLabels(box.classID).name}: {box.confidence}")
             input_image = render_box(input_image, box.box(), color=tuple(RAND_COLORS[box.classID % 64].tolist()))
-            size = get_text_size(input_image, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}", normalised_scaling=0.6)
-            input_image = render_filled_box(input_image, (box.x1 - 3, box.y1 - 3, box.x1 + size[0], box.y1 + size[1]), color=(220, 220, 220))
-            input_image = render_text(input_image, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}", (box.x1, box.y1), color=(30, 30, 30), normalised_scaling=0.5)
+            size = get_text_size(input_image, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}",
+                                 normalised_scaling=0.6)
+            input_image = render_filled_box(input_image, (box.x1 - 3, box.y1 - 3, box.x1 + size[0], box.y1 + size[1]),
+                                            color=(220, 220, 220))
+            input_image = render_text(input_image, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}",
+                                      (box.x1, box.y1), color=(30, 30, 30), normalised_scaling=0.5)
 
         if FLAGS.out:
             cv2.imwrite(FLAGS.out, input_image)
@@ -301,16 +305,20 @@ if __name__ == '__main__':
             det_boxes = results.as_numpy("det_boxes")
             det_scores = results.as_numpy("det_scores")
             det_classes = results.as_numpy("det_classes")
-            detected_objects = postprocess(num_dets, det_boxes, det_scores, det_classes, frame.shape[1], frame.shape[0], [FLAGS.width, FLAGS.height])
+            detected_objects = postprocess(num_dets, det_boxes, det_scores, det_classes, frame.shape[1], frame.shape[0],
+                                           [FLAGS.width, FLAGS.height])
             print(f"Frame {counter}: {len(detected_objects)} objects")
             counter += 1
 
             for box in detected_objects:
                 print(f"{COCOLabels(box.classID).name}: {box.confidence}")
                 frame = render_box(frame, box.box(), color=tuple(RAND_COLORS[box.classID % 64].tolist()))
-                size = get_text_size(frame, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}", normalised_scaling=0.6)
-                frame = render_filled_box(frame, (box.x1 - 3, box.y1 - 3, box.x1 + size[0], box.y1 + size[1]), color=(220, 220, 220))
-                frame = render_text(frame, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}", (box.x1, box.y1), color=(30, 30, 30), normalised_scaling=0.5)
+                size = get_text_size(frame, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}",
+                                     normalised_scaling=0.6)
+                frame = render_filled_box(frame, (box.x1 - 3, box.y1 - 3, box.x1 + size[0], box.y1 + size[1]),
+                                          color=(220, 220, 220))
+                frame = render_text(frame, f"{COCOLabels(box.classID).name}: {box.confidence:.2f}", (box.x1, box.y1),
+                                    color=(30, 30, 30), normalised_scaling=0.5)
 
             if FLAGS.out:
                 out.write(frame)
