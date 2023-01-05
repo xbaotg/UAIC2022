@@ -1,4 +1,5 @@
 
+
 # UIT AI Challenge - Artistic Text Challenge
 
 - [Dependencies](#dependencies)
@@ -15,6 +16,27 @@
 - [Inference](#INFER)
   * [Test model](#INFER-TEST)
   * [Xuất file để nộp](#INFER-SUBMIT)
+
+
+## Chú ý
+
+Nếu như không muốn **Xử lý dữ liệu** và **train model**, ta có thể sử dụng bộ dữ liệu và model đã được team chúng mình tạo ra và train:
+
+- Model YOLOv7 + SRN: https://drive.google.com/file/d/13pkPQT7N7URkuvJwsdz5qpUjTqeWW6QT/view?usp=share_link 
+
+Sau đó tiến hành giải nén, và đặt vào thư mục gốc (thư mục có chứa các file `predict.py`, `model.py`, ... 
+
+## Cấu trúc folders
+
+```
+├── configs	
+├── data			- Chứa các ảnh để predict
+├── models			- Chứa các trained weights và inference models
+├── PaddleOCR
+├── YOLOv7
+├── tools
+├── result			- Chứa kết quả sau khi predict
+```
 
 ## Dependencies
 Tiến hành cài đặt các dependencies trước có thể chạy
