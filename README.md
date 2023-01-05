@@ -1,6 +1,21 @@
 
 # UIT AI Challenge - Artistic Text Challenge
 
+- [Dependencies](#dependencies)
+- [Xử lý dữ liệu](#x--l--d--li-u)
+  * [Đối với dữ liệu để huấn luyện cho model Recognition](#--i-v-i-d--li-u----hu-n-luy-n-cho-model-recognition)
+  * [Đối với dữ liệu để huấn luyện cho model Detection](#--i-v-i-d--li-u----hu-n-luy-n-cho-model-detection)
+- [Tiến hành train model](#ti-n-h-nh-train-model)
+  * [Train model Detection](#train-model-detection)
+  * [Train model Recognition](#train-model-recognition)
+- [Lưu trained weights và convert thành Inference model](#l-u-trained-weights-v--convert-th-nh-inference-model)
+  * [Đối với model Detection (YOLOv7)](#--i-v-i-model-detection--yolov7-)
+  * [Đối với model Recognition (SRN)](#--i-v-i-model-recognition--srn-)
+  * [Định dạng của thư mục models sau cùng](#--nh-d-ng-c-a-th--m-c-models-sau-c-ng)
+- [Inference](#inference)
+  * [Test model](#test-model)
+  * [Xuất file để nộp](#xu-t-file----n-p)
+
 ## Dependencies
 Tiến hành cài đặt các dependencies trước có thể chạy
 ```
