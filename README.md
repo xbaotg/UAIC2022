@@ -45,7 +45,7 @@ Sau khi train xong, ta tiến hành lưu file weights vào thư mục `models/de
 
 ### Đối với model Recognition (SRN)
 
-- Sau khi việc train hoàn tất (hoặc không thể train thêm được nữa), ta lưu các file weights (thường là trong `output/rec/srn_new`) vào trong thư mục `models/rec/train`với tên là `ocr.pdopt`, `ocr.pdparams`, `ocr.states`.
+- Sau khi việc train hoàn tất (hoặc không thể train thêm được nữa), ta lưu các file weights (thường là trong `output/rec/srn_new`) vào trong thư mục `models/rec/train` với tên là `ocr.pdopt`, `ocr.pdparams`, `ocr.states`.
 - Sau đó tiến hành convert thành inference model bằng cách chuyển tới thư mục gốc và thực chạy lệnh:
 ```
 ./export_ocr_inference.sh
@@ -55,4 +55,42 @@ hoặc là
 
 ```
 python3 PaddleOCR/tools/export_model.py -c PaddleOCR/configs/rec/rec_r50_fpn_srn.yml -o Global.pretrained_model=models/rec/train/ocr Global.character_dict_path=configs/dict.txt Global.save_inference_dir=models/rec/inference/
+```
+
+### Định dạng của thư mục models sau cùng
+```
+models
+├── det
+	├── yolo.pt 
+└── rec
+    ├── inference
+		├── inference.pdiparams
+		├── inference.pdiparams.info	
+		├── inference.pdmodel	
+    └── train
+	    ├── ocr.pdopt
+		├── ocr.pdparams	
+		├── ocr.states	
+```
+
+## Inference
+
+### Test model
+
+Để tiến hành test model, ta cho các ảnh vào thư mục `data` sau đó thực hiện lệnh sau để test:
+
+```
+python predict.py --task test
+```
+
+Các kết quả sẽ được lưu vào trong thư mục `result` với những ảnh giống như thế này
+
+![Image](result/im0005.jpg)
+
+### Xuất file để nộp
+
+Tương tự như trên, ta cũng cho các ảnh cần nhận diện chữ nghệ thuật vào thư mục `data` và thực hiện lệnh sau để có được các file submit trong thư mục `result`
+
+```
+python predict.py --task submit
 ```
