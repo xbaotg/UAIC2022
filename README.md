@@ -16,7 +16,9 @@
   * [Xuất file để nộp](#INFER-SUBMIT)
 
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/YmAa7ZB-1Gc" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+[](https://user-images.githubusercontent.com/21699486/210822133-1113cbb6-b2eb-4cd0-a558-9b930bcc5ef6.mp4)
+
 
 ## Chú ý
 
