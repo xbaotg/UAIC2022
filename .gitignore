@@ -7,6 +7,6 @@
 **/PaddleOCR/inference/
 **/PaddleOCR/backup-inference/
 **/.venv
-**/models/
+**/models/**
 **/.idea
 **/__pycache__/
