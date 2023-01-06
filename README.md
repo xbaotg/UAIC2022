@@ -25,11 +25,13 @@ Source code mô tả cho bài [report](configs/report.pdf) này
 <a name="WARNING"></a>
 ## Chú ý
 
-Nếu như không muốn **Xử lý dữ liệu** và **train model**, ta có thể sử dụng bộ dữ liệu và model đã được chúng mình tạo ra và train:
+Nếu như không muốn **Xử lý dữ liệu** và **train model**, ta có thể sử dụng model đã được chúng mình train:
 
 - Model YOLOv7 + SRN: [Drive](https://drive.google.com/file/d/13pkPQT7N7URkuvJwsdz5qpUjTqeWW6QT/view?usp=share_link)
 
-Sau đó tiến hành giải nén, và đặt vào thư mục gốc (thư mục có chứa các file `predict.py`, `model.py`. Sau đó thực hiện [Inference](#INFER).
+Tiến hành giải nén và đặt vào thư mục gốc (thư mục có chứa các file `predict.py`, `model.py`. Sau đó thực hiện [Inference](#INFER).
+
+> Team có thực hiện thêm việc kiếm tra các ảnh bị đánh nhãn sai, nên số lượng ảnh và quá trình thực hiện có khác đôi chút với hướng dẫn bên trên.
 
 ## Cấu trúc folders
 
@@ -50,7 +52,7 @@ Sau đó tiến hành giải nén, và đặt vào thư mục gốc (thư mục 
 ```
 
 ## Dependencies
-Tiến hành cài đặt các dependencies trước có thể chạy
+
 ```
 pip install -r requirements.txt
 ```
@@ -69,17 +71,13 @@ data
 ├── images 		- chứa các ảnh
 ├── labels 		- chứa các file json
 ```
-3. Tiến hành chuyển tới thư mục `tools/Recognition` và thực thi câu lệnh `./process_rec.sh` để tiến hành xử lý các ảnh, sinh thêm các synthetics data, augment data và split data thành tập dữ liệu train và val (tỉ lệ 80-20). Dữ liệu cuối cùng cũng sẽ chính là thư mục `data`.
-
-> Team có thực hiện thêm việc kiếm tra các ảnh bị đánh nhãn sai, nên số lượng ảnh và quá trình thực hiện có khác đôi chút với hướng dẫn bên trên.
+3. Chuyển tới thư mục `tools/Recognition` và thực thi câu lệnh `./process_rec.sh` để tiến hành xử lý các ảnh, sinh thêm các synthetics data, augment data và split data thành tập dữ liệu train và val (tỉ lệ 80-20). Dữ liệu cuối cùng cũng sẽ chính là thư mục `data`.
 
 <a name="PDATA-DET"></a>
 ### Đối với dữ liệu để huấn luyện cho model Detection
 
 1. Ta thực hiện tương tự như việc xử lý dữ liệu cho model `Recognition` bên trên, nhưng ta cần copy folder `data` vào thư mục `tools/Detection` 
-2. Tiến hành chuyển tới thư mục `tools/Detection` và thực thi câu lệnh `./process_det.sh` để tiến hành xử lý các ảnh, augment data và split data thành tập dữ liệu train và val (tỉ lệ 80-20). Dữ liệu cuối cùng cũng sẽ chính là thư mục `data`.
-
-> Và tương tự như trên, Team có thực hiện thêm việc kiếm tra các ảnh bị đánh nhãn sai, nên số lượng ảnh và quá trình thực hiện có khác đôi chút với hướng dẫn bên trên.
+2. Chuyển tới thư mục `tools/Detection` và thực thi câu lệnh `./process_det.sh` để tiến hành xử lý các ảnh, augment data và split data thành tập dữ liệu train và val (tỉ lệ 80-20). Dữ liệu cuối cùng cũng sẽ chính là thư mục `data`.
 
 <a name="TRAIN"></a>
 ## Tiến hành train model
