@@ -112,16 +112,16 @@ python3 PaddleOCR/tools/export_model.py -c PaddleOCR/configs/rec/rec_r50_fpn_srn
 ```
 models
 ├── det
-	├── yolo.pt 
+│   └── yolo.pt
 └── rec
     ├── inference
-      ├── inference.pdiparams
-      ├── inference.pdiparams.info	
-      ├── inference.pdmodel	
+    │   ├── inference.pdiparams
+    │   ├── inference.pdiparams.info
+    │   └── inference.pdmodel
     └── train
-	    ├── ocr.pdopt
-      ├── ocr.pdparams	
-      ├── ocr.states	
+        ├── ocr.pdopt
+        ├── ocr.pdparams
+        └── ocr.states
 ```
 
 <a name="INFER"></a>
