@@ -84,11 +84,13 @@ data
 
 <a name="TRAIN-DET"></a>
 ### Train model Detection
-Với vấn đề này, Team sử dụng mô hình YOLOv7 được train từ đầu với dữ liệu đã được xử lý bên trên. Để tiến hành train cho model, ta lần lượt thực thi các lệnh bên trong `train_detection.ipynb`.  Trong notebook này, team có ví dụ bằng cách sử dụng [dữ liệu](https://drive.google.com/file/d/1sohRPX_oUXKt6RjwYVR0EJkBJtATmX2o/view) đã được tạo ra và được chúng mình sử dụng trong các vòng vừa qua.
+Với vấn đề này, Team sử dụng mô hình YOLOv7 được train từ đầu với dữ liệu đã được xử lý bên trên. Để tiến hành train cho model, ta lần lượt thực thi các lệnh bên trong `train_detection.ipynb`.  Trong notebook này, team có ví dụ bằng cách sử dụng [dữ liệu](https://drive.google.com/file/d/1sohRPX_oUXKt6RjwYVR0EJkBJtATmX2o/view) đã được tạo ra và được chúng mình sử dụng.
 
 <a name="TRAIN-REC"></a>
 ### Train model Recognition
-Về việc nhận diện chữ thì chúng mình sử dụng mô hình SRN của framework PaddleOCR và tụi mình có sử dụng [pretrained model](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r50_vd_srn_train.tar) được đề cập tới trong [bài viết này](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_en/algorithm_rec_srn_en.md#1). Sau đó team mình tiến hành train dựa trên pretrained model đó với tập dữ liệu đã được team tạo ra bên trên. Để tiến hành train cho model, ta lần lượt thực thi các lệnh bên trong `train_recognition.ipynb` và cũng trong notebook này, team có ví dụ bằng cách sử dụng [dữ liệu](https://drive.google.com/file/d/1zbmLSW3t7hFq4nd1_GYHqDNHU5ggLKBB/view) đã được tạo ra và được chúng mình sử dụng trong các vòng vừa qua.
+Về việc nhận diện chữ thì chúng mình sử dụng [pretrained model](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r50_vd_srn_train.tar) mô hình SRN của framework PaddleOCR. Sau đó team mình tiến hành train dựa trên pretrained model đó với tập dữ liệu đã được team tạo ra bên trên. 
+
+Để tiến hành train cho model, ta lần lượt thực thi các lệnh bên trong `train_recognition.ipynb` và cũng trong notebook này, team có ví dụ bằng cách sử dụng [dữ liệu](https://drive.google.com/file/d/1zbmLSW3t7hFq4nd1_GYHqDNHU5ggLKBB/view) đã được tạo ra và được chúng mình sử dụng.
 
 <a name="STORE"></a>
 ## Lưu trained weights và convert thành Inference model
@@ -96,18 +98,18 @@ Về việc nhận diện chữ thì chúng mình sử dụng mô hình SRN củ
 <a name="STORE-DET"></a>
 ### Đối với model Detection (YOLOv7)
 
-Sau khi train xong, ta tiến hành lưu file weights vào thư mục `models/det` và đặt tên file là `yolo.pt`
+Sau khi train xong (hoặc không thể train thêm được nữa), ta tiến hành lưu file weights vào thư mục `models/det` và đặt tên file là `yolo.pt`
 
 <a name="STORE-REC"></a>
 ### Đối với model Recognition (SRN)
 
 - Sau khi việc train hoàn tất (hoặc không thể train thêm được nữa), ta lưu các file weights vào trong thư mục `models/rec/train` với tên là `ocr.pdopt`, `ocr.pdparams`, `ocr.states`.
-- Sau đó tiến hành convert thành inference model bằng cách chuyển tới thư mục gốc và thực chạy lệnh:
+- Sau đó tiến hành convert thành inference model bằng cách chuyển tới thư mục gốc và chạy lệnh:
 ```
 ./export_ocr_inference.sh
 ```
 
-hoặc là
+hoặc 
 
 ```
 python3 PaddleOCR/tools/export_model.py -c PaddleOCR/configs/rec/rec_r50_fpn_srn.yml -o Global.pretrained_model=models/rec/train/ocr Global.character_dict_path=configs/dict.txt Global.save_inference_dir=models/rec/inference/

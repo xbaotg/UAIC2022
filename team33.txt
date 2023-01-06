@@ -21,3 +21,18 @@
     5. Chạy lệnh: python predict.py --task submit
     6. Kết quả sẽ được lưu vào thư mục result
 
+  + Cấu trúc thư mục:
+
+    ├── configs
+    ├── data                  - Chứa các ảnh để predict
+    ├── models                
+    │   ├── det               - Chứa các trained models của YOLOv7
+    │   └── rec
+    │       ├── inference     - Chứa các inference models của SRN sau khi export
+    │       └── train         - Chứa các trained models của SRN
+    ├── PaddleOCR
+    ├── result                - Chứa kết quả sau khi predict
+    ├── tools
+    │   ├── Detection
+    │   └── Recognition
+    └── YOLOv7
