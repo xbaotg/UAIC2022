@@ -152,7 +152,7 @@ if __name__ == "__main__":
     opt = parser.parse_args()
 
     if len(os.listdir("models/rec/inference")) < 3:
-        print("Must export model OCR at ./tools/export_ocr_inference.sh")
+        print("Execute ./export_ocr_inference.sh first")
         sys.exit(0)
 
     generate_det_images()
