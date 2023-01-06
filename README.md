@@ -32,13 +32,19 @@ Sau đó tiến hành giải nén, và đặt vào thư mục gốc (thư mục 
 ## Cấu trúc folders
 
 ```
-├── configs	
-├── data			- Chứa các ảnh để predict
-├── models			- Chứa các trained weights và inference models
+├── configs
+├── data                  - Chứa các ảnh để predict
+├── models                
+│   ├── det               - Chứa các trained models của YOLOv7
+│   └── rec
+│       ├── inference     - Chứa các inference models của SRN sau khi export
+│       └── train         - Chứa các trained models của SRN
 ├── PaddleOCR
-├── YOLOv7
+├── result                - Chứa kết quả sau khi predict
 ├── tools
-├── result			- Chứa kết quả sau khi predict
+│   ├── Detection
+│   └── Recognition
+└── YOLOv7
 ```
 
 ## Dependencies
