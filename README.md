@@ -1,5 +1,7 @@
 # UIT AI Challenge - Artistic Text Challenge
 
+Source code mô tả cho bài [report](configs/report.pdf) này
+
 - [Chú ý](#WARNING)
 - [Dependencies](#dependencies)
 - [Xử lý dữ liệu](#PDATA)
@@ -23,7 +25,7 @@
 <a name="WARNING"></a>
 ## Chú ý
 
-Nếu như không muốn **Xử lý dữ liệu** và **train model**, ta có thể sử dụng bộ dữ liệu và model đã được team chúng mình tạo ra và train:
+Nếu như không muốn **Xử lý dữ liệu** và **train model**, ta có thể sử dụng bộ dữ liệu và model đã được chúng mình tạo ra và train:
 
 - Model YOLOv7 + SRN: [Drive](https://drive.google.com/file/d/13pkPQT7N7URkuvJwsdz5qpUjTqeWW6QT/view?usp=share_link)
 
@@ -88,7 +90,7 @@ Với vấn đề này, Team sử dụng mô hình YOLOv7 được train từ đ
 
 <a name="TRAIN-REC"></a>
 ### Train model Recognition
-Về việc nhận diện chữ thì team chúng mình sử dụng mô hình SRN của framework PaddleOCR và tụi mình có sử dụng [pretrained model](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r50_vd_srn_train.tar) được đề cập tới trong [bài viết này](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_en/algorithm_rec_srn_en.md#1). Sau đó team mình tiến hành train dựa trên pretrained model đó với tập dữ liệu đã được team tạo ra bên trên. Để tiến hành train cho model, ta lần lượt thực thi các lệnh bên trong `train_recognition.ipynb` và cũng trong notebook này, team có ví dụ bằng cách sử dụng [dữ liệu](https://drive.google.com/file/d/1zbmLSW3t7hFq4nd1_GYHqDNHU5ggLKBB/view) đã được tạo ra và được chúng mình sử dụng trong các vòng vừa qua.
+Về việc nhận diện chữ thì chúng mình sử dụng mô hình SRN của framework PaddleOCR và tụi mình có sử dụng [pretrained model](https://paddleocr.bj.bcebos.com/dygraph_v2.0/en/rec_r50_vd_srn_train.tar) được đề cập tới trong [bài viết này](https://github.com/PaddlePaddle/PaddleOCR/blob/release/2.6/doc/doc_en/algorithm_rec_srn_en.md#1). Sau đó team mình tiến hành train dựa trên pretrained model đó với tập dữ liệu đã được team tạo ra bên trên. Để tiến hành train cho model, ta lần lượt thực thi các lệnh bên trong `train_recognition.ipynb` và cũng trong notebook này, team có ví dụ bằng cách sử dụng [dữ liệu](https://drive.google.com/file/d/1zbmLSW3t7hFq4nd1_GYHqDNHU5ggLKBB/view) đã được tạo ra và được chúng mình sử dụng trong các vòng vừa qua.
 
 <a name="STORE"></a>
 ## Lưu trained weights và convert thành Inference model
