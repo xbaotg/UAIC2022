@@ -115,13 +115,13 @@ models
 	├── yolo.pt 
 └── rec
     ├── inference
-		├── inference.pdiparams
-		├── inference.pdiparams.info	
-		├── inference.pdmodel	
+      ├── inference.pdiparams
+      ├── inference.pdiparams.info	
+      ├── inference.pdmodel	
     └── train
 	    ├── ocr.pdopt
-		├── ocr.pdparams	
-		├── ocr.states	
+      ├── ocr.pdparams	
+      ├── ocr.states	
 ```
 
 <a name="INFER"></a>
