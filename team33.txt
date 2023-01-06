@@ -18,8 +18,9 @@
     2. Download trained / inference models: https://drive.google.com/drive/u/3/folders/1L8Yiiy7IFbiWhm-cOwNnUkyeY2SrLC6o
     3. Unzip và copy thư mục models vào thư mục gốc của repository
     4. Copy các ảnh cần inference vào thư mục data 
-    5. Chạy lệnh: python predict.py --task submit
-    6. Kết quả sẽ được lưu vào thư mục result
+    5. Install dependencies: pip install -r requirements.txt
+    6. Chạy lệnh: python predict.py --task submit
+    7. Kết quả sẽ được lưu vào thư mục result
 
   + Cấu trúc thư mục:
 
