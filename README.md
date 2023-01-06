@@ -31,7 +31,7 @@ Nếu như không muốn **Xử lý dữ liệu** và **train model**, ta có th
 
 Tiến hành giải nén và đặt vào thư mục gốc (thư mục có chứa các file `predict.py`, `model.py`. Sau đó thực hiện [Inference](#INFER).
 
-> Team có thực hiện thêm việc kiếm tra các ảnh bị đánh nhãn sai, nên số lượng ảnh và quá trình thực hiện có khác đôi chút với hướng dẫn bên trên.
+> Team có thực hiện thêm việc kiếm tra các ảnh bị đánh nhãn sai, nên số lượng ảnh và quá trình thực hiện có khác đôi chút với hướng dẫn về việc xử lý dữ liệu.
 
 ## Cấu trúc folders
 
@@ -101,7 +101,7 @@ Sau khi train xong, ta tiến hành lưu file weights vào thư mục `models/de
 <a name="STORE-REC"></a>
 ### Đối với model Recognition (SRN)
 
-- Sau khi việc train hoàn tất (hoặc không thể train thêm được nữa), ta lưu các file weights (thường là trong `output/rec/srn_new`) vào trong thư mục `models/rec/train` với tên là `ocr.pdopt`, `ocr.pdparams`, `ocr.states`.
+- Sau khi việc train hoàn tất (hoặc không thể train thêm được nữa), ta lưu các file weights vào trong thư mục `models/rec/train` với tên là `ocr.pdopt`, `ocr.pdparams`, `ocr.states`.
 - Sau đó tiến hành convert thành inference model bằng cách chuyển tới thư mục gốc và thực chạy lệnh:
 ```
 ./export_ocr_inference.sh
