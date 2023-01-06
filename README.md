@@ -19,7 +19,7 @@ Source code mô tả cho bài [report](configs/report.pdf) này
   * [Xuất file để nộp](#INFER-SUBMIT)
 
 <a name="HD"></a>
-[Hướng dẫn Inference](https://user-images.githubusercontent.com/21699486/210822133-1113cbb6-b2eb-4cd0-a558-9b930bcc5ef6.mp4)
+[](https://user-images.githubusercontent.com/21699486/210822133-1113cbb6-b2eb-4cd0-a558-9b930bcc5ef6.mp4)
 
 <a name="WARNING"></a>
 ## Chú ý
